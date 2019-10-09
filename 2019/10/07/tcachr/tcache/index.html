@@ -1,29 +1,28 @@
 
-  
-    <!DOCTYPE HTML>
+ <!DOCTYPE HTML>
 <html lang="en">
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>about | p1Kk&#39;s World!</title>
+    <title>Tcache Attack学习 | p1Kk&#39;s World!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="p1Kk">
     
 
     
-    <meta name="description" content="👩‍🔧 p1Kk @ 2001.6目前就读于SWPU 本科2018级不会pwn的pwnerMjg2NDM5NDc0NA==">
-<meta name="keywords" content="Try to pwn everything!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="p1Kk.github.io/about/index.html">
+    <meta name="description" content="参考：CTF-wikictf-all-in-one  tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26正式提供了该机制，并默认开启。 tcache的数据结构glibc在编译时使用use_tcache条件来开启tcache机制，并定义了： 12">
+<meta name="keywords" content="pwn,堆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tcache Attack学习">
+<meta property="og:url" content="p1Kk.github.io/2019/10/07/tcachr/tcache/index.html">
 <meta property="og:site_name" content="p1Kk&#39;s World!">
-<meta property="og:description" content="👩‍🔧 p1Kk @ 2001.6目前就读于SWPU 本科2018级不会pwn的pwnerMjg2NDM5NDc0NA==">
+<meta property="og:description" content="参考：CTF-wikictf-all-in-one  tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26正式提供了该机制，并默认开启。 tcache的数据结构glibc在编译时使用use_tcache条件来开启tcache机制，并定义了： 12">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-03T03:31:41.698Z">
+<meta property="og:updated_time" content="2019-10-07T14:14:10.364Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="👩‍🔧 p1Kk @ 2001.6目前就读于SWPU 本科2018级不会pwn的pwnerMjg2NDM5NDc0NA==">
+<meta name="twitter:title" content="Tcache Attack学习">
+<meta name="twitter:description" content="参考：CTF-wikictf-all-in-one  tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26正式提供了该机制，并默认开启。 tcache的数据结构glibc在编译时使用use_tcache条件来开启tcache机制，并定义了： 12">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -38,9 +37,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 </html>
-      <body>
-        <header>
-          
+  <body>
+    <header>
+      
 <div>
 		
 			<div id="imglogo">
@@ -79,33 +78,54 @@
 				</ul>
 			</nav>			
 </div>
-        </header>
-        <div id="container">
-          <div id="main" class="page" itemscope itemprop="blogPost">
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/about/index.html" title="about" itemprop="url">about</a>
+      <a href="/2019/10/07/tcachr/tcache/" title="Tcache Attack学习" itemprop="url">Tcache Attack学习</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
 		
   <p class="article-time">
-    <time datetime="2019-10-02T09:44:57.000Z" itemprop="datePublished"> Published 2019-10-02</time>
+    <time datetime="2019-10-07T06:40:49.556Z" itemprop="datePublished"> Published 2019-10-07</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>👩‍🔧</p>
-<h3 id="p1Kk-2001-6"><a href="#p1Kk-2001-6" class="headerlink" title="p1Kk @ 2001.6"></a>p1Kk @ 2001.6</h3><h3 id="目前就读于SWPU-本科2018级"><a href="#目前就读于SWPU-本科2018级" class="headerlink" title="目前就读于SWPU 本科2018级"></a>目前就读于SWPU 本科2018级</h3><h3 id="不会pwn的pwner"><a href="#不会pwn的pwner" class="headerlink" title="不会pwn的pwner"></a>不会pwn的pwner</h3><h3 id="Mjg2NDM5NDc0NA"><a href="#Mjg2NDM5NDc0NA" class="headerlink" title="Mjg2NDM5NDc0NA=="></a>Mjg2NDM5NDc0NA==</h3>  
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache机制"><span class="toc-number">1.</span> <span class="toc-text">tcache机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache的数据结构"><span class="toc-number">2.</span> <span class="toc-text">tcache的数据结构</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>参考：<a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/tcache_attack-zh/" target="_blank" rel="noopener">CTF-wiki</a><br><a href="https://firmianay.gitbooks.io/ctf-all-in-one/doc/4.14_glibc_tcache.html" target="_blank" rel="noopener">ctf-all-in-one</a></p>
+</blockquote>
+<h1 id="tcache机制"><a href="#tcache机制" class="headerlink" title="tcache机制"></a>tcache机制</h1><p>tcache全名<em>thread local caching</em>，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26正式提供了该机制，并默认开启。</p>
+<h1 id="tcache的数据结构"><a href="#tcache的数据结构" class="headerlink" title="tcache的数据结构"></a>tcache的数据结构</h1><p>glibc在编译时使用<code>use_tcache</code>条件来开启tcache机制，并定义了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/堆/">堆</a>
+  </div>
 
 </div>
 
@@ -116,11 +136,138 @@
    	       
 	</article>
 	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/07/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具">
+  <span>
+  ubuntu18安装各种pwn工具</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/10/03/buu/wppp/"  title="buuctf pwn wp【长期更】">
+ <span>buuctf pwn wp【长期更】
+</span>
+</a>
+</div>
+
+</nav>
+
 	
 
 </div>  
-        </div>
-        <footer><div id="footer" >
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>6</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="link1's url" target="_blank" title="link1&#39;s name">link1&#39;s name</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
 		
 		
 
@@ -139,7 +286,7 @@
 </span>
 
 </footer>
-        <script src="/js/jquery-2.0.3.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
@@ -185,6 +332,32 @@ $(document).ready(function(){
       o.css('display', 'none');
         
     }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
   });
 });
 </script>
@@ -297,6 +470,5 @@ $(document).ready(function(){
 
 <!-- Tiny_search End -->
 
-      </body>
-     </html>
-     
+  </body>
+</html>
