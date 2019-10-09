@@ -81,9 +81,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2019/10/07/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具" itemprop="url">ubuntu18安装各种pwn工具</a>
@@ -97,16 +97,16 @@
     
   </p>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#更换系统镜像为清华镜像源"><span class="toc-number">1.</span> <span class="toc-text">更换系统镜像为清华镜像源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础工具安装"><span class="toc-number">2.</span> <span class="toc-text">基础工具安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwntools"><span class="toc-number">3.</span> <span class="toc-text">pwntools</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gdb"><span class="toc-number">4.</span> <span class="toc-text">gdb</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwndbg"><span class="toc-number">5.</span> <span class="toc-text">pwndbg</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LibcSearcher"><span class="toc-number">6.</span> <span class="toc-text">LibcSearcher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#libc-database库的使用"><span class="toc-number">6.1.</span> <span class="toc-text">libc-database库的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROPgadget"><span class="toc-number">7.</span> <span class="toc-text">ROPgadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#one-gadget"><span class="toc-number">8.</span> <span class="toc-text">one_gadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#roputils"><span class="toc-number">9.</span> <span class="toc-text">roputils</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#edb-debugger"><span class="toc-number">10.</span> <span class="toc-text">edb-debugger</span></a></li></ol>
-		
-		</div>
-		
-		<blockquote>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#更换系统镜像为清华镜像源"><span class="toc-number">1.</span> <span class="toc-text">更换系统镜像为清华镜像源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础工具安装"><span class="toc-number">2.</span> <span class="toc-text">基础工具安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwntools"><span class="toc-number">3.</span> <span class="toc-text">pwntools</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gdb"><span class="toc-number">4.</span> <span class="toc-text">gdb</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwndbg"><span class="toc-number">5.</span> <span class="toc-text">pwndbg</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LibcSearcher"><span class="toc-number">6.</span> <span class="toc-text">LibcSearcher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#libc-database库的使用"><span class="toc-number">6.1.</span> <span class="toc-text">libc-database库的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROPgadget"><span class="toc-number">7.</span> <span class="toc-text">ROPgadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#one-gadget"><span class="toc-number">8.</span> <span class="toc-text">one_gadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#roputils"><span class="toc-number">9.</span> <span class="toc-text">roputils</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#edb-debugger"><span class="toc-number">10.</span> <span class="toc-text">edb-debugger</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <blockquote>
 <p>写在前面：<br>因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍</p>
 </blockquote>
 <h1 id="更换系统镜像为清华镜像源"><a href="#更换系统镜像为清华镜像源" class="headerlink" title="更换系统镜像为清华镜像源"></a><a href="https://blog.csdn.net/ifreewolf_csdn/article/details/83185505" target="_blank" rel="noopener">更换系统镜像为清华镜像源</a></h1><p>不换的话以后下载东西会很慢</p>
@@ -177,8 +177,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install cmake</span><br><span class="line">$ sudo apt-get build-essential</span><br><span class="line">$ sudo apt-get install libboost-dev</span><br><span class="line">$ sudo apt-get install libqt5xmlpatterns5-dev</span><br><span class="line">$ sudo apt-get install qtbase5-dev</span><br><span class="line">$ sudo apt-get install qt5-default</span><br><span class="line">$ sudo apt-get install libqt5svg5-dev</span><br><span class="line">$ sudo apt-get install libgraphviz-dev</span><br><span class="line">$ sudo apt-get install libcapstone-dev</span><br><span class="line"></span><br><span class="line">$ git clone --recursive https://github.com/eteran/edb-debugger.git</span><br><span class="line">$ cd edb-debugger</span><br><span class="line">$ mkdir build</span><br><span class="line">$ cd build</span><br><span class="line">$ cmake ..</span><br><span class="line">$ make</span><br><span class="line">$ ./edb</span><br></pre></td></tr></table></figure>
 
   
-	</div>
-		<footer class="article-footer clearfix">
+	  </div>
+		  <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
@@ -199,8 +199,8 @@
 </footer>
 
    	       
-	</article>
-	
+	  </article>
+	  
 <nav class="article-nav clearfix">
  
 
@@ -213,9 +213,9 @@
 
 </nav>
 
-	
+	  
 
-</div>  
+</div> 
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
@@ -322,16 +322,16 @@
 </div>
     </div>
     <footer><div id="footer" >
-		
-		
+	
+	
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
-		
-		<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
-		
-		
-		</p>
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
 </div></footer>
     <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>

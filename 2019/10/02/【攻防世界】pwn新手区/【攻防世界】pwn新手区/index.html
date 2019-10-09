@@ -97,9 +97,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2019/10/02/【攻防世界】pwn新手区/【攻防世界】pwn新手区/" title="【攻防世界】pwn新手区 wp" itemprop="url">【攻防世界】pwn新手区 wp</a>
@@ -113,16 +113,16 @@
     
   </p>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#string-（NUAACTF）"><span class="toc-number">1.</span> <span class="toc-text">string （NUAACTF）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞"><span class="toc-number">1.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec"><span class="toc-number">1.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#在IDA中对文件进行分析。"><span class="toc-number">1.1.0.0.2.</span> <span class="toc-text">在IDA中对文件进行分析。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路"><span class="toc-number">1.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03exp"><span class="toc-number">1.3.</span> <span class="toc-text">0x03exp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#guess-num"><span class="toc-number">2.</span> <span class="toc-text">guess_num</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-1"><span class="toc-number">2.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-1"><span class="toc-number">2.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析"><span class="toc-number">2.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路分析"><span class="toc-number">2.2.</span> <span class="toc-text">0x02思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击"><span class="toc-number">2.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#关于rand和srand"><span class="toc-number">2.3.0.0.1.</span> <span class="toc-text">关于rand和srand</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关于ctype库与dll"><span class="toc-number">2.3.0.0.2.</span> <span class="toc-text">关于ctype库与dll</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#libc共享库"><span class="toc-number">2.3.0.0.3.</span> <span class="toc-text">libc共享库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下"><span class="toc-number">2.3.0.0.4.</span> <span class="toc-text">exp如下</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cgpwn2（CGCTF）"><span class="toc-number">3.</span> <span class="toc-text">cgpwn2（CGCTF）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-2"><span class="toc-number">3.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-2"><span class="toc-number">3.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-1"><span class="toc-number">3.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02分析利用"><span class="toc-number">3.2.</span> <span class="toc-text">0x02分析利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-1"><span class="toc-number">3.3.</span> <span class="toc-text">0x03攻击</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#int-overflow"><span class="toc-number">4.</span> <span class="toc-text">int_overflow</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-3"><span class="toc-number">4.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-3"><span class="toc-number">4.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-2"><span class="toc-number">4.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路-1"><span class="toc-number">4.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-2"><span class="toc-number">4.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下-1"><span class="toc-number">4.3.0.0.1.</span> <span class="toc-text">exp如下</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#level3"><span class="toc-number">5.</span> <span class="toc-text">level3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-4"><span class="toc-number">5.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-4"><span class="toc-number">5.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-3"><span class="toc-number">5.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路分析-1"><span class="toc-number">5.2.</span> <span class="toc-text">0x02思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-3"><span class="toc-number">5.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下-2"><span class="toc-number">5.3.0.0.1.</span> <span class="toc-text">exp如下</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ps"><span class="toc-number">5.3.0.0.2.</span> <span class="toc-text">ps</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
-		
-		</div>
-		
-		<ul>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#string-（NUAACTF）"><span class="toc-number">1.</span> <span class="toc-text">string （NUAACTF）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞"><span class="toc-number">1.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec"><span class="toc-number">1.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#在IDA中对文件进行分析。"><span class="toc-number">1.1.0.0.2.</span> <span class="toc-text">在IDA中对文件进行分析。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路"><span class="toc-number">1.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03exp"><span class="toc-number">1.3.</span> <span class="toc-text">0x03exp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#guess-num"><span class="toc-number">2.</span> <span class="toc-text">guess_num</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-1"><span class="toc-number">2.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-1"><span class="toc-number">2.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析"><span class="toc-number">2.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路分析"><span class="toc-number">2.2.</span> <span class="toc-text">0x02思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击"><span class="toc-number">2.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#关于rand和srand"><span class="toc-number">2.3.0.0.1.</span> <span class="toc-text">关于rand和srand</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关于ctype库与dll"><span class="toc-number">2.3.0.0.2.</span> <span class="toc-text">关于ctype库与dll</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#libc共享库"><span class="toc-number">2.3.0.0.3.</span> <span class="toc-text">libc共享库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下"><span class="toc-number">2.3.0.0.4.</span> <span class="toc-text">exp如下</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cgpwn2（CGCTF）"><span class="toc-number">3.</span> <span class="toc-text">cgpwn2（CGCTF）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-2"><span class="toc-number">3.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-2"><span class="toc-number">3.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-1"><span class="toc-number">3.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02分析利用"><span class="toc-number">3.2.</span> <span class="toc-text">0x02分析利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-1"><span class="toc-number">3.3.</span> <span class="toc-text">0x03攻击</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#int-overflow"><span class="toc-number">4.</span> <span class="toc-text">int_overflow</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-3"><span class="toc-number">4.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-3"><span class="toc-number">4.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-2"><span class="toc-number">4.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02利用思路-1"><span class="toc-number">4.2.</span> <span class="toc-text">0x02利用思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-2"><span class="toc-number">4.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下-1"><span class="toc-number">4.3.0.0.1.</span> <span class="toc-text">exp如下</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#level3"><span class="toc-number">5.</span> <span class="toc-text">level3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01寻找漏洞-4"><span class="toc-number">5.1.</span> <span class="toc-text">0x01寻找漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#checksec-4"><span class="toc-number">5.1.0.0.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ida分析-3"><span class="toc-number">5.1.0.0.2.</span> <span class="toc-text">ida分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02思路分析-1"><span class="toc-number">5.2.</span> <span class="toc-text">0x02思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03攻击-3"><span class="toc-number">5.3.</span> <span class="toc-text">0x03攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#exp如下-2"><span class="toc-number">5.3.0.0.1.</span> <span class="toc-text">exp如下</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ps"><span class="toc-number">5.3.0.0.2.</span> <span class="toc-text">ps</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <ul>
 <li>写这些的时候是19.5.30</li>
 </ul>
 <h1 id="string-（NUAACTF）"><a href="#string-（NUAACTF）" class="headerlink" title="string （NUAACTF）"></a>string （NUAACTF）</h1><blockquote>
@@ -214,8 +214,8 @@
 <h5 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h5><p>我尝试了网上其他大佬写的脚本哈，本地和远程都行…所以我的脚本到底哪里错了，感觉跟他们的都差不多啊</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/17548101-b1b24284d6715e51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="菜是本源"></p>
   
-	</div>
-		<footer class="article-footer clearfix">
+	  </div>
+		  <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
@@ -236,8 +236,8 @@
 </footer>
 
    	       
-	</article>
-	
+	  </article>
+	  
 <nav class="article-nav clearfix">
  
  <div class="prev" >
@@ -250,9 +250,9 @@
 
 </nav>
 
-	
+	  
 
-</div>  
+</div> 
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
@@ -359,16 +359,16 @@
 </div>
     </div>
     <footer><div id="footer" >
-		
-		
+	
+	
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
-		
-		<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
-		
-		
-		</p>
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
 </div></footer>
     <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>

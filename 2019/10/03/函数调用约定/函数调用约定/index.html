@@ -81,9 +81,9 @@
     </header>
     <div id="container">
       <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2019/10/03/函数调用约定/函数调用约定/" title="函数调用约定" itemprop="url">函数调用约定</a>
@@ -97,16 +97,16 @@
     
   </p>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-基本介绍"><span class="toc-number">1.</span> <span class="toc-text">一.基本介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-函数调用约定"><span class="toc-number">2.</span> <span class="toc-text">二.函数调用约定</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01Windows-x86下的函数调用约定（C）"><span class="toc-number">2.1.</span> <span class="toc-text">0x01Windows_x86下的函数调用约定（C）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cdecl调用约定"><span class="toc-number">2.1.1.</span> <span class="toc-text">-cdecl调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stdcall调用约定"><span class="toc-number">2.1.2.</span> <span class="toc-text">-stdcall调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcall调用约定"><span class="toc-number">2.1.3.</span> <span class="toc-text">-fastcall调用约定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02Windows-x64下的调用约定（C）"><span class="toc-number">2.2.</span> <span class="toc-text">0x02Windows_x64下的调用约定（C）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcall调用约定-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">-fastcall调用约定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03LINUX-X64下的函数调用约定"><span class="toc-number">2.3.</span> <span class="toc-text">0x03LINUX_X64下的函数调用约定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#thiscall调用约定"><span class="toc-number">2.3.1.</span> <span class="toc-text">-thiscall调用约定</span></a></li></ol></li></ol></li></ol>
-		
-		</div>
-		
-		<h1 id="一-基本介绍"><a href="#一-基本介绍" class="headerlink" title="一.基本介绍"></a>一.基本介绍</h1><blockquote>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-基本介绍"><span class="toc-number">1.</span> <span class="toc-text">一.基本介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-函数调用约定"><span class="toc-number">2.</span> <span class="toc-text">二.函数调用约定</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01Windows-x86下的函数调用约定（C）"><span class="toc-number">2.1.</span> <span class="toc-text">0x01Windows_x86下的函数调用约定（C）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cdecl调用约定"><span class="toc-number">2.1.1.</span> <span class="toc-text">-cdecl调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stdcall调用约定"><span class="toc-number">2.1.2.</span> <span class="toc-text">-stdcall调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcall调用约定"><span class="toc-number">2.1.3.</span> <span class="toc-text">-fastcall调用约定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02Windows-x64下的调用约定（C）"><span class="toc-number">2.2.</span> <span class="toc-text">0x02Windows_x64下的调用约定（C）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcall调用约定-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">-fastcall调用约定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03LINUX-X64下的函数调用约定"><span class="toc-number">2.3.</span> <span class="toc-text">0x03LINUX_X64下的函数调用约定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#thiscall调用约定"><span class="toc-number">2.3.1.</span> <span class="toc-text">-thiscall调用约定</span></a></li></ol></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <h1 id="一-基本介绍"><a href="#一-基本介绍" class="headerlink" title="一.基本介绍"></a>一.基本介绍</h1><blockquote>
 <p>函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。</p>
 </blockquote>
 <h1 id="二-函数调用约定"><a href="#二-函数调用约定" class="headerlink" title="二.函数调用约定"></a>二.函数调用约定</h1><h2 id="0x01Windows-x86下的函数调用约定（C）"><a href="#0x01Windows-x86下的函数调用约定（C）" class="headerlink" title="0x01Windows_x86下的函数调用约定（C）"></a>0x01Windows_x86下的函数调用约定（C）</h2><h3 id="cdecl调用约定"><a href="#cdecl调用约定" class="headerlink" title="-cdecl调用约定"></a>-cdecl调用约定</h3><p>（c语言默认的函数调用方式）调用函数后，使用</p>
@@ -127,8 +127,8 @@
 <h3 id="thiscall调用约定"><a href="#thiscall调用约定" class="headerlink" title="-thiscall调用约定"></a>-thiscall调用约定</h3><p>（c++特有的一种调用约定，用于类成员函数的调用约定）如果参数确定，this指针存放于ECX寄存器，函数自身清理堆栈；如果参数不确定，this指针在所有的参数入栈后再入栈，调用者清理栈。_thiscall不是关键字，程序员不能使用。参数按照从右至左的方式入栈。</p>
 <p>参考：《逆向工程核心原理》——【韩】李承远</p>
   
-	</div>
-		<footer class="article-footer clearfix">
+	  </div>
+		  <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
@@ -149,8 +149,8 @@
 </footer>
 
    	       
-	</article>
-	
+	  </article>
+	  
 <nav class="article-nav clearfix">
  
  <div class="prev" >
@@ -170,9 +170,9 @@
 
 </nav>
 
-	
+	  
 
-</div>  
+</div> 
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
@@ -279,16 +279,16 @@
 </div>
     </div>
     <footer><div id="footer" >
-		
-		
+	
+	
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
-		
-		<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
-		
-		
-		</p>
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
 </div></footer>
     <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
