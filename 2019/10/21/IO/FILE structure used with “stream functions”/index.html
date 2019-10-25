@@ -19,12 +19,12 @@
 <meta property="og:site_name" content="p1Kk&#39;s World!">
 <meta property="og:description" content="emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔 FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下： 123456789101112131415161718192021222324252627282930313233343536373839404142struct _IO_FILE &amp;#123;  int _fla">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="p1Kk.github.io/2019/10/21/IO/FILE%20structure%20used%20with%20“stream%20functions”/78PVL%7DDCCGGZF755_Q1D4V3.jpg">
-<meta property="og:updated_time" content="2019-10-23T14:15:04.852Z">
+<meta property="og:image" content="https://i.loli.net/2019/10/24/tZARdbkSf6WzNVD.jpg">
+<meta property="og:updated_time" content="2019-10-24T07:12:58.037Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IO_FILE structure used with &quot;stream functions&quot;">
 <meta name="twitter:description" content="emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔 FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下： 123456789101112131415161718192021222324252627282930313233343536373839404142struct _IO_FILE &amp;#123;  int _fla">
-<meta name="twitter:image" content="p1Kk.github.io/2019/10/21/IO/FILE%20structure%20used%20with%20“stream%20functions”/78PVL%7DDCCGGZF755_Q1D4V3.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/24/tZARdbkSf6WzNVD.jpg">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -179,7 +179,7 @@
 <p>第二次的scanf，我写入<code>aaaa</code><br>此时</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/4gx 0x602000</span><br><span class="line">0x602000:	0x0000000000000000	0x0000000000000411</span><br><span class="line">0x602010:	0x00000a0a61616161	0x0000000000000000</span><br></pre></td></tr></table></figure>
 
-<p>那么我们通过修改<code>_IO_buf_base</code>和<code>_IO_buf_end</code>就可以实现任意地址读写。<br>可是怎么修改啊…<br><img src="78PVL%7DDCCGGZF755_Q1D4V3.jpg" alt></p>
+<p>那么我们通过修改<code>_IO_buf_base</code>和<code>_IO_buf_end</code>就可以实现任意地址读写。<br>可是怎么修改啊…<br><img src="https://i.loli.net/2019/10/24/tZARdbkSf6WzNVD.jpg" alt></p>
 <blockquote>
 <p>libc的vtable==&gt;<code>_IO_file_jumps</code>被检查，而<code>_IO_str_jumps</code>不在检查范围</p>
 </blockquote>
@@ -338,11 +338,11 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			

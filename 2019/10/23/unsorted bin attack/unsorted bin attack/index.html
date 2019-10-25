@@ -12,19 +12,19 @@
 
     
     <meta name="description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
-<meta name="keywords" content="pwn,堆,笔记">
+<meta name="keywords" content="pwn,笔记,堆">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unsorted Bin Attack">
 <meta property="og:url" content="p1Kk.github.io/2019/10/23/unsorted bin attack/unsorted bin attack/index.html">
 <meta property="og:site_name" content="p1Kk&#39;s World!">
 <meta property="og:description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="p1Kk.github.io/2019/10/23/unsorted%20bin%20attack/unsorted%20bin%20attack/2019-10-23-21-00-00.png">
-<meta property="og:updated_time" content="2019-10-23T13:38:21.160Z">
+<meta property="og:image" content="https://i.loli.net/2019/10/24/bdjoUPiDnJNHz37.png">
+<meta property="og:updated_time" content="2019-10-24T07:10:37.085Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unsorted Bin Attack">
 <meta name="twitter:description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
-<meta name="twitter:image" content="p1Kk.github.io/2019/10/23/unsorted%20bin%20attack/unsorted%20bin%20attack/2019-10-23-21-00-00.png">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/24/bdjoUPiDnJNHz37.png">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -174,7 +174,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">0x602000 PREV_INUSE &#123;</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 417, </span><br><span class="line">  fd = 0x7ffff7dd1b78 &lt;main_arena+88&gt;, </span><br><span class="line">  bk = 0x7fffffffddf0,  ==&gt;成功被修改</span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x0</span><br><span class="line">&#125;</span><br><span class="line">0x6021a0 FASTBIN &#123;</span><br><span class="line">  prev_size = 416, </span><br><span class="line">  size = 33, </span><br><span class="line">  fd = 0x0, </span><br><span class="line">  bk = 0x0, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x20e41</span><br><span class="line">&#125;</span><br><span class="line">0x6021c0 PREV_INUSE &#123;</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 134721, </span><br><span class="line">  fd = 0x0, </span><br><span class="line">  bk = 0x0, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<p><img src="2019-10-23-21-00-00.png" alt="我写的似乎没有wiki美观...可以转看wiki"></p>
+<p><img src="https://i.loli.net/2019/10/24/bdjoUPiDnJNHz37.png" alt="我写的似乎没有wiki美观...可以转看wiki"></p>
 <blockquote>
 <p>以上参考：<br><a href="https://ctf-wiki.github.io/ctf-wiki" target="_blank" rel="noopener">CTF-wiki</a><br><a href="http://blog.eonew.cn/archives/623" target="_blank" rel="noopener">unsorted bin attack –Ex</a></p>
 </blockquote>
@@ -191,7 +191,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/堆/">堆</a><a href="/tags/笔记/">笔记</a>
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/笔记/">笔记</a><a href="/tags/堆/">堆</a>
   </div>
 
 </div>
@@ -292,11 +292,11 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
