@@ -4,25 +4,27 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>函数调用约定 | p1Kk&#39;s World!</title>
+    <title>HDU by java（很少部分，只作为自己的练习，for test） | p1Kk&#39;s World!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="p1Kk">
     
 
     
-    <meta name="description" content="一.基本介绍 函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。  二.函数调用约定0x01Windows_x86下的函数调用约定（C）-cdecl调用约定（c语言默认的函数调用方式）调用函数后，使用 1ASS ESP,XXX  整理栈。调用者直接清理压入栈的函数参数。">
-<meta name="keywords" content="笔记">
+    <meta name="description" content="做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦  10.31先做两道吧…然后还有其他东西要学呢 hdu 200012345678">
+<meta name="keywords" content="java,ACM,HDU">
 <meta property="og:type" content="article">
-<meta property="og:title" content="函数调用约定">
-<meta property="og:url" content="p1Kk.github.io/2019/10/03/函数调用约定/函数调用约定/index.html">
+<meta property="og:title" content="HDU by java（很少部分，只作为自己的练习，for test）">
+<meta property="og:url" content="p1Kk.github.io/2019/10/31/hdu/hdu/hdu/index.html">
 <meta property="og:site_name" content="p1Kk&#39;s World!">
-<meta property="og:description" content="一.基本介绍 函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。  二.函数调用约定0x01Windows_x86下的函数调用约定（C）-cdecl调用约定（c语言默认的函数调用方式）调用函数后，使用 1ASS ESP,XXX  整理栈。调用者直接清理压入栈的函数参数。">
+<meta property="og:description" content="做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦  10.31先做两道吧…然后还有其他东西要学呢 hdu 200012345678">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-10T11:25:05.192Z">
+<meta property="og:image" content="https://i.loli.net/2019/10/31/GrZzJufg6tRw3UQ.png">
+<meta property="og:updated_time" content="2019-10-31T12:35:57.124Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="函数调用约定">
-<meta name="twitter:description" content="一.基本介绍 函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。  二.函数调用约定0x01Windows_x86下的函数调用约定（C）-cdecl调用约定（c语言默认的函数调用方式）调用函数后，使用 1ASS ESP,XXX  整理栈。调用者直接清理压入栈的函数参数。">
+<meta name="twitter:title" content="HDU by java（很少部分，只作为自己的练习，for test）">
+<meta name="twitter:description" content="做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦  10.31先做两道吧…然后还有其他东西要学呢 hdu 200012345678">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/31/GrZzJufg6tRw3UQ.png">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -86,14 +88,14 @@
 		  <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/10/03/函数调用约定/函数调用约定/" title="函数调用约定" itemprop="url">函数调用约定</a>
+      <a href="/2019/10/31/hdu/hdu/hdu/" title="HDU by java（很少部分，只作为自己的练习，for test）" itemprop="url">HDU by java（很少部分，只作为自己的练习，for test）</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
 		
   <p class="article-time">
-    <time datetime="2019-10-03T01:21:36.939Z" itemprop="datePublished"> Published 2019-10-03</time>
+    <time datetime="2019-10-31T12:36:23.663Z" itemprop="datePublished"> Published 2019-10-31</time>
     
   </p>
 </header>
@@ -102,43 +104,34 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-基本介绍"><span class="toc-number">1.</span> <span class="toc-text">一.基本介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-函数调用约定"><span class="toc-number">2.</span> <span class="toc-text">二.函数调用约定</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01Windows-x86下的函数调用约定（C）"><span class="toc-number">2.1.</span> <span class="toc-text">0x01Windows_x86下的函数调用约定（C）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cdecl调用约定"><span class="toc-number">2.1.1.</span> <span class="toc-text">-cdecl调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stdcall调用约定"><span class="toc-number">2.1.2.</span> <span class="toc-text">-stdcall调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcall调用约定"><span class="toc-number">2.1.3.</span> <span class="toc-text">-fastcall调用约定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02Windows-x64下的调用约定（C）"><span class="toc-number">2.2.</span> <span class="toc-text">0x02Windows_x64下的调用约定（C）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcall调用约定-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">-fastcall调用约定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03LINUX-X64下的函数调用约定"><span class="toc-number">2.3.</span> <span class="toc-text">0x03LINUX_X64下的函数调用约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04C-调用约定"><span class="toc-number">2.4.</span> <span class="toc-text">0x04C++调用约定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#thiscall调用约定"><span class="toc-number">2.4.1.</span> <span class="toc-text">-thiscall调用约定</span></a></li></ol></li></ol></li></ol>
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2000"><span class="toc-number">1.</span> <span class="toc-text">hdu 2000</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2001"><span class="toc-number">2.</span> <span class="toc-text">hdu 2001</span></a></li></ol>
 		  
 		  </div>
 		  
-		  <h1 id="一-基本介绍"><a href="#一-基本介绍" class="headerlink" title="一.基本介绍"></a>一.基本介绍</h1><blockquote>
-<p>函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。</p>
+		  <blockquote>
+<p>做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…<br><strong>有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz</strong><br>哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦<br><img src="https://i.loli.net/2019/10/31/GrZzJufg6tRw3UQ.png" alt></p>
 </blockquote>
-<h1 id="二-函数调用约定"><a href="#二-函数调用约定" class="headerlink" title="二.函数调用约定"></a>二.函数调用约定</h1><h2 id="0x01Windows-x86下的函数调用约定（C）"><a href="#0x01Windows-x86下的函数调用约定（C）" class="headerlink" title="0x01Windows_x86下的函数调用约定（C）"></a>0x01Windows_x86下的函数调用约定（C）</h2><h3 id="cdecl调用约定"><a href="#cdecl调用约定" class="headerlink" title="-cdecl调用约定"></a>-cdecl调用约定</h3><p>（c语言默认的函数调用方式）调用函数后，使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ASS ESP,XXX</span><br></pre></td></tr></table></figure>
+<p>10.31<br>先做两道吧…然后还有其他东西要学呢</p>
+<h1 id="hdu-2000"><a href="#hdu-2000" class="headerlink" title="hdu 2000"></a>hdu 2000</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line"></span><br><span class="line">public class Main &#123;     //注意提交的时候改成Main哦~</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Scanner scan =  new Scanner(System.in);</span><br><span class="line">        while(scan.hasNext())&#123;</span><br><span class="line">            String s = scan.next();</span><br><span class="line">            char[] a = s.toCharArray();     //字符串转换为字符数组</span><br><span class="line">            Arrays.sort(a);</span><br><span class="line">            for(int i = 0; i &lt; 2; i++)&#123;</span><br><span class="line">                System.out.print(a[i] + &quot; &quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(a[2]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>整理栈。<br>调用者直接清理压入栈的函数参数。<br>好处：它可以像c语言中printf()函数一样，向被调用函数传递长度可变的参数。</p>
-<h3 id="stdcall调用约定"><a href="#stdcall调用约定" class="headerlink" title="-stdcall调用约定"></a>-stdcall调用约定</h3><p>（常用于Win32 API，该方式由被调用者清理栈）如果想使用stdcall方式编译源码，只要使用_stdcall关键字即可。<br>eg建立函数:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int _stdcall add(int a, int b)</span><br></pre></td></tr></table></figure>
+<h1 id="hdu-2001"><a href="#hdu-2001" class="headerlink" title="hdu 2001"></a>hdu 2001</h1><p>这个是copy别人的正确了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"> </span><br><span class="line">public class Main&#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Scanner scanner = new Scanner(System.in);</span><br><span class="line">        </span><br><span class="line">        while (scanner.hasNext()) &#123;</span><br><span class="line">            </span><br><span class="line">            double a = scanner.nextDouble();</span><br><span class="line">            double b = scanner.nextDouble();</span><br><span class="line">            double c = scanner.nextDouble();</span><br><span class="line">            double d = scanner.nextDouble();</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">            double x = Math.pow(a-c, 2);</span><br><span class="line">            double y = Math.pow(b-d, 2);</span><br><span class="line">            double z = Math.sqrt(x+y);</span><br><span class="line">            System.out.println(String.format(&quot;%.2f&quot;,z));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>栈的清理工作由函数最后的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RETN 8</span><br></pre></td></tr></table></figure>
-
-<p>（该命令含义：RETN + POP 8 字节）来执行。<br>好处：被调用者函数内部存在着栈清理代码，代码尺寸小。</p>
-<h3 id="fastcall调用约定"><a href="#fastcall调用约定" class="headerlink" title="-fastcall调用约定"></a>-fastcall调用约定</h3><p>（与stdcall类似，但该方式通常使用寄存器传参）头两个参数（从左到右）存入ECX和EDX，余下的参数存入栈中（从右到左）。<br>好处：可以实现函数的快速调用（对于CPU，访问寄存器比访问内存快很多）。<br>劣处：寄存器在调用函数前若存有重要数据，或者有其他用途，需要将寄存器中的数据先备份。</p>
-<h2 id="0x02Windows-x64下的调用约定（C）"><a href="#0x02Windows-x64下的调用约定（C）" class="headerlink" title="0x02Windows_x64下的调用约定（C）"></a>0x02Windows_x64下的调用约定（C）</h2><h3 id="fastcall调用约定-1"><a href="#fastcall调用约定-1" class="headerlink" title="-fastcall调用约定"></a>-fastcall调用约定</h3><p>x64下的调用约定简化了，一律使用_fastcall，前四个参数用ECX, RDX, R8, R9传递，除了这四个外加RAX, R10, R11，其他寄存器都是非易失的。</p>
-<h2 id="0x03LINUX-X64下的函数调用约定"><a href="#0x03LINUX-X64下的函数调用约定" class="headerlink" title="0x03LINUX_X64下的函数调用约定"></a>0x03LINUX_X64下的函数调用约定</h2><p>参数从左到右放入寄存器：RDI, RSI, RDX, ECX, R8, R9。当参数为7个以上时，前6个与前面一样，但后面的依次从“右向左”放入栈中。</p>
-<h2 id="0x04C-调用约定"><a href="#0x04C-调用约定" class="headerlink" title="0x04C++调用约定"></a>0x04C++调用约定</h2><h3 id="thiscall调用约定"><a href="#thiscall调用约定" class="headerlink" title="-thiscall调用约定"></a>-thiscall调用约定</h3><p>（c++特有的一种调用约定，用于类成员函数的调用约定）如果参数确定，this指针存放于ECX寄存器，函数自身清理堆栈；如果参数不确定，this指针在所有的参数入栈后再入栈，调用者清理栈。_thiscall不是关键字，程序员不能使用。参数按照从右至左的方式入栈。</p>
-<p>参考：《逆向工程核心原理》——【韩】李承远</p>
-  
+<p>这个是我的…fo，示例都过的了…不晓得为啥过不去…居然报Wrong Answer，有点可怕哦</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line">import java.lang.Math;  //sqrt</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        int x1, y1, x2, y2;</span><br><span class="line">        double l;</span><br><span class="line">        while(sc.hasNext()) &#123;</span><br><span class="line">            x1 = sc.nextInt();</span><br><span class="line">            y1 = sc.nextInt();</span><br><span class="line">            x2 = sc.nextInt();</span><br><span class="line">            y2 = sc.nextInt();</span><br><span class="line">            l = (double)Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));</span><br><span class="line">            String str = String.format(&quot;%.2f&quot;, l);</span><br><span class="line">            System.out.println(str);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
 	  </div>
 		  <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  <a class="article-category-link" href="/categories/HDU/">HDU</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/笔记/">笔记</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/ACM/">ACM</a><a href="/tags/HDU/">HDU</a>
   </div>
 
 </div>
@@ -152,17 +145,10 @@
 	  
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/10/03/【攻防世界】pwn进阶区/【攻防世界】pwn进阶区wp/" title="【攻防世界】pwn进阶区 wp(未完)">
-  <span>
-  【攻防世界】pwn进阶区 wp(未完)</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/10/02/【攻防世界】pwn新手区/【攻防世界】pwn新手区/"  title="【攻防世界】pwn新手区 wp">
- <span>【攻防世界】pwn新手区 wp
+<a href="/2019/10/28/house of_系列学习之 house of orange/house of/house of_系列学习/"  title="house of_系列学习之 house of orange">
+ <span>house of_系列学习之 house of orange
 </span>
 </a>
 </div>
