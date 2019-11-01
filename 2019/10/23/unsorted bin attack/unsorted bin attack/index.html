@@ -20,7 +20,7 @@
 <meta property="og:description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://i.loli.net/2019/10/24/bdjoUPiDnJNHz37.png">
-<meta property="og:updated_time" content="2019-11-01T09:43:53.027Z">
+<meta property="og:updated_time" content="2019-11-01T09:46:00.487Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unsorted Bin Attack">
 <meta name="twitter:description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
@@ -181,7 +181,7 @@
 <p>那么要想跳过放 chunk 的这个过程，就需要对应 tcache bin 的 counts 域不小于 tcache_count（默认为7），但如果 counts 不为 0，说明 tcache bin 里是有 chunk 的，那么 malloc 的时候会直接从 tcache bin 里取出，于是就没有 unsorted bin 什么事了：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if (tc_idx &lt; mp_.tcache_bins</span><br><span class="line">    /*&amp;&amp; tc_idx &lt; TCACHE_MAX_BINS*/ /* to appease gcc */</span><br><span class="line">    &amp;&amp; tcache</span><br><span class="line">    &amp;&amp; tcache-&gt;entries[tc_idx] != NULL)</span><br><span class="line">  &#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-<p>这就造成了矛盾，所以我们需要找到一种既能从 unsorted bin 中取 chunk，又不会将 chunk 放进 tcache bin 的办法，看似是不可能的，但是 在<a href>tcache attack——tcache poisoning</a>中，最后counts被改为<code>0xff</code><br>于是就会执行<code>else</code>分支：</p>
+<p>这就造成了矛盾，所以我们需要找到一种既能从 unsorted bin 中取 chunk，又不会将 chunk 放进 tcache bin 的办法，看似是不可能的，但是 在<a href="https://p1kk.github.io/2019/11/01/Tcache%20Attack%E5%AD%A6%E4%B9%A0/tcache/tcache/" target="_blank" rel="noopener">tcache attack——tcache poisoning</a>中，最后counts被改为<code>0xff</code><br>于是就会执行<code>else</code>分支：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">          /* Fill cache first, return to user only if cache fills.</span><br><span class="line">         We may return one of these chunks later.  */</span><br><span class="line">          if (tcache_nb</span><br><span class="line">          &amp;&amp; tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count)</span><br><span class="line">        &#123;</span><br><span class="line">          tcache_put (victim, tc_idx);</span><br><span class="line">          return_cached = 1;</span><br><span class="line">          continue;</span><br><span class="line">        &#125;</span><br><span class="line">          else</span><br><span class="line">        &#123;</span><br><span class="line">#endif</span><br><span class="line">              check_malloced_chunk (av, victim, nb);</span><br><span class="line">              void *p = chunk2mem (victim);</span><br><span class="line">              alloc_perturb (p, bytes);</span><br><span class="line">              return p;</span><br></pre></td></tr></table></figure>
 
 <p>直接取出了chunk并返回，可以用于泄露unsorted bin的头地址</p>
@@ -317,15 +317,15 @@
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
@@ -341,7 +341,7 @@
 			
 		
 			
-				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>
