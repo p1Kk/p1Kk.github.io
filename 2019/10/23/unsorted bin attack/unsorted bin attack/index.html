@@ -20,7 +20,7 @@
 <meta property="og:description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://i.loli.net/2019/10/24/bdjoUPiDnJNHz37.png">
-<meta property="og:updated_time" content="2019-10-24T07:10:37.085Z">
+<meta property="og:updated_time" content="2019-11-01T09:43:53.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unsorted Bin Attack">
 <meta name="twitter:description" content="Unsorted Bin chunk分割，剩余&amp;gt;MINSIZE  放入unsorted bin   释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻  放入unsorted bin   malloc_consolidate时，合并后的chunk不与top chunk紧邻  放入unsorted bin   malloc时，fastbin smallbin都找">
@@ -104,7 +104,7 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unsorted-Bin"><span class="toc-number">1.</span> <span class="toc-text">Unsorted Bin</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Unsorted-Bin-Attack"><span class="toc-number">2.</span> <span class="toc-text">Unsorted Bin Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用处"><span class="toc-number">2.2.</span> <span class="toc-text">用处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引例"><span class="toc-number">2.3.</span> <span class="toc-text">引例</span></a></li></ol></li></ol>
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unsorted-Bin"><span class="toc-number">1.</span> <span class="toc-text">Unsorted Bin</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Unsorted-Bin-Attack"><span class="toc-number">2.</span> <span class="toc-text">Unsorted Bin Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用处"><span class="toc-number">2.2.</span> <span class="toc-text">用处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引例"><span class="toc-number">2.3.</span> <span class="toc-text">引例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#由tcache引发的新知"><span class="toc-number">3.</span> <span class="toc-text">由tcache引发的新知</span></a></li></ol>
 		  
 		  </div>
 		  
@@ -175,8 +175,18 @@
 
 <hr>
 <p><img src="https://i.loli.net/2019/10/24/bdjoUPiDnJNHz37.png" alt="我写的似乎没有wiki美观...可以转看wiki"></p>
+<h1 id="由tcache引发的新知"><a href="#由tcache引发的新知" class="headerlink" title="由tcache引发的新知"></a>由tcache引发的新知</h1><p>对于高版本的libc，存在<code>tcache</code>机制，malloc 从 unsorted bin 取 chunk 的时候，如果对应的 tcache bin 还未装满，则会将 unsorted bin 里的 chunk 全部放进对应的 tcache bin，然后再从 tcache bin 中取出。那么问题就来了，在放进 tcache bin 的这个过程中，malloc 会以为我们的 target address 也是一个 chunk，然而这个 “chunk” 是过不了检查的，将抛出 “memory corruption” 的错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while ((victim = unsorted_chunks (av)-&gt;bk) != unsorted_chunks (av))</span><br><span class="line">  &#123;</span><br><span class="line">    bck = victim-&gt;bk;</span><br><span class="line">    if (__builtin_expect (chunksize_nomask (victim) &lt;= 2 * SIZE_SZ, 0)</span><br><span class="line">        || __builtin_expect (chunksize_nomask (victim)</span><br><span class="line">             &gt; av-&gt;system_mem, 0))</span><br><span class="line">      malloc_printerr (&quot;malloc(): memory corruption&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>那么要想跳过放 chunk 的这个过程，就需要对应 tcache bin 的 counts 域不小于 tcache_count（默认为7），但如果 counts 不为 0，说明 tcache bin 里是有 chunk 的，那么 malloc 的时候会直接从 tcache bin 里取出，于是就没有 unsorted bin 什么事了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if (tc_idx &lt; mp_.tcache_bins</span><br><span class="line">    /*&amp;&amp; tc_idx &lt; TCACHE_MAX_BINS*/ /* to appease gcc */</span><br><span class="line">    &amp;&amp; tcache</span><br><span class="line">    &amp;&amp; tcache-&gt;entries[tc_idx] != NULL)</span><br><span class="line">  &#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就造成了矛盾，所以我们需要找到一种既能从 unsorted bin 中取 chunk，又不会将 chunk 放进 tcache bin 的办法，看似是不可能的，但是 在<a href>tcache attack——tcache poisoning</a>中，最后counts被改为<code>0xff</code><br>于是就会执行<code>else</code>分支：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#if USE_TCACHE</span><br><span class="line">          /* Fill cache first, return to user only if cache fills.</span><br><span class="line">         We may return one of these chunks later.  */</span><br><span class="line">          if (tcache_nb</span><br><span class="line">          &amp;&amp; tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count)</span><br><span class="line">        &#123;</span><br><span class="line">          tcache_put (victim, tc_idx);</span><br><span class="line">          return_cached = 1;</span><br><span class="line">          continue;</span><br><span class="line">        &#125;</span><br><span class="line">          else</span><br><span class="line">        &#123;</span><br><span class="line">#endif</span><br><span class="line">              check_malloced_chunk (av, victim, nb);</span><br><span class="line">              void *p = chunk2mem (victim);</span><br><span class="line">              alloc_perturb (p, bytes);</span><br><span class="line">              return p;</span><br></pre></td></tr></table></figure>
+
+<p>直接取出了chunk并返回，可以用于泄露unsorted bin的头地址</p>
 <blockquote>
-<p>以上参考：<br><a href="https://ctf-wiki.github.io/ctf-wiki" target="_blank" rel="noopener">CTF-wiki</a><br><a href="http://blog.eonew.cn/archives/623" target="_blank" rel="noopener">unsorted bin attack –Ex</a></p>
+<p>以上参考：<br><a href="https://ctf-wiki.github.io/ctf-wiki" target="_blank" rel="noopener">CTF-wiki</a><br><a href="http://blog.eonew.cn/archives/623" target="_blank" rel="noopener">unsorted bin attack –Ex</a><br><a href="https://firmianay.gitbooks.io/ctf-all-in-one/doc/3.1.8_heap_exploit_3.html#unsorted_bin_attack" target="_blank" rel="noopener">CTF-all-in-one</a></p>
 </blockquote>
   
 	  </div>
@@ -311,6 +321,10 @@
 			
 		
 			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
@@ -320,10 +334,6 @@
 		
 			
 				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
