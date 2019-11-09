@@ -23,7 +23,8 @@
 <meta property="og:image" content="https://i.loli.net/2019/11/05/859nvqpftQCaeBb.png">
 <meta property="og:image" content="https://i.loli.net/2019/11/08/avIhAERFkBLSfOl.png">
 <meta property="og:image" content="https://i.loli.net/2019/11/09/9HfeaXyIplv3WJQ.png">
-<meta property="og:updated_time" content="2019-11-09T01:46:15.857Z">
+<meta property="og:image" content="https://i.loli.net/2019/11/09/HNkWKIZSq3f2eup.png">
+<meta property="og:updated_time" content="2019-11-09T01:57:53.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="house of_系列学习之 house of roman">
 <meta name="twitter:description" content="house of roman介绍利用条件UAF漏洞以及能创建任意大小的chunk 原理fastbin attack + unsortedbin attack。该技术用于 bypass ALSR，利用 12-bit 的爆破来达到获取 shell 的目的。 demo分析checksec 12345Arch:     amd64-64-littleRELRO:    Partial RELROStack">
@@ -154,14 +155,15 @@
 <p>8.利用unsorted bin attack，向<code>__malloc_hook</code>中写入<code>main_arena+0x88</code>，使<code>__malloc_hook</code>中包含libc地址</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0x555555757380 PREV_INUSE &#123;     //新的chunk1</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 209, </span><br><span class="line">  fd = 0x4242424242424242, </span><br><span class="line">  bk = 0x7ffff7dd1b00 &lt;__memalign_hook&gt;, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>9.修改chunk0，将<code>__malloc_hook</code>的低三位修改为<code>one_gadget</code></p>
+<p>9.修改chunk0，将<code>__malloc_hook</code>的低三位修改为<code>one_gadget</code>【这个的地址…我不是很理解】</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10gx 0x7ffff7dd1af0</span><br><span class="line">0x7ffff7dd1af0 &lt;_IO_wide_data_0+304&gt;:	0x00007ffff7dd0260	0x5252520000000000</span><br><span class="line">0x7ffff7dd1b00 &lt;__memalign_hook&gt;:	0x5252525252525252	0x5252525252525252</span><br><span class="line">0x7ffff7dd1b10 &lt;__malloc_hook&gt;:	0x00007ffff7afd2a4	0x0000000000000000      ==&gt;后三位被覆盖</span><br><span class="line">0x7ffff7dd1b20 &lt;main_arena&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b30 &lt;main_arena+16&gt;:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
 
 <p>10.连续free两次同一个chunk，触发<code>malloc_printerr</code></p>
 <p><img src="https://i.loli.net/2019/11/09/9HfeaXyIplv3WJQ.png" alt><br>这样本地可以成功了，我们把<code>ASLR</code>打开<br>写一个<code>repeat.sh</code>批量执行脚本，但攻击成功存在偶然性…</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">for i in `seq 1 5000`; do python exp.py; done;</span><br></pre></td></tr></table></figure>
 
-<p>但是就我测试而言…一直都是EOF，并没有成功…</p>
+<p>这个挺麻烦的…但是最后还是成功了<br><img src="https://i.loli.net/2019/11/09/HNkWKIZSq3f2eup.png" alt></p>
+<p>还存疑很多，也需要自己独立写脚本试试</p>
 <h3 id="环境：ubuntu18"><a href="#环境：ubuntu18" class="headerlink" title="环境：ubuntu18"></a>环境：ubuntu18</h3><p>后期探索…先打比赛去了dbq</p>
 <blockquote>
 <p>参考：<a href="https://xz.aliyun.com/t/2316#toc-0" target="_blank" rel="noopener">House of Roman 实战</a><br><a href="https://www.jianshu.com/p/6ba2bea1079e" target="_blank" rel="noopener">house_of_roman——zs0zrc</a></p>
