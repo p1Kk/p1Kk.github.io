@@ -20,7 +20,7 @@
 <meta property="og:description" content="在有c语言基础下学习《C++ Primer》的新知  小知识 9.7更1using namespace std;    1. 在控制台窗口内编译程序假定main程序保存在文件prog1.cc中，用如下命令编译它： 1$ CC prog1.cc  其中，CC为编译器程序的名字，$是系统提示符。 2. 输入输出流1cin &amp;gt;&amp;gt; 变量名;   cin &amp;gt;&amp;gt;  其中&amp;gt;&amp;gt">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://i.loli.net/2019/11/24/x4SgjiFKazNYLXo.png">
-<meta property="og:updated_time" content="2019-11-24T09:23:57.126Z">
+<meta property="og:updated_time" content="2019-11-24T11:18:14.727Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++ 学习笔记【长期更】">
 <meta name="twitter:description" content="在有c语言基础下学习《C++ Primer》的新知  小知识 9.7更1using namespace std;    1. 在控制台窗口内编译程序假定main程序保存在文件prog1.cc中，用如下命令编译它： 1$ CC prog1.cc  其中，CC为编译器程序的名字，$是系统提示符。 2. 输入输出流1cin &amp;gt;&amp;gt; 变量名;   cin &amp;gt;&amp;gt;  其中&amp;gt;&amp;gt">
@@ -337,7 +337,7 @@
 <p>迭代器精确类型无须知道。<br><code>const_iterator</code>能读取但是不能修改</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(*it).empty() 相当于 it-&gt;empty()		//解引用it，然后调用结果对象的empty成员，检查it所指字符串是否为空</span><br></pre></td></tr></table></figure>
 
-<p>试图在循环体中对迭代器所属容器添加元素，或任何一种可能改变vector对象容量的操作，如<code>push_back</code>，都会使迭代器失效</p>
+<p>试图在循环体中对迭代器所属容器添加元素，或任何一种可能改变vector对象容量的操作，如<code>push_back</code>，都会使迭代器失效<br>迭代器运算</p>
 <h2 id="43"><a href="#43" class="headerlink" title="43."></a>43.</h2><h1 id="一些easy-test"><a href="#一些easy-test" class="headerlink" title="一些easy_test"></a>一些easy_test</h1><h2 id="读取文本"><a href="#读取文本" class="headerlink" title="读取文本"></a>读取文本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include&lt;fstream&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	ifstream in;	//文件**输入流**的类</span><br><span class="line">	in.open(&quot;C:\\Users\\jy\\Desktop\\flag.txt&quot;);</span><br><span class="line">	//这两句可替换为：ifstream in(&quot;C:\\Users\\jy\\Desktop\\flag.txt&quot;);</span><br><span class="line">	if (!in) &#123;</span><br><span class="line">		cerr &lt;&lt; &quot;打开文件夹失败！&quot; &lt;&lt; endl;</span><br><span class="line">		return 0;</span><br><span class="line">	&#125;</span><br><span class="line">	char x;</span><br><span class="line">	while (in &gt;&gt; x) &#123;	//in每一次流一个字符到x</span><br><span class="line">		cout &lt;&lt; x;		//x再流到cout输出</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	in.close();</span><br><span class="line"></span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">//会出现中文乱码，空格和回车没有流</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i.loli.net/2019/11/24/x4SgjiFKazNYLXo.png" alt="flag.txt中是带空格的，可是没有打印出来哦~"><br>ifstream 还可以接受不止一个参数</p>
@@ -407,7 +407,7 @@
 		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
 		
 		
-		<a href="https://github.com/https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
 		
 		
 		
@@ -483,15 +483,11 @@
 			
 		
 			
-				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
 			
 		
 			
@@ -500,6 +496,10 @@
 		
 			
 				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 		</ul>
