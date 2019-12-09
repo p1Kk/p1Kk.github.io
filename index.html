@@ -81,6 +81,27 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2019/12/09/0CTF2017 babyheap/新建文件夹/wp/" title="" itemprop="url">
+  
+    <h1 itemprop="name"></h1>
+    
+     
+           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
+
+漏洞点保护全开calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。
+分析先关闭PIE方便调试
+1sudo sh -c &amp;quot;echo 0 &amp;gt; /proc/sys/kern</p>
+        
+    
+    <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished">2019-12-09</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/" title="C++ 学习笔记【长期更】" itemprop="url">
   
     <h1 itemprop="name">C++ 学习笔记【长期更】</h1>
@@ -260,28 +281,6 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
         
     
     <time datetime="2019-10-07T07:45:30.833Z" itemprop="datePublished">2019-10-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/buu/wppp/" title="buuctf pwn wp【长期更】" itemprop="url">
-  
-    <h1 itemprop="name">buuctf pwn wp【长期更】</h1>
-    
-     
-           <p itemprop="description" >开始刷一下buu，尽力做吧
-
-连上就有flag的pwn
-RIP覆盖一下
-ciscn_2019_c_1栈溢出我的exp一直调试不对是因为这句
-1puts_addr = u64(io.recvuntil(&amp;quot;\n&amp;quot;, drop = True).ljust(8, &amp;a</p>
-        
-    
-    <time datetime="2019-10-03T03:10:09.843Z" itemprop="datePublished">2019-10-03</time>
   </a>
 </section>
 
