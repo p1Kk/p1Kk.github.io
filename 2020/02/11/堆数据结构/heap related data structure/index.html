@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png">
-<meta property="og:updated_time" content="2020-02-12T08:53:27.960Z">
+<meta property="og:updated_time" content="2020-02-12T08:57:06.965Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="heap related data structure &amp;&amp; ptmalloc2">
 <meta name="twitter:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
@@ -194,56 +194,56 @@
 </ul>
 </li>
 <li><ol start="3">
-<li>是否是mmap分配<ul>
+<li>是否是mmap分配</li>
+</ol>
+<ul>
 <li>是，释放mmap的chunk</li>
 <li>否，⬇</li>
 </ul>
 </li>
-</ol>
-</li>
 <li><ol start="4">
-<li>size是否属于<code>fast bin</code>且chunk并不位于heap顶部，也就是不与top chunk相邻<ul>
+<li>size是否属于<code>fast bin</code>且chunk并不位于heap顶部，也就是不与top chunk相邻</li>
+</ol>
+<ul>
 <li>是，插入<code>fast bin</code>，return</li>
 <li>否，⬇</li>
 </ul>
 </li>
-</ol>
-</li>
 <li><ol start="5">
-<li>查看前一个chunk是否free<ul>
+<li>查看前一个chunk是否free</li>
+</ol>
+<ul>
 <li>是，合并，⬇</li>
 </ul>
 </li>
-</ol>
-</li>
 <li><ol start="6">
-<li>查看下一个chunk是否为top chunk<ul>
+<li>查看下一个chunk是否为top chunk</li>
+</ol>
+<ul>
 <li>是，合并，更新top chunk大小，⬇</li>
 <li>否，-&gt;7</li>
 </ul>
 </li>
-</ol>
-</li>
 <li><ol start="7">
-<li>查看下一个chunk是否free<ul>
+<li>查看下一个chunk是否free</li>
+</ol>
+<ul>
 <li>是，合并</li>
 </ul>
 </li>
-</ol>
-</li>
 <li><ol start="8">
-<li>判断合并后的 chunk 的大小是否大于 FASTBIN_CONSOLIDATION_THRESHOLD（默认 64KB）<ul>
+<li>判断合并后的 chunk 的大小是否大于 FASTBIN_CONSOLIDATION_THRESHOLD（默认 64KB）</li>
+</ol>
+<ul>
 <li>是，触发进行 fast bins 的合并操作，fast bins 中的 chunk 将被 遍历，并与相邻的空闲 chunk 进行合并，合并后的 chunk 会被放到 unsorted bin 中。 fast bins 将变为空，⬇</li>
 </ul>
 </li>
-</ol>
-</li>
 <li><ol start="9">
-<li>判断 top chunk 的大小是否大于 mmap 收缩阈值（默认为 128KB）<ul>
+<li>判断 top chunk 的大小是否大于 mmap 收缩阈值（默认为 128KB）</li>
+</ol>
+<ul>
 <li>是，对 于主分配区，则会试图归还 top chunk 中的一部分给操作系统。但是最先分配的 128KB 空间是不会归还的，ptmalloc 会一直管理这部分内存，用于响应用户的分配 请求；如果为非主分配区，会进行 sub-heap 收缩，将 top chunk 的一部分返回给操 作系统，如果 top chunk 为整个 sub-heap，会把整个 sub-heap 还回给操作系统。</li>
 </ul>
-</li>
-</ol>
 </li>
 </ul>
 <p>释放结束，从 free() 函数退出。可以看出，收缩堆的条件是当前 free 的 chunk 大小加上前后能合并 chunk 的大小大于 64k，并且要 top chunk 的大 小要达到 mmap 收缩阈值，才有可能收缩堆</p>
@@ -388,15 +388,15 @@
 			
 		
 			
-				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
