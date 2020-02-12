@@ -4,29 +4,29 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>heap related data structure | p1Kk&#39;s World!</title>
+    <title>heap related data structure &amp;&amp; ptmalloc2 | p1Kk&#39;s World!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="p1Kk">
     
 
     
-    <meta name="description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例）  0x01 malloc_chunk的基本结构（空闲chunk/free之后）（使用中/未被free）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表示： NON_MAIN_ARENA">
-<meta name="keywords" content="pwn,堆,笔记">
+    <meta name="description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
+<meta name="keywords" content="pwn,笔记,堆">
 <meta property="og:type" content="article">
-<meta property="og:title" content="heap related data structure">
+<meta property="og:title" content="heap related data structure &amp;&amp; ptmalloc2">
 <meta property="og:url" content="p1Kk.github.io/2020/02/11/堆数据结构/heap related data structure/index.html">
 <meta property="og:site_name" content="p1Kk&#39;s World!">
-<meta property="og:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例）  0x01 malloc_chunk的基本结构（空闲chunk/free之后）（使用中/未被free）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表示： NON_MAIN_ARENA">
+<meta property="og:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="p1Kk.github.io/2020/02/11/堆数据结构/heap%20related%20data%20structure/%E7%A9%BA%E9%97%B2chunk.png">
-<meta property="og:image" content="p1Kk.github.io/2020/02/11/堆数据结构/heap%20related%20data%20structure/no%20free.png">
-<meta property="og:image" content="p1Kk.github.io/2020/02/11/堆数据结构/heap%20related%20data%20structure/bin.png">
-<meta property="og:updated_time" content="2020-02-11T14:12:15.257Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png">
+<meta property="og:updated_time" content="2020-02-12T08:53:27.960Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="heap related data structure">
-<meta name="twitter:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例）  0x01 malloc_chunk的基本结构（空闲chunk/free之后）（使用中/未被free）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表示： NON_MAIN_ARENA">
-<meta name="twitter:image" content="p1Kk.github.io/2020/02/11/堆数据结构/heap%20related%20data%20structure/%E7%A9%BA%E9%97%B2chunk.png">
+<meta name="twitter:title" content="heap related data structure &amp;&amp; ptmalloc2">
+<meta name="twitter:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -90,7 +90,7 @@
 		  <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/02/11/堆数据结构/heap related data structure/" title="heap related data structure" itemprop="url">heap related data structure</a>
+      <a href="/2020/02/11/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">heap related data structure &amp;&amp; ptmalloc2</a>
   </h1>
   <p class="article-author">By
        
@@ -106,14 +106,15 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-malloc-chunk的基本结构"><span class="toc-number">1.</span> <span class="toc-text">0x01 malloc_chunk的基本结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-chunk的复用"><span class="toc-number">2.</span> <span class="toc-text">0x02 chunk的复用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-Bin"><span class="toc-number">3.</span> <span class="toc-text">0x03 Bin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一．概述"><span class="toc-number">3.1.</span> <span class="toc-text">一．概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二．分类"><span class="toc-number">3.2.</span> <span class="toc-text">二．分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fast-bins"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. fast bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-unsorted-bins"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. unsorted bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-small-bins"><span class="toc-number">3.2.3.</span> <span class="toc-text">3. small bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-large-bins"><span class="toc-number">3.2.4.</span> <span class="toc-text">4. large bins</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-三种特殊的chunk"><span class="toc-number">4.</span> <span class="toc-text">0x04 三种特殊的chunk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#top-chunk"><span class="toc-number">4.1.</span> <span class="toc-text">top chunk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mmaped-chunk（略）"><span class="toc-number">4.2.</span> <span class="toc-text">mmaped chunk（略）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-remainder-chunk（略）"><span class="toc-number">4.3.</span> <span class="toc-text">last remainder chunk（略）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#综上"><span class="toc-number">5.</span> <span class="toc-text">综上</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配：-int-malloc"><span class="toc-number">5.1.</span> <span class="toc-text">内存分配：_int_malloc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存回收：free"><span class="toc-number">5.2.</span> <span class="toc-text">内存回收：free</span></a></li></ol></li></ol>
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-malloc-chunk的基本结构"><span class="toc-number">1.</span> <span class="toc-text">0x01 malloc_chunk的基本结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-chunk的复用"><span class="toc-number">2.</span> <span class="toc-text">0x02 chunk的复用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-Bin"><span class="toc-number">3.</span> <span class="toc-text">0x03 Bin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一．概述"><span class="toc-number">3.1.</span> <span class="toc-text">一．概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二．分类"><span class="toc-number">3.2.</span> <span class="toc-text">二．分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fast-bins"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. fast bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-unsorted-bins"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. unsorted bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-small-bins"><span class="toc-number">3.2.3.</span> <span class="toc-text">3. small bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-large-bins"><span class="toc-number">3.2.4.</span> <span class="toc-text">4. large bins</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-三种特殊的chunk"><span class="toc-number">4.</span> <span class="toc-text">0x04 三种特殊的chunk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#top-chunk"><span class="toc-number">4.1.</span> <span class="toc-text">top chunk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mmaped-chunk（略）"><span class="toc-number">4.2.</span> <span class="toc-text">mmaped chunk（略）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-remainder-chunk（略）"><span class="toc-number">4.3.</span> <span class="toc-text">last remainder chunk（略）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#综上"><span class="toc-number">5.</span> <span class="toc-text">综上</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配：-int-malloc"><span class="toc-number">5.1.</span> <span class="toc-text">内存分配：_int_malloc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存回收：free"><span class="toc-number">5.2.</span> <span class="toc-text">内存回收：free</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分配区"><span class="toc-number">6.</span> <span class="toc-text">分配区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#main-arena"><span class="toc-number">6.1.</span> <span class="toc-text">main_arena</span></a></li></ol></li></ol>
 		  
 		  </div>
 		  
 		  <blockquote>
-<p>复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…<br>本文只捡练了一些（以32位系统为例）</p>
+<p>复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…<br>本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）</p>
 </blockquote>
-<h1 id="0x01-malloc-chunk的基本结构"><a href="#0x01-malloc-chunk的基本结构" class="headerlink" title="0x01 malloc_chunk的基本结构"></a>0x01 malloc_chunk的基本结构</h1><p>（空闲chunk/free之后）<br><img src="%E7%A9%BA%E9%97%B2chunk.png" alt><br>（使用中/未被free）<br><img src="no%20free.png" alt></p>
+<h1 id="0x01-malloc-chunk的基本结构"><a href="#0x01-malloc-chunk的基本结构" class="headerlink" title="0x01 malloc_chunk的基本结构"></a>0x01 malloc_chunk的基本结构</h1><p>（使用中/未被free）<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png" alt></p>
+<p>（空闲chunk/free之后）<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png" alt></p>
 <ol>
 <li><strong>size</strong>字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表示：<ul>
 <li>NON_MAIN_<strong>A</strong>RENA，记录当前 chunk 是否不属于主线程（main_arena），1 表示不属于，0 表示属于。</li>
@@ -130,13 +131,15 @@
 <li>ptmalloc将相似大小的chunk用双向链表链接，此链表称为bin。ptmalloc一共维护了128个bin，并使用一个数组来存储这些bin</li>
 <li>free掉一个chunk时根据chunk大小加入到对应的bin中。</li>
 </ul>
-<p><img src="bin.png" alt><br>bin[128]中0和127不使用</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png" alt><br>bin[128]中0和127不使用</p>
 <h2 id="二．分类"><a href="#二．分类" class="headerlink" title="二．分类"></a>二．分类</h2><h3 id="1-fast-bins"><a href="#1-fast-bins" class="headerlink" title="1. fast bins"></a>1. fast bins</h3><p><strong>不大于</strong>max_fast（<strong>64B</strong>）的chunk被释放后，首先会被放到fastbins中，fastbins中的chunk不改变它的Prev_inuse标志，也就无法被合并。<br>当用户需要的chunk大小 &lt; max_fast时，ptmalloc会首先判断fastbin中相应的bin中是否有对应大小的空闲块（这里比较的是无符号整数），如果有，直接从fastbin头结点开始取chunk。free之后如果再次malloc相同size，会申请到同一块内存。如果没有才会查找bins中的空闲chunk。<br>在某个特定的时候，ptmalloc会遍历fastbins中的chunk，将相邻的空闲chunk进行合并，并将合并后的chunk加入unsorted bin中，然后再将unsortedbin中的chunk加入bins。</p>
-<p>fast bin为单链表。采用LIFO（Last In First Out）。fastbinsY[10]只使用前八个bin，所以大小范围为[0x10,0x80]。</p>
+<p>fast bin为单链表。采用LIFO（Last In First Out）。fastbins cache了 small bins的前7个大小的空闲chunk，对于 SIZE_SZ 为 4B 的平台【16B，24B，32B，40B，48B，56B，64B】；对 于 SIZE_SZ 为 8B 的平台【32B，48B，64B，80B，96B，112B，128B】</p>
+<p>当每次释放的 chunk 与该 chunk 相邻的空闲 chunk 合并后的大小大于 64k 时，就认为内存碎片可能比较多了，就需要 把 fast bins 中的所有 chunk 都进行合并，以减少内存碎片对系统的影响</p>
 <h3 id="2-unsorted-bins"><a href="#2-unsorted-bins" class="headerlink" title="2. unsorted bins"></a>2. unsorted bins</h3><p>如果被用户释放的chunk <strong>&gt;</strong> max_fast（<strong>64B</strong>），或者fastbins中的空闲chunk合并后，这些chunk首先会被放入unsorted bin<br>malloc时如果fastbin中没有合适的chunk，就会在unsorted bin中查找合适的。如果unsorted bin中没有合适的chunk，就将unsorted bin中的chunk放到所属的bin中再分配。<br>可以把unsorted bins理解为缓冲区。</p>
 <p><code>unsorted bin</code>为bin[1]，其中的chunk没有排序，大小不限制，双链表，成环。采用FIFO。</p>
-<h3 id="3-small-bins"><a href="#3-small-bins" class="headerlink" title="3. small bins"></a>3. small bins</h3><p><code>small bin</code>为索引2到63，大小为（2 * SIZE_SZ * ndx）（即size <strong>&lt; 512B</strong>），双链表，成环。采用FIFO。同一个small bin 链表中的 chunk 的大小相同。两个相邻索引的 small bin 链表中的 chunk 大小相差的字节数为2个机器字长，即 32 位相差 8 字节，64 位相差 16 字节。</p>
-<h3 id="4-large-bins"><a href="#4-large-bins" class="headerlink" title="4. large bins"></a>4. large bins</h3><p><code>large bin</code>为索引64到126，大小为[512,512+64)。每个 bin 中的 chunk 的大小不一致，而是处于一定区间范围内。此外，这 63 个 bin 被分成了 6 组，每组 bin 中的 chunk 大小之间的公差一致。large bins 中的每一个 bin 都包含一定范围内的 chunk，其中的 chunk 按 fd 指针的顺序从大到小排列。相同大小的 chunk 同样按照最近使用顺序排列。</p>
+<h3 id="3-small-bins"><a href="#3-small-bins" class="headerlink" title="3. small bins"></a>3. small bins</h3><p><code>small bin</code>为索引2到63，大小为（2 * SIZE_SZ * ndx）（即 size <strong>&lt; 512B</strong>），双链表，成环。采用FIFO。<br>实际共62个bin，<strong>同一个small bin 链表中的 chunk 的大小相同</strong>。两个相邻索引的 small bin 链表中的 chunk 大小32 位相差 8 字节【16B, 24B, 32B, …, 504B】，64 位相差 16 字节【32B, 48B, 64B, …, 1008B】<br>分配时采用精确匹配。</p>
+<h3 id="4-large-bins"><a href="#4-large-bins" class="headerlink" title="4. large bins"></a>4. large bins</h3><p><code>large bin</code>为索引64到126，大小为[512,512+64)（即 size <strong>&gt;= 512B</strong>）。<br>一共包括63个bin，每个 bin 中的 chunk 的大小不一致，而是处于一定区间范围内。此外，这 63 个 bin 被分成了 6 组，每组 bin 中的 chunk 大小之间的公差一致。<br>以32位平台（SIZE_SZ = 4B）为例：<br>|组    |数量|公差|<br>|—|—|—|<br>|1    |32    |64B|<br>|2    |16    |512B|<br>|3    |8    |4096B|<br>|4    |4    |32768B|<br>|5 |2    |262144B|<br>|6    |1    |不限制|</p>
+<p>large bins 中的每一个 bin 都包含一定范围内的 chunk，其中的 chunk 按 fd 指针的顺序从大到小排列。相同大小的 chunk 同样按照最近使用顺序排列。<br>分配时采用最近匹配。</p>
 <hr>
 <p>——上述这些 bin 的排布都会遵循一个原则：<strong>任意两个物理相邻的空闲 chunk 不能在一起</strong>。</p>
 <p>需要注意的是，并不是所有的 chunk 被释放后就立即被放到 bin 中。ptmalloc 为了提高分配的速度，会把一些小的 chunk<strong>先</strong>放到 fast bins 的容器内。<strong>而且，fastbin 容器中的 chunk 的使用标记总是被置位的，所以不满足上面的原则。</strong></p>
@@ -244,6 +247,10 @@
 </li>
 </ul>
 <p>释放结束，从 free() 函数退出。可以看出，收缩堆的条件是当前 free 的 chunk 大小加上前后能合并 chunk 的大小大于 64k，并且要 top chunk 的大 小要达到 mmap 收缩阈值，才有可能收缩堆</p>
+<h1 id="分配区"><a href="#分配区" class="headerlink" title="分配区"></a>分配区</h1><p>arena的个数是跟系统中处理器核心个数相关</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">For 32 bit systems:</span><br><span class="line">     Number of arena = 2 * number of cores.</span><br><span class="line">For 64 bit systems:</span><br><span class="line">     Number of arena = 8 * number of cores.</span><br></pre></td></tr></table></figure>
+
+<h2 id="main-arena"><a href="#main-arena" class="headerlink" title="main_arena"></a>main_arena</h2><p>main_arena表示主分配区，任何进程有且仅有一个全局的主分配区</p>
 <blockquote>
 <p>参考：<a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/heap_structure/" target="_blank" rel="noopener">CTF-wiki堆</a>，<a href="https://paper.seebug.org/papers/Archive/refs/heap/glibc%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86ptmalloc%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90.pdf" target="_blank" rel="noopener">glibc内存管理ptmalloc2源码分析</a></p>
 </blockquote>
@@ -260,7 +267,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/堆/">堆</a><a href="/tags/笔记/">笔记</a>
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/笔记/">笔记</a><a href="/tags/堆/">堆</a>
   </div>
 
 </div>
