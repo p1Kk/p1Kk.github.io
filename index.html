@@ -81,6 +81,46 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2025/06/08/Diary/diary/" title="About" itemprop="url">
+  
+    <h1 itemprop="name">About</h1>
+    
+     
+           <p itemprop="description" >2020.2.13
+栈迁移2020.2.12
+今天没有做Remote，不想做了，学pwn
+glibc源码分析ptmalloc2还是挺好看的，以前没有认真看这两天又看了一遍。2020.2.11时间好快啊，不自怨自艾了，我又重新做人了（pwn）
+把远控的MainDll debug结束</p>
+        
+    
+    <time datetime="2025-06-07T16:00:00.000Z" itemprop="datePublished">2025-06-08</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/02/12/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
+  
+    <h1 itemprop="name">栈迁移</h1>
+    
+     
+           <p itemprop="description" >看到了一道栈迁移的题，就来小写一下加深印象
+前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
+以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函</p>
+        
+    
+    <time datetime="2020-02-12T13:39:31.071Z" itemprop="datePublished">2020-02-12</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/02/11/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
   
     <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
@@ -237,53 +277,6 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/23/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
-  
-    <h1 itemprop="name">Unsorted Bin Attack</h1>
-    
-     
-           <p itemprop="description" >Unsorted Bin
-chunk分割，剩余&amp;gt;MINSIZE
-
-放入unsorted bin
-
-
-释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻
-
-放入unsorted bin
-
-
-malloc_consolidate时，合并后的chu</p>
-        
-    
-    <time datetime="2019-10-23T11:58:13.889Z" itemprop="datePublished">2019-10-23</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/21/FILE structure used with “stream functions”/IO/FILE structure used with “stream functions”/" title="IO_FILE structure used with &#34;stream functions&#34;" itemprop="url">
-  
-    <h1 itemprop="name">IO_FILE structure used with &#34;stream functions&#34;</h1>
-    
-     
-           <p itemprop="description" >emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔
-FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下：
-12345678910111213141516171819202122232425262728</p>
-        
-    
-    <time datetime="2019-10-21T14:06:41.270Z" itemprop="datePublished">2019-10-21</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -339,7 +332,11 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			<li><a href="/categories/杂记/" title="杂记">杂记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>12</sup></a></li>
 		  
 		
 		</ul>
@@ -352,15 +349,15 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>17</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>9</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>7</sup></a></li>
 			
 		
 			
@@ -373,6 +370,10 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
 			
 		
 			
