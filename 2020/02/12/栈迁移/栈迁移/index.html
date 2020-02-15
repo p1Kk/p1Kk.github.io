@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="看到了一道栈迁移的题，就来小写一下加深印象 前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base 以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数后堆栈不平衡以及找不到之前的入口地址。leave ret相当于： 12leave ==&amp;gt; mov esp, eb">
-<meta name="keywords" content="笔记,pwn,栈">
+<meta name="keywords" content="pwn,笔记,栈">
 <meta property="og:type" content="article">
 <meta property="og:title" content="栈迁移">
 <meta property="og:url" content="p1Kk.github.io/2020/02/12/栈迁移/栈迁移/index.html">
@@ -143,7 +143,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/pwn/">pwn</a><a href="/tags/栈/">栈</a>
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/笔记/">笔记</a><a href="/tags/栈/">栈</a>
   </div>
 
 </div>
@@ -158,9 +158,9 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2025/06/08/Diary/diary/" title="About">
+ <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出">
   <span>
-  About</span>
+  整数溢出</span>
 </a>
 </div>
 
@@ -226,11 +226,7 @@
 		  
 		
 		  
-			<li><a href="/categories/杂记/" title="杂记">杂记<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>12</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>13</sup></a></li>
 		  
 		
 		</ul>
@@ -243,15 +239,15 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>18</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>9</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>19</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>9</sup></a></li>
 			
 		
 			
@@ -263,15 +259,15 @@
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -291,7 +287,7 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>

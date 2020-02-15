@@ -4,21 +4,25 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>p1Kk&#39;s World!</title>
+    <title>整数溢出 | p1Kk&#39;s World!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="p1Kk">
     
 
     
-    <meta name="keywords" content="Try to pwn everything!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="p1Kk&#39;s World!">
-<meta property="og:url" content="p1Kk.github.io/page/2/index.html">
+    <meta name="description" content="ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下 例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&amp;gt; int，将会造成截断，">
+<meta name="keywords" content="pwn,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="整数溢出">
+<meta property="og:url" content="p1Kk.github.io/2020/02/15/整数溢出/整数溢出/index.html">
 <meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下 例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&amp;gt; int，将会造成截断，">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-15T14:17:16.474Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="p1Kk&#39;s World!">
+<meta name="twitter:title" content="整数溢出">
+<meta name="twitter:description" content="ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下 例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&amp;gt; int，将会造成截断，">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -76,234 +80,76 @@
 </div>
     </header>
     <div id="container">
-      <div id="main">
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/23/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
-  
-    <h1 itemprop="name">Unsorted Bin Attack</h1>
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-     
-           <p itemprop="description" >Unsorted Bin
-chunk分割，剩余&amp;gt;MINSIZE
-
-放入unsorted bin
-
-
-释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻
-
-放入unsorted bin
-
-
-malloc_consolidate时，合并后的chu</p>
-        
+      <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出" itemprop="url">整数溢出</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-02-15T14:06:08.636Z" itemprop="datePublished"> Published 2020-02-15</time>
     
-    <time datetime="2019-10-23T11:58:13.889Z" itemprop="datePublished">2019-10-23</time>
-  </a>
-</section>
-
-
-
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  
+		  
+		  </div>
+		  
+		  <p>ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出<br>但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下</p>
+<p>例如： <code>long: 0x100000000 -&gt; int: 0x00000000</code><br>已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&gt; int，将会造成截断，只把长整型的低 4byte 的值传给整型变量。<br>如果此时再传入一个较大的数据就会造成溢出。</p>
+<p>但是当范围更小的变量就能完全的把值传递给范围更大的变量，而不会造成数据丢失。</p>
+<p>类型    |字节    |范围<br>|—|—|—|<br>short int    |2byte(word)    |0 ~ 32767(0 ~ 0x7fff)  // -32768 ~ -1(0x8000 ~ 0xffff)<br>unsigned short int    |2byte(word)    |0 ~ 65535(0 ~ 0xffff)<br>int    |4byte(dword)    |0 ~ 2147483647(0 ~ 0x7fffffff)  //  -2147483648 ~ -1(0x80000000 ~ 0xffffffff)<br>unsigned int    |4byte(dword)    |0 ~ 4294967295(0 ~ 0xffffffff)<br>long int    |8byte(qword)    |正: 0 ~ 0x7fffffffffffffff  //  负: 0x8000000000000000 ~ 0xffffffffffffffff<br>unsigned long int    |8byte(qword)    |0 ~ 0xffffffffffffffff</p>
   
-<section class="post" itemscope itemprop="blogitem">
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
   
-    <a href="/2019/10/21/FILE structure used with “stream functions”/IO/FILE structure used with “stream functions”/" title="IO_FILE structure used with &#34;stream functions&#34;" itemprop="url">
-  
-    <h1 itemprop="name">IO_FILE structure used with &#34;stream functions&#34;</h1>
-    
-     
-           <p itemprop="description" >emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔
-FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下：
-12345678910111213141516171819202122232425262728</p>
-        
-    
-    <time datetime="2019-10-21T14:06:41.270Z" itemprop="datePublished">2019-10-21</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/07/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具" itemprop="url">
-  
-    <h1 itemprop="name">ubuntu18安装各种pwn工具</h1>
-    
-     
-           <p itemprop="description" >写在前面：因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍
-
-更换系统镜像为清华镜像源不换的话以后下载东西会很慢
-遇到报错
-12E: Could not get lock /var/lib/dpkg/lock - open (1</p>
-        
-    
-    <time datetime="2019-10-07T07:45:30.833Z" itemprop="datePublished">2019-10-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/buu/wppp/" title="buuctf pwn wp【长期更】" itemprop="url">
-  
-    <h1 itemprop="name">buuctf pwn wp【长期更】</h1>
-    
-     
-           <p itemprop="description" >开始刷一下buu，尽力做吧
-
-连上就有flag的pwn
-RIP覆盖一下
-ciscn_2019_c_1栈溢出我的exp一直调试不对是因为这句
-1puts_addr = u64(io.recvuntil(&amp;quot;\n&amp;quot;, drop = True).ljust(8, &amp;a</p>
-        
-    
-    <time datetime="2019-10-03T03:10:09.843Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">
-  
-    <h1 itemprop="name">Jarvis OJ pwn wp(未完...看情况继续写)</h1>
-    
-     
-           <p itemprop="description" >写于19.7.12
-
-用jarvis复习复习，题总是做不出来…☹
-level3_x640x01寻找漏洞checksec
-1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos</p>
-        
-    
-    <time datetime="2019-10-03T03:01:17.634Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">
-  
-    <h1 itemprop="name">IDA插件keypatch初体验</h1>
-    
-     
-           <p itemprop="description" >写于19.6.28
-
-我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数
-找到上方Edit
-我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数
-这里只举例用汇编修改，使用汇编修改比较方便
-修改成功，下</p>
-        
-    
-    <time datetime="2019-10-03T02:57:24.003Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp" itemprop="url">
-  
-    <h1 itemprop="name">2019 RedpwnCTF Bronze Ropchain wp</h1>
-    
-     
-           <p itemprop="description" >写于19.8.18
-
-
-这个题应该简单记录一下，我也不怎么用ropchain，感谢今天梦师傅的指点嘻嘻orz\
-
-因为它有点不一样checksec
-1234567kk@ubuntu:~/Desktop/black/CTF/RedpwnCTF/Bronze Ropchain$ ch</p>
-        
-    
-    <time datetime="2019-10-03T02:54:02.329Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/tw/tw/" title="pwnable.tw wp(刚开始...)" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw wp(刚开始...)</h1>
-    
-     
-           <p itemprop="description" >start0x01分析checksec
-1234567kk@ubuntu:~/Desktop/black/tw/start$ checksec start [*] &amp;apos;/home/kk/Desktop/black/tw/start/start&amp;apos;    Arch:</p>
-        
-    
-    <time datetime="2019-10-03T02:49:08.908Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
-  
-    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
-    
-     
-           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
-
-lab1法一通过ida查看get_flag函数。发现是…逆向呀
-
-是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
-
-在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
-        
-    
-    <time datetime="2019-10-03T02:40:43.671Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/Asis CTF 2016 b00ks(obo)/wp/" title="Asis CTF 2016 b00ks wp (null off-by-one)【详】" itemprop="url">
-  
-    <h1 itemprop="name">Asis CTF 2016 b00ks wp (null off-by-one)【详】</h1>
-    
-     
-           <p itemprop="description" >写于19.6.26
-
-
-没错没错，从CTF-wiki过来的，我没看懂，又去其他大佬的博客==&amp;gt;九层台取取经，终于会调了orz…掌握gdb调试很重要啊啊啊！改最终脚本改了好久了，唉😑ps过于繁琐高手可以绕过嚯嚯嚯
-
-🎈0x01寻找漏洞checksec1234567kk@u</p>
-        
-    
-    <time datetime="2019-10-03T02:35:50.307Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-
-  <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
-  </nav>
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/笔记/">笔记</a>
+  </div>
 
 </div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2020/02/12/栈迁移/栈迁移/"  title="栈迁移">
+ <span>栈迁移
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
@@ -499,6 +345,81 @@ $(document).ready(function(){
 });
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
 
 
 
@@ -559,4 +480,4 @@ $(document).ready(function(){
 <!-- Tiny_search End -->
 
   </body>
- </html>
+</html>
