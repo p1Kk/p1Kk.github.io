@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="p1Kk&#39;s World!">
 <meta property="og:description" content="ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下 例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&amp;gt; int，将会造成截断，">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-02-15T14:17:16.474Z">
+<meta property="og:updated_time" content="2020-02-16T05:45:14.543Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="整数溢出">
 <meta name="twitter:description" content="ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下 例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&amp;gt; int，将会造成截断，">
@@ -109,7 +109,7 @@
 		  <p>ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出<br>但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下</p>
 <p>例如： <code>long: 0x100000000 -&gt; int: 0x00000000</code><br>已经长整型的占有 8 byte 的内存空间，而整型只有 4 byte 的内存空间，所以当 long -&gt; int，将会造成截断，只把长整型的低 4byte 的值传给整型变量。<br>如果此时再传入一个较大的数据就会造成溢出。</p>
 <p>但是当范围更小的变量就能完全的把值传递给范围更大的变量，而不会造成数据丢失。</p>
-<p>类型    |字节    |范围<br>|—|—|—|<br>short int    |2byte(word)    |0 ~ 32767(0 ~ 0x7fff)  // -32768 ~ -1(0x8000 ~ 0xffff)<br>unsigned short int    |2byte(word)    |0 ~ 65535(0 ~ 0xffff)<br>int    |4byte(dword)    |0 ~ 2147483647(0 ~ 0x7fffffff)  //  -2147483648 ~ -1(0x80000000 ~ 0xffffffff)<br>unsigned int    |4byte(dword)    |0 ~ 4294967295(0 ~ 0xffffffff)<br>long int    |8byte(qword)    |正: 0 ~ 0x7fffffffffffffff  //  负: 0x8000000000000000 ~ 0xffffffffffffffff<br>unsigned long int    |8byte(qword)    |0 ~ 0xffffffffffffffff</p>
+<p>类型    |字节    |范围|<br>|—|—|—|<br>short int    |2byte(word)    |0 ~ 32767(0 ~ 0x7fff)  // -32768 ~ -1(0x8000 ~ 0xffff)|<br>unsigned short int    |2byte(word)    |0 ~ 65535(0 ~ 0xffff)|<br>int    |4byte(dword)    |0 ~ 2147483647(0 ~ 0x7fffffff)  //  -2147483648 ~ -1(0x80000000 ~ 0xffffffff)|<br>unsigned int    |4byte(dword)    |0 ~ 4294967295(0 ~ 0xffffffff)|<br>long int    |8byte(qword)    |正: 0 ~ 0x7fffffffffffffff  //  负: 0x8000000000000000 ~ 0xffffffffffffffff|<br>unsigned long int    |8byte(qword)    |0 ~ 0xffffffffffffffff|</p>
   
 	  </div>
 		  <footer class="article-footer clearfix">
@@ -236,11 +236,11 @@
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
