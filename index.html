@@ -81,6 +81,26 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/02/17/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
+  
+    <h1 itemprop="name">Fastbin Attack</h1>
+    
+     
+           <p itemprop="description" >首先需要了解：
+
+fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_inuse标志，也就无法被合并
+首块double free检查，当一个chunk被free进fastbin前，会看看链表的第一个chunk【main_arena直接指</p>
+        
+    
+    <time datetime="2020-02-17T08:52:29.955Z" itemprop="datePublished">2020-02-17</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/02/16/SROP/SROP/" title="SROP" itemprop="url">
   
     <h1 itemprop="name">SROP</h1>
@@ -252,25 +272,6 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/28/house of_系列学习之 house of orange/house of/house of_系列学习/" title="house of_系列学习之 house of orange" itemprop="url">
-  
-    <h1 itemprop="name">house of_系列学习之 house of orange</h1>
-    
-     
-           <p itemprop="description" >emmm说起来这也算是house of orange这道题的wp了ovo
-house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数
-原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个</p>
-        
-    
-    <time datetime="2019-10-28T14:16:36.659Z" itemprop="datePublished">2019-10-28</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -326,7 +327,7 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>14</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>15</sup></a></li>
 		  
 		
 		</ul>
@@ -339,11 +340,11 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>20</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>10</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
 			
 		
 			
@@ -351,7 +352,7 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 			
 		
 			
-				<li><a href="/tags/堆/" title="堆">堆<sup>6</sup></a></li>
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
