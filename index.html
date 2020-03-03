@@ -81,6 +81,24 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/03/03/Tcache Attack学习/tcache/" title="Tcache Attack学习" itemprop="url">
+  
+    <h1 itemprop="name">Tcache Attack学习</h1>
+    
+     
+           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
+tcache的数据结构glibc在编译时使用use_tcac</p>
+        
+    
+    <time datetime="2020-03-02T16:00:00.000Z" itemprop="datePublished">2020-03-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/02/17/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
   
     <h1 itemprop="name">Fastbin Attack</h1>
@@ -181,9 +199,10 @@ fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_in
      
            <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
 
-漏洞点保护全开calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。
-分析先关闭PIE方便调试
-1sudo sh -c &amp;quot;echo 0 &amp;gt; /proc/sys/kern</p>
+漏洞点保护全开功能：
+123451. Allocate2. Fill3. Free4. Dump5. Exit
+
+calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
         
     
     <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished">2019-12-09</time>
@@ -232,24 +251,6 @@ demo分析checkse</p>
         
     
     <time datetime="2019-11-09T01:46:33.147Z" itemprop="datePublished">2019-11-09</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/01/Tcache Attack学习/tcache/tcache/" title="Tcache Attack学习" itemprop="url">
-  
-    <h1 itemprop="name">Tcache Attack学习</h1>
-    
-     
-           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
-tcache的数据结构glibc在编译时使用use_tcac</p>
-        
-    
-    <time datetime="2019-11-01T09:31:01.933Z" itemprop="datePublished">2019-11-01</time>
   </a>
 </section>
 
@@ -364,11 +365,11 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
