@@ -1,0 +1,557 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="路由器环境基础工具安装  网络上有很多安装教程，也看了《揭秘家用路由器 0day 漏洞挖掘技术》，但是由于版本等原因，与其他作者的安装还是略有不同，会遇到很多问题，以下参考我自己安装遇到的问题进行。  我的环境 12ubuntu：16.04内核：4  安装 binwalk方法一1sudo apt-get install binwalk  方法二（推荐）1sudo git clone https:/">
+<meta name="keywords" content="Try to pwn everything!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="p1Kk&#39;s World!">
+<meta property="og:url" content="p1Kk.github.io/2020/03/28/路由器/路由器环境配置/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="路由器环境基础工具安装  网络上有很多安装教程，也看了《揭秘家用路由器 0day 漏洞挖掘技术》，但是由于版本等原因，与其他作者的安装还是略有不同，会遇到很多问题，以下参考我自己安装遇到的问题进行。  我的环境 12ubuntu：16.04内核：4  安装 binwalk方法一1sudo apt-get install binwalk  方法二（推荐）1sudo git clone https:/">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200310105709.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/8PID_DI~B4FDMB1%5DB%%5DWMDW.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/wangka.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200311195407.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/54.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/3434.png">
+<meta property="og:updated_time" content="2020-03-12T06:17:34.564Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="p1Kk&#39;s World!">
+<meta name="twitter:description" content="路由器环境基础工具安装  网络上有很多安装教程，也看了《揭秘家用路由器 0day 漏洞挖掘技术》，但是由于版本等原因，与其他作者的安装还是略有不同，会遇到很多问题，以下参考我自己安装遇到的问题进行。  我的环境 12ubuntu：16.04内核：4  安装 binwalk方法一1sudo apt-get install binwalk  方法二（推荐）1sudo git clone https:/">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200310105709.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/03/28/路由器/路由器环境配置/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-03-28T06:16:56.769Z" itemprop="datePublished"> Published 2020-03-28</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-binwalk"><span class="toc-number">1.</span> <span class="toc-text">安装 binwalk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#方法一"><span class="toc-number">1.1.</span> <span class="toc-text">方法一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法二（推荐）"><span class="toc-number">1.2.</span> <span class="toc-text">方法二（推荐）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-jeb"><span class="toc-number">2.</span> <span class="toc-text">安装 jeb</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-QEMU"><span class="toc-number">3.</span> <span class="toc-text">安装 QEMU</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-sasquatch"><span class="toc-number">4.</span> <span class="toc-text">安装 sasquatch</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-MIPS-交叉编译环境-buildroot"><span class="toc-number">5.</span> <span class="toc-text">安装 MIPS 交叉编译环境 buildroot</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#添加PATH"><span class="toc-number">5.1.</span> <span class="toc-text">添加PATH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试交叉编译环境-demo-c"><span class="toc-number">5.2.</span> <span class="toc-text">测试交叉编译环境 demo.c</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MIPS-系统网络配置"><span class="toc-number">6.</span> <span class="toc-text">MIPS 系统网络配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载mips虚拟机"><span class="toc-number">6.1.</span> <span class="toc-text">下载mips虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#法一"><span class="toc-number">6.2.</span> <span class="toc-text">法一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#法二（推荐）"><span class="toc-number">6.3.</span> <span class="toc-text">法二（推荐）</span></a></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <p>路由器环境基础工具安装</p>
+<blockquote>
+<p>网络上有很多安装教程，也看了《揭秘家用路由器 0day 漏洞挖掘技术》，但是由于版本等原因，与其他作者的安装还是略有不同，会遇到很多问题，以下参考我自己安装遇到的问题进行。</p>
+</blockquote>
+<p>我的环境</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ubuntu：16.04</span><br><span class="line">内核：4</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装-binwalk"><a href="#安装-binwalk" class="headerlink" title="安装 binwalk"></a>安装 binwalk</h1><h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install binwalk</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二（推荐）"><a href="#方法二（推荐）" class="headerlink" title="方法二（推荐）"></a>方法二（推荐）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https://github.com/devttys0/binwalk.git</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装-jeb"><a href="#安装-jeb" class="headerlink" title="安装 jeb"></a>安装 jeb</h1><p>在 <a href="https://www.pnfsoftware.com/jeb2/mips" target="_blank" rel="noopener">https://www.pnfsoftware.com/jeb2/mips</a> 下载试用版，但是不知道为啥我的下载速度很慢。<br>也可以使用<code>吾爱破解</code>的破解版 <a href="https://down.52pojie.cn/Tools/Android_Tools/JEB_3.0.0.201808031948_Pro.zip" target="_blank" rel="noopener">https://down.52pojie.cn/Tools/Android_Tools/JEB_3.0.0.201808031948_Pro.zip</a> ，亲测内部可以进行复制粘贴。<br>需要安装java环境，可以参考：<a href="https://blog.csdn.net/lyhkmm/article/details/79524712" target="_blank" rel="noopener">https://blog.csdn.net/lyhkmm/article/details/79524712</a> 进行安装。</p>
+<h1 id="安装-QEMU"><a href="#安装-QEMU" class="headerlink" title="安装 QEMU"></a>安装 QEMU</h1><p>有两种方法，一种是直接下载，另一种是通过官网下载包，然后再安装。经过H4lo师傅的踩坑，<code>2.4.0版本</code>最好。<br>方法一：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install qemu</span><br></pre></td></tr></table></figure>
+
+<p>我这样下载下来的是<code>2.5.0版本</code>，我决定先用一段时间…<br>方法二：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https://download.qemu.org/      # 自选版本进行下载</span><br><span class="line"></span><br><span class="line">./configure</span><br><span class="line">sudo make -j8       # -jx x=内核*2 </span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装-sasquatch"><a href="#安装-sasquatch" class="headerlink" title="安装 sasquatch"></a>安装 sasquatch</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential liblzma-dev liblzo2-dev zlib1g-dev</span><br><span class="line">git clone https://github.com/devttys0/sasquatch</span><br><span class="line">cd sasquatch</span><br><span class="line">./build.sh</span><br></pre></td></tr></table></figure>
+
+<p>使用sasquatch工具的时候，直接命令行输入 sasquatch加对应的参数就可以执行。</p>
+<h1 id="安装-MIPS-交叉编译环境-buildroot"><a href="#安装-MIPS-交叉编译环境-buildroot" class="headerlink" title="安装 MIPS 交叉编译环境 buildroot"></a>安装 MIPS 交叉编译环境 buildroot</h1><p>这个我卸载安装了好几次..因为安装的版本编译会出错(我搜索没有找到较好的解决办法)，使用会出现头文件找不到等等问题。推荐下面的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc build-essential bison flex gettext tcl sharutils libncurses-dev zlib1g-dev exuberant-ctags g++ texinfo patch vim libtool   //升级一下系统的包</span><br><span class="line">wget http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2</span><br><span class="line">tar -jxvf buildroot-snapshot.tar.bz2</span><br><span class="line">cd buildroot</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200310105709.png" alt><br>查看kernel版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br></pre></td></tr></table></figure>
+
+<p>最后使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<p>进行编译</p>
+<h2 id="添加PATH"><a href="#添加PATH" class="headerlink" title="添加PATH"></a>添加PATH</h2><p>法一：将PATH添加到<code>/etc/profile</code>末尾，再<code>source /etc/profile</code>，网上很多都说有效…对我无效，只是暂时性的<br>法二：将PATH添加到<code>~/.bashrc</code>末尾，再source</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=&quot;/home/kk/tools/buildroot/output/host/bin:$PATH&quot;        # 填自己的编译器所在路径</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试交叉编译环境-demo-c"><a href="#测试交叉编译环境-demo-c" class="headerlink" title="测试交叉编译环境 demo.c"></a>测试交叉编译环境 demo.c</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int main()&#123;</span><br><span class="line">        puts(&quot;demo&quot;);</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kk@ubuntu:~/Desktop/iot$ mipsel-linux-gcc -static demo.c -o demo</span><br><span class="line">kk@ubuntu:~/Desktop/iot$ ls</span><br><span class="line">demo  demo.c</span><br><span class="line">kk@ubuntu:~/Desktop/iot$ file demo</span><br><span class="line">demo: ELF 32-bit LSB executable, MIPS, MIPS32 version 1 (SYSV), statically linked, not stripped</span><br></pre></td></tr></table></figure>
+
+<p>LSB –&gt; 小端序</p>
+<h1 id="MIPS-系统网络配置"><a href="#MIPS-系统网络配置" class="headerlink" title="MIPS 系统网络配置"></a>MIPS 系统网络配置</h1><h2 id="下载mips虚拟机"><a href="#下载mips虚拟机" class="headerlink" title="下载mips虚拟机"></a>下载mips虚拟机</h2><p><a href="https://people.debian.org/~aurel32/qemu/mips/" target="_blank" rel="noopener">https://people.debian.org/~aurel32/qemu/mips/</a> 自行选择大小端格式mips系统【mips大端机，mipsel小端机】</p>
+<h2 id="法一"><a href="#法一" class="headerlink" title="法一"></a>法一</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install uml-utilities bridge-utils         # 安装依赖文件</span><br><span class="line">sudo vim /etc/network/interfaces                        # 修改主机配置</span><br></pre></td></tr></table></figure>
+
+<p>写入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br><span class="line">auto eth0</span><br><span class="line">iface eth0 inet dhcp</span><br><span class="line">iface br0 inet dhcp</span><br><span class="line">  bridge_ports eth0</span><br><span class="line">  bridge_maxwait 0</span><br></pre></td></tr></table></figure>
+
+<p>创建qemu网络接口启动脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/qemu-ifup</span><br></pre></td></tr></table></figure>
+
+<p>将原来内容注释，并写入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">echo &quot;Executing /etc/qemu-ifup&quot;</span><br><span class="line">echo &quot;bridge networking&quot;</span><br><span class="line">echo &quot;Bringing up $1 for bridge mode&quot;</span><br><span class="line">sudo /sbin/ifconfig $1 0.0.0.0 promisc up</span><br><span class="line">echo &quot;Adding $1 to br0&quot;</span><br><span class="line">sudo /sbin/brctl addif br0 $1</span><br><span class="line">sleep 2</span><br></pre></td></tr></table></figure>
+
+<p>更改qemu-ifup权限，重启使配置生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 /etc/qemu-ifup</span><br><span class="line">sudo /etc/init.d/networking restart</span><br></pre></td></tr></table></figure>
+
+<p>失败，在网上查询之后，找到了比较好的解决方法<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/8PID_DI~B4FDMB1%5DB%%5DWMDW.png" alt><br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/wangka.png" alt><br>网卡中并没有叫eth0的。<br>将上面两个文件中的<code>eth0</code>改为<code>ens33</code>，再次<code>sudo /etc/init.d/networking restart</code>，成功.<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200311195407.png" alt></p>
+<ul>
+<li>我认为也可以将网卡名更改为<code>eth0</code>，不过我没有用这种方式，可以参考：<a href="https://blog.csdn.net/openbox2008/article/details/80051259" target="_blank" rel="noopener">https://blog.csdn.net/openbox2008/article/details/80051259</a> 我觉得有些麻烦<br>执行：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo qemu-system-mips -M malta -kernel vmlinux-2.6.32-5-4kc-malta -hda debian_squeeze_mips_standard.qcow2 -append &quot;root=/dev/sda1 console=tty0&quot; -net nic, -net tap -nographic</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- Hostname:       debian-mips</span><br><span class="line">- Root password:  root</span><br><span class="line">- User account:   user</span><br><span class="line">- User password:  user</span><br></pre></td></tr></table></figure>
+
+<p>查看<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/54.png" alt><br>eth0没有ip，手动设置<code>ifconfig eth0 xxx.xx.xx.xx</code>，mips虚拟机的ip要和主虚拟机ip在同一网段<br>很麻烦…我这还遇见这么多错误…</p>
+<h2 id="法二（推荐）"><a href="#法二（推荐）" class="headerlink" title="法二（推荐）"></a>法二（推荐）</h2><p>第二种方法，是直接使用<code>tunctl</code>命令来建立一个虚拟网卡，与模拟的 mips 虚拟机进行通信</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo tunctl -t tap0 -u `whoami`  # 为了与 QEMU 虚拟机通信，添加一个虚拟网卡</span><br><span class="line">sudo ifconfig tap0 10.10.10.1/24 # 为添加的虚拟网卡配置 IP 地址</span><br><span class="line">sudo qemu-system-mips -M malta -kernel vmlinux-2.6.32-5-4kc-malta -hda debian_squeeze_mips_standard.qcow2 -append &quot;root=/dev/sda1 console=tty0&quot; -net nic, -net tap -nographic           # 开启mips虚拟机</span><br></pre></td></tr></table></figure>
+
+<p>在mips虚拟机中登录后执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig eth0 10.10.10.2/24</span><br></pre></td></tr></table></figure>
+
+<p>可以互相ping通说明配置成功<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/3434.png" alt></p>
+<blockquote>
+<p>参考：<br><a href="https://blog.csdn.net/QQ1084283172/article/details/68942660" target="_blank" rel="noopener">https://blog.csdn.net/QQ1084283172/article/details/68942660</a><br><a href="https://xz.aliyun.com/t/3826#toc-2" target="_blank" rel="noopener">https://xz.aliyun.com/t/3826#toc-2</a><br><a href="https://xz.aliyun.com/t/6071#toc-2" target="_blank" rel="noopener">https://xz.aliyun.com/t/6071#toc-2</a><br><a href="https://blog.csdn.net/youyudehexie/article/details/7583657" target="_blank" rel="noopener">https://blog.csdn.net/youyudehexie/article/details/7583657</a><br><a href="https://xz.aliyun.com/t/462#toc-6" target="_blank" rel="noopener">https://xz.aliyun.com/t/462#toc-6</a><br>感谢<code>BufSnake</code> <code>知世</code></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/03/28/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack">
+  <span>
+  Unsorted Bin Attack</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/03/27/栈迁移/栈迁移/"  title="栈迁移">
+ <span>栈迁移
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>15</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
