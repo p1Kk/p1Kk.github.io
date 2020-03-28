@@ -81,21 +81,16 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
+    <a href="/2020/03/03/Tcache Attack学习/tcache/" title="Tcache Attack学习" itemprop="url">
   
-    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
+    <h1 itemprop="name">Tcache Attack学习</h1>
     
      
-           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
-
-lab1法一通过ida查看get_flag函数。发现是…逆向呀
-
-是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
-
-在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
+           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
+tcache的数据结构glibc在编译时使用use_tcac</p>
         
     
-    <time datetime="2019-10-03T02:40:43.671Z" itemprop="datePublished">2019-10-03</time>
+    <time datetime="2020-03-02T16:00:00.000Z" itemprop="datePublished">2020-03-03</time>
   </a>
 </section>
 
@@ -104,20 +99,16 @@ lab1法一通过ida查看get_flag函数。发现是…逆向呀
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/Asis CTF 2016 b00ks(obo)/wp/" title="Asis CTF 2016 b00ks wp (null off-by-one)【详】" itemprop="url">
+    <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
   
-    <h1 itemprop="name">Asis CTF 2016 b00ks wp (null off-by-one)【详】</h1>
+    <h1 itemprop="name">整数溢出</h1>
     
      
-           <p itemprop="description" >写于19.6.26
-
-
-没错没错，从CTF-wiki过来的，我没看懂，又去其他大佬的博客==&amp;gt;九层台取取经，终于会调了orz…掌握gdb调试很重要啊啊啊！改最终脚本改了好久了，唉😑ps过于繁琐高手可以绕过嚯嚯嚯
-
-🎈0x01寻找漏洞checksec1234567kk@u</p>
+           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
+例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
         
     
-    <time datetime="2019-10-03T02:35:50.307Z" itemprop="datePublished">2019-10-03</time>
+    <time datetime="2020-02-15T14:06:08.636Z" itemprop="datePublished">2020-02-15</time>
   </a>
 </section>
 
@@ -126,20 +117,20 @@ lab1法一通过ida查看get_flag函数。发现是…逆向呀
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/【攻防世界】pwn进阶区/【攻防世界】pwn进阶区wp/" title="【攻防世界】pwn进阶区 wp(未完)" itemprop="url">
+    <a href="/2019/12/09/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
   
-    <h1 itemprop="name">【攻防世界】pwn进阶区 wp(未完)</h1>
+    <h1 itemprop="name">0ctf2017 babyheap wp</h1>
     
      
-           <p itemprop="description" >做这些的时候是19.8.2
+           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
 
-dice_game （XCTF 4th-QCTF-2018）
-写在前面：这道题和新手区的[guess_num]如出一辙，都用到了覆盖和随机种子，可以参考一下/&amp;gt;.&amp;lt;/
+漏洞点保护全开功能：
+123451. Allocate2. Fill3. Free4. Dump5. Exit
 
-0x01寻找漏洞首先整个程序流程就是猜对50次的数字后就可以get </p>
+calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
         
     
-    <time datetime="2019-10-03T01:28:51.953Z" itemprop="datePublished">2019-10-03</time>
+    <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished">2019-12-09</time>
   </a>
 </section>
 
@@ -148,18 +139,24 @@ dice_game （XCTF 4th-QCTF-2018）
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/函数调用约定/函数调用约定/" title="函数调用约定" itemprop="url">
+    <a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/" title="C++ 学习笔记【长期更】" itemprop="url">
   
-    <h1 itemprop="name">函数调用约定</h1>
+    <h1 itemprop="name">C++ 学习笔记【长期更】</h1>
     
      
-           <p itemprop="description" >一.基本介绍
-函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。
+           <p itemprop="description" >在有c语言基础下学习《C++ Primer》的新知
 
-二.函数调用约定0x01Windows_x86下的函数调用约定（C）-cdecl调</p>
+小知识okfine太繁杂了…我觉得写的太烂了…淦，后面二次学习的话就会精简一些了…吧…
+
+9.7更1using namespace std;
+
+
+
+使用std::虽然较麻烦，但是在大型程序中，很有必要。后期讲命名空间解释。
+1</p>
         
     
-    <time datetime="2019-10-03T01:21:36.939Z" itemprop="datePublished">2019-10-03</time>
+    <time datetime="2019-11-23T16:00:00.000Z" itemprop="datePublished">2019-11-24</time>
   </a>
 </section>
 
@@ -168,23 +165,122 @@ dice_game （XCTF 4th-QCTF-2018）
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/02/【攻防世界】pwn新手区/【攻防世界】pwn新手区/" title="【攻防世界】pwn新手区 wp" itemprop="url">
+    <a href="/2019/10/31/hdu/hdu/hdu/" title="HDU by java（很少部分） &amp;&amp; java学习" itemprop="url">
   
-    <h1 itemprop="name">【攻防世界】pwn新手区 wp</h1>
+    <h1 itemprop="name">HDU by java（很少部分） &amp;&amp; java学习</h1>
     
      
-           <p itemprop="description" >写这些的时候是19.5.30
-
-string （NUAACTF）
-参考：CTF-wiki格式化字符串漏洞利用
-
-0x01寻找漏洞checksec
-在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。
-
-执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，</p>
+           <p itemprop="description" >做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈</p>
         
     
-    <time datetime="2019-10-02T10:06:07.769Z" itemprop="datePublished">2019-10-02</time>
+    <time datetime="2019-10-31T12:36:23.663Z" itemprop="datePublished">2019-10-31</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/26/canary的绕过姿势/canary/canary/" title="canary的绕过姿势" itemprop="url">
+  
+    <h1 itemprop="name">canary的绕过姿势</h1>
+    
+     
+           <p itemprop="description" >0x01 Canary
+canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。工人们每次下井都会带上一只金丝雀如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。
+
+由于 stack overflow 而引发的攻击非常</p>
+        
+    
+    <time datetime="2019-10-26T10:47:28.761Z" itemprop="datePublished">2019-10-26</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/buu/wppp/" title="buuctf pwn wp【长期更】" itemprop="url">
+  
+    <h1 itemprop="name">buuctf pwn wp【长期更】</h1>
+    
+     
+           <p itemprop="description" >开始刷一下buu，尽力做吧
+
+连上就有flag的pwnRIP覆盖一下ciscn_2019_c_1栈溢出我的exp一直调试不对是因为这句
+1puts_addr = u64(io.recvuntil(&amp;quot;\n&amp;quot;, drop = True).ljust(8, &amp;apo</p>
+        
+    
+    <time datetime="2019-10-03T03:10:09.843Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">
+  
+    <h1 itemprop="name">Jarvis OJ pwn wp(未完...看情况继续写)</h1>
+    
+     
+           <p itemprop="description" >写于19.7.12
+
+用jarvis复习复习，题总是做不出来…☹
+level3_x640x01寻找漏洞checksec
+1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos</p>
+        
+    
+    <time datetime="2019-10-03T03:01:17.634Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">
+  
+    <h1 itemprop="name">IDA插件keypatch初体验</h1>
+    
+     
+           <p itemprop="description" >写于19.6.28
+
+我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数
+找到上方Edit
+我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数
+这里只举例用汇编修改，使用汇编修改比较方便
+修改成功，下</p>
+        
+    
+    <time datetime="2019-10-03T02:57:24.003Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp" itemprop="url">
+  
+    <h1 itemprop="name">2019 RedpwnCTF Bronze Ropchain wp</h1>
+    
+     
+           <p itemprop="description" >写于19.8.18
+
+
+这个题应该简单记录一下，我也不怎么用ropchain，感谢今天梦师傅的指点嘻嘻orz\
+
+因为它有点不一样checksec
+1234567kk@ubuntu:~/Desktop/black/CTF/RedpwnCTF/Bronze Ropchain$ ch</p>
+        
+    
+    <time datetime="2019-10-03T02:54:02.329Z" itemprop="datePublished">2019-10-03</time>
   </a>
 </section>
 
@@ -192,7 +288,7 @@ string （NUAACTF）
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -245,7 +341,7 @@ string （NUAACTF）
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>5</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>15</sup></a></li>
 		  
 		
 		</ul>
@@ -258,7 +354,11 @@ string （NUAACTF）
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>12</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
 			
 		
 			
@@ -266,7 +366,11 @@ string （NUAACTF）
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>4</sup></a></li>
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
 			
 		
 			
@@ -274,11 +378,15 @@ string （NUAACTF）
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/堆/" title="堆">堆<sup>1</sup></a></li>
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
