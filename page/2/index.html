@@ -81,6 +81,45 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2019/11/15/house of roman/house of roman/" title="house of_系列学习之 house of roman" itemprop="url">
+  
+    <h1 itemprop="name">house of_系列学习之 house of roman</h1>
+    
+     
+           <p itemprop="description" >house of roman介绍利用条件UAF漏洞以及能创建任意大小的chunk
+原理fastbin attack + unsortedbin attack。该技术用于 bypass ALSR，利用 12-bit 的爆破来达到获取 shell 的目的。
+demo分析checkse</p>
+        
+    
+    <time datetime="2019-11-14T16:00:00.000Z" itemprop="datePublished">2019-11-15</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/11/10/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
+  
+    <h1 itemprop="name">Fastbin Attack</h1>
+    
+     
+           <p itemprop="description" >首先需要了解：
+
+fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_inuse标志，也就无法被合并
+首块double free检查，当一个chunk被free进fastbin前，会看看链表的第一个chunk【main_arena直接指</p>
+        
+    
+    <time datetime="2019-11-09T16:00:00.000Z" itemprop="datePublished">2019-11-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
   
     <h1 itemprop="name">Unsorted Bin Attack</h1>
@@ -241,52 +280,6 @@ level3_x640x01寻找漏洞checksec
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">
-  
-    <h1 itemprop="name">IDA插件keypatch初体验</h1>
-    
-     
-           <p itemprop="description" >写于19.6.28
-
-我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数
-找到上方Edit
-我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数
-这里只举例用汇编修改，使用汇编修改比较方便
-修改成功，下</p>
-        
-    
-    <time datetime="2019-10-03T02:57:24.003Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp" itemprop="url">
-  
-    <h1 itemprop="name">2019 RedpwnCTF Bronze Ropchain wp</h1>
-    
-     
-           <p itemprop="description" >写于19.8.18
-
-
-这个题应该简单记录一下，我也不怎么用ropchain，感谢今天梦师傅的指点嘻嘻orz\
-
-因为它有点不一样checksec
-1234567kk@ubuntu:~/Desktop/black/CTF/RedpwnCTF/Bronze Ropchain$ ch</p>
-        
-    
-    <time datetime="2019-10-03T02:54:02.329Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -342,7 +335,7 @@ level3_x640x01寻找漏洞checksec
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>16</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
 		  
 		
 		</ul>
@@ -359,7 +352,7 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>12</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
 			
 		
 			
@@ -371,15 +364,15 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
@@ -407,7 +400,7 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>1</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>
