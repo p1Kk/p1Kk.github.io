@@ -81,6 +81,122 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/07/18/tw/tw re-alloc/" title="pwnable.tw re-alloc wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw re-alloc wp</h1>
+    
+     
+           <p itemprop="description" >re-alloc分析123456Arch:     amd64-64-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)FORTIFY</p>
+        
+    
+    <time datetime="2020-07-18T05:13:06.444Z" itemprop="datePublished">2020-07-18</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/17/tw/tw applestore/" title="pwnable.tw applestore wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw applestore wp</h1>
+    
+     
+           <p itemprop="description" >applestore分析123456checksec:    Arch:     i386-32-little    RELRO:    Partial RELRO    Stack:    Canary found    NX:       NX enabled    PIE:</p>
+        
+    
+    <time datetime="2020-07-16T16:00:00.000Z" itemprop="datePublished">2020-07-17</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/09/tw/tw bullet/" title="pwnable.tw silver_bullet wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw silver_bullet wp</h1>
+    
+     
+           <p itemprop="description" >silver_bullet分析123456checksec:    Arch:     i386-32-little    RELRO:    Full RELRO    Stack:    No canary found    NX:       NX enabled    P</p>
+        
+    
+    <time datetime="2020-07-09T15:08:07.823Z" itemprop="datePublished">2020-07-09</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
+    
+     
+           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
+
+看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
+        
+    
+    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
+    
+     
+           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
+
+其中有个note结构体如下，程序就是一个菜单，比较好理解
+1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
+</p>
+        
+    
+    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/08/tw/tw 3x17/" title="pwnable.tw 3x17 wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw 3x17 wp</h1>
+    
+     
+           <p itemprop="description" >继续继续…不能都搞一半放下了…
+3X17这个题目是静态编译，先来了解一下ELF文件的启动
+
+详细请看:https://luomuxiaoxiao.com/?p=516
+
+
+0x01 分析ida一看这个函数名，静态编译，再通过linux file确认一下
+
+运行程序，在ida中查找</p>
+        
+    
+    <time datetime="2020-07-07T16:00:00.000Z" itemprop="datePublished">2020-07-08</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/05/13/路由器/Dlink 505便携路由器越界漏洞/" title="D-Link DIR-505 便携路由器越界漏洞分析" itemprop="url">
   
     <h1 itemprop="name">D-Link DIR-505 便携路由器越界漏洞分析</h1>
@@ -92,6 +208,23 @@
         
     
     <time datetime="2020-05-12T16:00:00.000Z" itemprop="datePublished">2020-05-13</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/05/10/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/" title="D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析</h1>
+    
+     
+           <p itemprop="description" >固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，</p>
+        
+    
+    <time datetime="2020-05-09T16:20:13.946Z" itemprop="datePublished">2020-05-10</time>
   </a>
 </section>
 
@@ -119,23 +252,6 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/04/27/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/" title="D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析" itemprop="url">
-  
-    <h1 itemprop="name">D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析</h1>
-    
-     
-           <p itemprop="description" >固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，</p>
-        
-    
-    <time datetime="2020-04-26T16:00:00.000Z" itemprop="datePublished">2020-04-27</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
     <a href="/2020/04/15/路由器/固件研究面经/" title="固件研究方向——面经" itemprop="url">
   
     <h1 itemprop="name">固件研究方向——面经</h1>
@@ -149,135 +265,6 @@ mips和x86参数有什么区别？都放在什</p>
         
     
     <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/04/15/路由器/路由分析/" title="分析固件第一步" itemprop="url">
-  
-    <h1 itemprop="name">分析固件第一步</h1>
-    
-     
-           <p itemprop="description" >分析D-Link DIR-605L路由器中的web应用程序boa为例（根据《揭秘家用路由器0day漏洞挖掘技术》，以下简称《揭秘》）
-环境安装上篇有讲过
-固件下载http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-605L
-bin</p>
-        
-    
-    <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/04/05/路由器/路由器溢出漏洞/" title="路由器栈溢出漏洞" itemprop="url">
-  
-    <h1 itemprop="name">路由器栈溢出漏洞</h1>
-    
-     
-           <p itemprop="description" >前提:有一定的 linux/win pwn 基础
-
-mips汇编要先了解一下https://blog.csdn.net/gujing001/article/details/8476685
-寄存器
-
-
-REGISTER
-NAME
-USAGE
-
-
-
-$0
-$zero
-常量0(cons</p>
-        
-    
-    <time datetime="2020-04-04T16:00:00.000Z" itemprop="datePublished">2020-04-05</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/03/28/路由器/路由器环境配置/" title="路由器环境基础工具安装" itemprop="url">
-  
-    <h1 itemprop="name">路由器环境基础工具安装</h1>
-    
-     
-           <p itemprop="description" >网络上有很多安装教程，也看了《揭秘家用路由器 0day 漏洞挖掘技术》，但是由于版本等原因，与其他作者的安装还是略有不同，会遇到很多问题，以下参考我自己安装遇到的问题进行。
-
-我的环境
-12ubuntu：16.04内核：4
-
-安装 binwalk方法一1sudo apt-get </p>
-        
-    
-    <time datetime="2020-03-27T16:00:00.000Z" itemprop="datePublished">2020-03-28</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
-  
-    <h1 itemprop="name">栈迁移</h1>
-    
-     
-           <p itemprop="description" >看到了一道栈迁移的题，就来写一下加深印象
-前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
-以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数</p>
-        
-    
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
-  
-    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
-    
-     
-           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
-
-0x01 malloc_chunk的基本结构（使用中/未被f</p>
-        
-    
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
-  
-    <h1 itemprop="name">整数溢出</h1>
-    
-     
-           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
-例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
-        
-    
-    <time datetime="2020-02-15T14:06:08.636Z" itemprop="datePublished">2020-02-15</time>
   </a>
 </section>
 
@@ -334,7 +321,7 @@ $zero
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>11</sup></a></li>
 		  
 		
 		  
@@ -355,7 +342,7 @@ $zero
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>27</sup></a></li>
 			
 		
 			
@@ -363,7 +350,7 @@ $zero
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>15</sup></a></li>
 			
 		
 			
@@ -375,15 +362,11 @@ $zero
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
@@ -391,7 +374,15 @@ $zero
 			
 		
 			
-				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -400,6 +391,10 @@ $zero
 		
 			
 				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
@@ -412,14 +407,6 @@ $zero
 		
 			
 				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 		</ul>

