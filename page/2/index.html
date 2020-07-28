@@ -81,16 +81,14 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
+    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
+    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
     
      
-           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
+           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
 
-其中有个note结构体如下，程序就是一个菜单，比较好理解
-1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
-</p>
+看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
         
     
     <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
@@ -182,15 +180,16 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/04/15/路由器/路由分析/" title="分析固件第一步" itemprop="url">
+    <a href="/2020/04/15/路由器/固件研究面经/" title="固件研究方向——面经" itemprop="url">
   
-    <h1 itemprop="name">分析固件第一步</h1>
+    <h1 itemprop="name">固件研究方向——面经</h1>
     
      
-           <p itemprop="description" >分析D-Link DIR-605L路由器中的web应用程序boa为例（根据《揭秘家用路由器0day漏洞挖掘技术》，以下简称《揭秘》）
-环境安装上篇有讲过
-固件下载http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-605L
-bin</p>
+           <p itemprop="description" >自我介绍（简历基本都是pwn，iot只会栈溢出）
+为什么从pwn学iot了？（因为我自我介绍是学pwn的）
+二进制栈溢出漏洞和路由器溢出漏洞，不管溢出多少都可以被利用吗？
+有没有研究漏洞？什么漏洞？是什么架构的？利用过程？（mips架构）
+mips和x86参数有什么区别？都放在什</p>
         
     
     <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
@@ -202,16 +201,15 @@ bin</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/04/15/路由器/固件研究面经/" title="固件研究方向——面经" itemprop="url">
+    <a href="/2020/04/15/路由器/路由分析/" title="分析固件第一步" itemprop="url">
   
-    <h1 itemprop="name">固件研究方向——面经</h1>
+    <h1 itemprop="name">分析固件第一步</h1>
     
      
-           <p itemprop="description" >自我介绍（简历基本都是pwn，iot只会栈溢出）
-为什么从pwn学iot了？（因为我自我介绍是学pwn的）
-二进制栈溢出漏洞和路由器溢出漏洞，不管溢出多少都可以被利用吗？
-有没有研究漏洞？什么漏洞？是什么架构的？利用过程？（mips架构）
-mips和x86参数有什么区别？都放在什</p>
+           <p itemprop="description" >分析D-Link DIR-605L路由器中的web应用程序boa为例（根据《揭秘家用路由器0day漏洞挖掘技术》，以下简称《揭秘》）
+环境安装上篇有讲过
+固件下载http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-605L
+bin</p>
         
     
     <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
@@ -276,14 +274,14 @@ $zero
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
+    <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
   
-    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
+    <h1 itemprop="name">栈迁移</h1>
     
      
-           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
-
-0x01 malloc_chunk的基本结构（使用中/未被f</p>
+           <p itemprop="description" >看到了一道栈迁移的题，就来写一下加深印象
+前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
+以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数</p>
         
     
     <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
@@ -380,19 +378,19 @@ $zero
 			
 		
 			
-				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
 			
 		
 			
@@ -408,7 +406,7 @@ $zero
 			
 		
 			
-				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -420,7 +418,7 @@ $zero
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
 			
 		
 			

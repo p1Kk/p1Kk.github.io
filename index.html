@@ -236,14 +236,16 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
+    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
+    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
     
      
-           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
+           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
 
-看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
+其中有个note结构体如下，程序就是一个菜单，比较好理解
+1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
+</p>
         
     
     <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
@@ -340,19 +342,19 @@
 			
 		
 			
-				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
 			
 		
 			
@@ -368,7 +370,7 @@
 			
 		
 			
-				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -380,7 +382,7 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
 			
 		
 			
