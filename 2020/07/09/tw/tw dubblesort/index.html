@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="dubblesort分析保护全开，运行一下就会发现存在泄露  看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输入0x40大小，还没有到达canary的值，但是可能会存在栈信息，这个后面再分析。 整个程序就是输入数字进行排序，没有限">
-<meta name="keywords" content="pwn,wp">
+<meta name="keywords" content="pwn,wp,tw">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pwnable.tw dubblesort wp">
 <meta property="og:url" content="p1Kk.github.io/2020/07/09/tw/tw dubblesort/index.html">
@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/sortoffsewt.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/SORTVM2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/readsort.png">
-<meta property="og:updated_time" content="2020-07-09T09:00:28.056Z">
+<meta property="og:updated_time" content="2020-07-20T13:49:24.238Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pwnable.tw dubblesort wp">
 <meta name="twitter:description" content="dubblesort分析保护全开，运行一下就会发现存在泄露  看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输入0x40大小，还没有到达canary的值，但是可能会存在栈信息，这个后面再分析。 整个程序就是输入数字进行排序，没有限">
@@ -152,7 +152,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a>
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a><a href="/tags/tw/">tw</a>
   </div>
 
 </div>
@@ -231,7 +231,7 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>11</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
 		  
 		
 		  
@@ -252,7 +252,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>27</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
 			
 		
 			
@@ -260,7 +264,7 @@
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>15</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
 			
 		
 			
@@ -272,11 +276,11 @@
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
 			
 		
 			
@@ -288,11 +292,15 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -301,10 +309,6 @@
 		
 			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			

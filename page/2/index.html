@@ -81,6 +81,107 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
+    
+     
+           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
+
+其中有个note结构体如下，程序就是一个菜单，比较好理解
+1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
+</p>
+        
+    
+    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/08/tw/tw 3x17/" title="pwnable.tw 3x17 wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw 3x17 wp</h1>
+    
+     
+           <p itemprop="description" >继续继续…不能都搞一半放下了…
+3X17这个题目是静态编译，先来了解一下ELF文件的启动
+
+详细请看:https://luomuxiaoxiao.com/?p=516
+
+
+0x01 分析ida一看这个函数名，静态编译，再通过linux file确认一下
+
+运行程序，在ida中查找</p>
+        
+    
+    <time datetime="2020-07-07T16:00:00.000Z" itemprop="datePublished">2020-07-08</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/05/13/路由器/Dlink 505便携路由器越界漏洞/" title="D-Link DIR-505 便携路由器越界漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">D-Link DIR-505 便携路由器越界漏洞分析</h1>
+    
+     
+           <p itemprop="description" >固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/
+
+根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访</p>
+        
+    
+    <time datetime="2020-05-12T16:00:00.000Z" itemprop="datePublished">2020-05-13</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/05/10/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/" title="D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析</h1>
+    
+     
+           <p itemprop="description" >固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，</p>
+        
+    
+    <time datetime="2020-05-09T16:20:13.946Z" itemprop="datePublished">2020-05-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/05/03/路由器/D-Link DIR-645栈溢出漏洞/" title="D-Link DIR-645(/865/845)路由器栈溢出漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">D-Link DIR-645(/865/845)路由器栈溢出漏洞分析</h1>
+    
+     
+           <p itemprop="description" >固件下载：http://files.dlink.com.au/Products/DIR-645/REV_A/Firmware/DIR645_FW103B11/POC：https://www.exploit-db.com/exploits/33862
+
+分析从介绍中可以看出是cgi</p>
+        
+    
+    <time datetime="2020-05-02T16:00:00.000Z" itemprop="datePublished">2020-05-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/04/15/路由器/固件研究面经/" title="固件研究方向——面经" itemprop="url">
   
     <h1 itemprop="name">固件研究方向——面经</h1>
@@ -91,6 +192,26 @@
 二进制栈溢出漏洞和路由器溢出漏洞，不管溢出多少都可以被利用吗？
 有没有研究漏洞？什么漏洞？是什么架构的？利用过程？（mips架构）
 mips和x86参数有什么区别？都放在什</p>
+        
+    
+    <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/04/15/路由器/路由分析/" title="分析固件第一步" itemprop="url">
+  
+    <h1 itemprop="name">分析固件第一步</h1>
+    
+     
+           <p itemprop="description" >分析D-Link DIR-605L路由器中的web应用程序boa为例（根据《揭秘家用路由器0day漏洞挖掘技术》，以下简称《揭秘》）
+环境安装上篇有讲过
+固件下载http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-605L
+bin</p>
         
     
     <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
@@ -171,131 +292,9 @@ $zero
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
-  
-    <h1 itemprop="name">栈迁移</h1>
-    
-     
-           <p itemprop="description" >看到了一道栈迁移的题，就来写一下加深印象
-前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
-以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数</p>
-        
-    
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
-  
-    <h1 itemprop="name">整数溢出</h1>
-    
-     
-           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
-例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
-        
-    
-    <time datetime="2020-02-15T14:06:08.636Z" itemprop="datePublished">2020-02-15</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/12/09/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
-  
-    <h1 itemprop="name">0ctf2017 babyheap wp</h1>
-    
-     
-           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
-
-漏洞点保护全开功能：
-123451. Allocate2. Fill3. Free4. Dump5. Exit
-
-calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
-        
-    
-    <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished">2019-12-09</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/12/03/Tcache Attack学习/tcache/" title="Tcache Attack学习" itemprop="url">
-  
-    <h1 itemprop="name">Tcache Attack学习</h1>
-    
-     
-           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
-tcache的数据结构glibc在编译时使用use_tcac</p>
-        
-    
-    <time datetime="2019-12-02T16:00:00.000Z" itemprop="datePublished">2019-12-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/" title="C++ 学习笔记【长期更】" itemprop="url">
-  
-    <h1 itemprop="name">C++ 学习笔记【长期更】</h1>
-    
-     
-           <p itemprop="description" >在有c语言基础下学习《C++ Primer》的新知
-
-小知识okfine太繁杂了…我觉得写的太烂了…淦，后面二次学习的话就会精简一些了…吧…
-
-9.7更1using namespace std;
-
-
-
-使用std::虽然较麻烦，但是在大型程序中，很有必要。后期讲命名空间解释。
-1</p>
-        
-    
-    <time datetime="2019-11-23T16:00:00.000Z" itemprop="datePublished">2019-11-24</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/17/house of_系列学习之 house of orange/house of_系列学习/" title="house of_系列学习之 house of orange" itemprop="url">
-  
-    <h1 itemprop="name">house of_系列学习之 house of orange</h1>
-    
-     
-           <p itemprop="description" >emmm说起来这也算是house of orange这道题的wp了ovo
-house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数
-原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个</p>
-        
-    
-    <time datetime="2019-11-16T16:00:00.000Z" itemprop="datePublished">2019-11-17</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -344,7 +343,7 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>11</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
 		  
 		
 		  
@@ -365,7 +364,11 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>27</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
 			
 		
 			
@@ -373,7 +376,7 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>15</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
 			
 		
 			
@@ -385,11 +388,11 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
 			
 		
 			
@@ -401,11 +404,15 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -414,10 +421,6 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
 		
 			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
 			
 		
 			
