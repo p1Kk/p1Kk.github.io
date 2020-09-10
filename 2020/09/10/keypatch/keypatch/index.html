@@ -1,0 +1,529 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>IDA插件keypatch初体验 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="写于19.6.28  我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数 找到上方Edit 我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数 这里只举例用汇编修改，使用汇编修改比较方便 修改成功，下面保存文件 替换掉原本的hello文件 我们在linux中执行hello文件，可以发现直接getshell了 修改成功">
+<meta name="keywords" content="pwn,AWD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDA插件keypatch初体验">
+<meta property="og:url" content="p1Kk.github.io/2020/09/10/keypatch/keypatch/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="写于19.6.28  我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数 找到上方Edit 我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数 这里只举例用汇编修改，使用汇编修改比较方便 修改成功，下面保存文件 替换掉原本的hello文件 我们在linux中执行hello文件，可以发现直接getshell了 修改成功">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-58ccc3800b9bc313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-3a176ef627310c71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-41bfae610214d312.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-05d8761f51f94e4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-4ad0088109390a54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-a81b396d64865648.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17548101-45e44bfcbe7fa0c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-10-03T03:00:32.496Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IDA插件keypatch初体验">
+<meta name="twitter:description" content="写于19.6.28  我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数 找到上方Edit 我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数 这里只举例用汇编修改，使用汇编修改比较方便 修改成功，下面保存文件 替换掉原本的hello文件 我们在linux中执行hello文件，可以发现直接getshell了 修改成功">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/17548101-58ccc3800b9bc313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/09/10/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">IDA插件keypatch初体验</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-09-10T01:56:43.133Z" itemprop="datePublished"> Published 2020-09-10</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  
+		  
+		  </div>
+		  
+		  <ul>
+<li>写于19.6.28</li>
+</ul>
+<p>我们用一个简单的栈溢出程序做实验<br>进入IDA发现程序存在getshell函数<br><img src="https://upload-images.jianshu.io/upload_images/17548101-58ccc3800b9bc313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>找到上方<code>Edit</code><br><img src="https://upload-images.jianshu.io/upload_images/17548101-3a176ef627310c71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数<br><img src="https://upload-images.jianshu.io/upload_images/17548101-41bfae610214d312.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>这里只举例用汇编修改，使用汇编修改比较方便<br><img src="https://upload-images.jianshu.io/upload_images/17548101-05d8761f51f94e4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>修改成功，下面保存文件<br><img src="https://upload-images.jianshu.io/upload_images/17548101-4ad0088109390a54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>替换掉原本的hello文件<br><img src="https://upload-images.jianshu.io/upload_images/17548101-a81b396d64865648.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>我们在linux中执行hello文件，可以发现直接getshell了<br><img src="https://upload-images.jianshu.io/upload_images/17548101-45e44bfcbe7fa0c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>修改成功！😁</p>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/AWD/">AWD</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/09/10/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp">
+  <span>
+  2019 RedpwnCTF Bronze Ropchain wp</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/09/10/HITCON Ttaing/HITCON wp/"  title="HITCON-Training WP (Lab1, Lab10, Lab13)">
+ <span>HITCON-Training WP (Lab1, Lab10, Lab13)
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>21</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/面经/" title="面经">面经<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

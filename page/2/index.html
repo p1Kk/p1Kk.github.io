@@ -81,17 +81,21 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
+    <a href="/2020/09/10/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
+    <h1 itemprop="name">IDA插件keypatch初体验</h1>
     
      
-           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
+           <p itemprop="description" >写于19.6.28
 
-看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
+我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数
+找到上方Edit
+我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数
+这里只举例用汇编修改，使用汇编修改比较方便
+修改成功，下</p>
         
     
-    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
+    <time datetime="2020-09-10T01:56:43.133Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -100,23 +104,21 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/08/tw/tw 3x17/" title="pwnable.tw 3x17 wp" itemprop="url">
+    <a href="/2020/09/10/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw 3x17 wp</h1>
+    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
     
      
-           <p itemprop="description" >继续继续…不能都搞一半放下了…
-3X17这个题目是静态编译，先来了解一下ELF文件的启动
+           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
 
-详细请看:https://luomuxiaoxiao.com/?p=516
+lab1法一通过ida查看get_flag函数。发现是…逆向呀
 
+是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
 
-0x01 分析ida一看这个函数名，静态编译，再通过linux file确认一下
-
-运行程序，在ida中查找</p>
+在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
         
     
-    <time datetime="2020-07-07T16:00:00.000Z" itemprop="datePublished">2020-07-08</time>
+    <time datetime="2020-09-10T01:56:43.055Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -125,17 +127,18 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/05/13/路由器/Dlink 505便携路由器越界漏洞/" title="D-Link DIR-505 便携路由器越界漏洞分析" itemprop="url">
+    <a href="/2020/09/10/canary的绕过姿势/canary/" title="canary的绕过姿势" itemprop="url">
   
-    <h1 itemprop="name">D-Link DIR-505 便携路由器越界漏洞分析</h1>
+    <h1 itemprop="name">canary的绕过姿势</h1>
     
      
-           <p itemprop="description" >固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/
+           <p itemprop="description" >0x01 Canary
+canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。工人们每次下井都会带上一只金丝雀如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。
 
-根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访</p>
+由于 stack overflow 而引发的攻击非常</p>
         
     
-    <time datetime="2020-05-12T16:00:00.000Z" itemprop="datePublished">2020-05-13</time>
+    <time datetime="2020-09-10T01:56:43.055Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -144,15 +147,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/05/10/路由器/D-Link DIR-815 路由器多次溢出漏洞分析（645)/" title="D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析" itemprop="url">
+    <a href="/2020/09/10/hdu/hdu/hdu/" title="HDU by java（很少部分） &amp;&amp; java学习" itemprop="url">
   
-    <h1 itemprop="name">D-Link DIR-815（/300/600/645) 路由器多次溢出漏洞分析</h1>
+    <h1 itemprop="name">HDU by java（很少部分） &amp;&amp; java学习</h1>
     
      
-           <p itemprop="description" >固件下载地址：https://rebyte.me/en/d-link/89510/file-592084/ （这是815，我用的645）POC：https://www.exploit-db.com/exploits/33863从poc可以看出漏洞存在于hedwig.cgi文件中，</p>
+           <p itemprop="description" >做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈</p>
         
     
-    <time datetime="2020-05-09T16:20:13.946Z" itemprop="datePublished">2020-05-10</time>
+    <time datetime="2020-09-10T01:56:43.055Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -161,17 +164,20 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/05/03/路由器/D-Link DIR-645栈溢出漏洞/" title="D-Link DIR-645(/865/845)路由器栈溢出漏洞分析" itemprop="url">
+    <a href="/2020/09/10/Asis CTF 2016 b00ks(obo)/wp/" title="Asis CTF 2016 b00ks wp (null off-by-one)【详】" itemprop="url">
   
-    <h1 itemprop="name">D-Link DIR-645(/865/845)路由器栈溢出漏洞分析</h1>
+    <h1 itemprop="name">Asis CTF 2016 b00ks wp (null off-by-one)【详】</h1>
     
      
-           <p itemprop="description" >固件下载：http://files.dlink.com.au/Products/DIR-645/REV_A/Firmware/DIR645_FW103B11/POC：https://www.exploit-db.com/exploits/33862
+           <p itemprop="description" >写于19.6.26
 
-分析从介绍中可以看出是cgi</p>
+
+没错没错，从CTF-wiki过来的，我没看懂，又去其他大佬的博客==&amp;gt;九层台取取经，终于会调了orz…掌握gdb调试很重要啊啊啊！改最终脚本改了好久了，唉😑ps过于繁琐高手可以绕过嚯嚯嚯
+
+🎈0x01寻找漏洞checksec1234567kk@u</p>
         
     
-    <time datetime="2020-05-02T16:00:00.000Z" itemprop="datePublished">2020-05-03</time>
+    <time datetime="2020-09-10T01:56:43.008Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -180,19 +186,18 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/04/15/路由器/固件研究面经/" title="固件研究方向——面经" itemprop="url">
+    <a href="/2020/09/10/buu/wppp/" title="buuctf pwn wp【长期更】" itemprop="url">
   
-    <h1 itemprop="name">固件研究方向——面经</h1>
+    <h1 itemprop="name">buuctf pwn wp【长期更】</h1>
     
      
-           <p itemprop="description" >自我介绍（简历基本都是pwn，iot只会栈溢出）
-为什么从pwn学iot了？（因为我自我介绍是学pwn的）
-二进制栈溢出漏洞和路由器溢出漏洞，不管溢出多少都可以被利用吗？
-有没有研究漏洞？什么漏洞？是什么架构的？利用过程？（mips架构）
-mips和x86参数有什么区别？都放在什</p>
+           <p itemprop="description" >开始刷一下buu，尽力做吧
+
+连上就有flag的pwnRIP覆盖一下ciscn_2019_c_1栈溢出我的exp一直调试不对是因为这句
+1puts_addr = u64(io.recvuntil(&amp;quot;\n&amp;quot;, drop = True).ljust(8, &amp;apo</p>
         
     
-    <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
+    <time datetime="2020-09-10T01:56:43.008Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -201,18 +206,20 @@ mips和x86参数有什么区别？都放在什</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/04/15/路由器/路由分析/" title="分析固件第一步" itemprop="url">
+    <a href="/2020/09/10/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
   
-    <h1 itemprop="name">分析固件第一步</h1>
+    <h1 itemprop="name">0ctf2017 babyheap wp</h1>
     
      
-           <p itemprop="description" >分析D-Link DIR-605L路由器中的web应用程序boa为例（根据《揭秘家用路由器0day漏洞挖掘技术》，以下简称《揭秘》）
-环境安装上篇有讲过
-固件下载http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-605L
-bin</p>
+           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
+
+漏洞点保护全开功能：
+123451. Allocate2. Fill3. Free4. Dump5. Exit
+
+calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
         
     
-    <time datetime="2020-04-14T16:00:00.000Z" itemprop="datePublished">2020-04-15</time>
+    <time datetime="2020-09-10T01:56:42.992Z" itemprop="datePublished">2020-09-10</time>
   </a>
 </section>
 
@@ -221,29 +228,16 @@ bin</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/04/05/路由器/路由器溢出漏洞/" title="路由器栈溢出漏洞" itemprop="url">
+    <a href="/2020/08/17/tw/0tw revenge/" title="pwnable.tw re-alloc_revenge wp" itemprop="url">
   
-    <h1 itemprop="name">路由器栈溢出漏洞</h1>
+    <h1 itemprop="name">pwnable.tw re-alloc_revenge wp</h1>
     
      
-           <p itemprop="description" >前提:有一定的 linux/win pwn 基础
-
-mips汇编要先了解一下https://blog.csdn.net/gujing001/article/details/8476685
-寄存器
-
-
-REGISTER
-NAME
-USAGE
-
-
-
-$0
-$zero
-常量0(cons</p>
+           <p itemprop="description" >re-alloc_revenge分析和re-alloc相比，就是保护全开
+exp</p>
         
     
-    <time datetime="2020-04-04T16:00:00.000Z" itemprop="datePublished">2020-04-05</time>
+    <time datetime="2020-08-16T16:00:00.000Z" itemprop="datePublished">2020-08-17</time>
   </a>
 </section>
 
@@ -252,20 +246,15 @@ $zero
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/28/路由器/路由器环境配置/" title="路由器环境基础工具安装" itemprop="url">
+    <a href="/2020/08/11/tw/0tw heapparadise/" title="pwnable.tw heap_paradise wp[未完，别看]" itemprop="url">
   
-    <h1 itemprop="name">路由器环境基础工具安装</h1>
+    <h1 itemprop="name">pwnable.tw heap_paradise wp[未完，别看]</h1>
     
      
-           <p itemprop="description" >网络上有很多安装教程，也看了《揭秘家用路由器 0day 漏洞挖掘技术》，但是由于版本等原因，与其他作者的安装还是略有不同，会遇到很多问题，以下参考我自己安装遇到的问题进行。
-
-我的环境
-12ubuntu：16.04内核：4
-
-安装 binwalk方法一1sudo apt-get </p>
+           <p itemprop="description" >heap_paradise分析123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    Canary foundNX:       NX enabledPIE:      PIE enabledFORTIFY:  E</p>
         
     
-    <time datetime="2020-03-27T16:00:00.000Z" itemprop="datePublished">2020-03-28</time>
+    <time datetime="2020-08-10T16:00:00.000Z" itemprop="datePublished">2020-08-11</time>
   </a>
 </section>
 
@@ -274,17 +263,15 @@ $zero
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
+    <a href="/2020/08/10/tw/0tw alive_note/" title="pwnable.tw alive_note wp【未完，别看】" itemprop="url">
   
-    <h1 itemprop="name">栈迁移</h1>
+    <h1 itemprop="name">pwnable.tw alive_note wp【未完，别看】</h1>
     
      
-           <p itemprop="description" >看到了一道栈迁移的题，就来写一下加深印象
-前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
-以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数</p>
+           <p itemprop="description" >alive_note123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:  </p>
         
     
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
+    <time datetime="2020-08-09T16:00:00.000Z" itemprop="datePublished">2020-08-10</time>
   </a>
 </section>
 
@@ -341,7 +328,7 @@ $zero
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
 		  
 		
 		  
@@ -362,11 +349,15 @@ $zero
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
 			
 		
 			
@@ -374,15 +365,11 @@ $zero
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
@@ -402,18 +389,6 @@ $zero
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
@@ -422,15 +397,27 @@ $zero
 			
 		
 			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>

@@ -81,17 +81,20 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
+    <a href="/2020/07/30/tw/tw secretgarden/" title="pwnable.tw secretgarden wp【没shell】" itemprop="url">
   
-    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
+    <h1 itemprop="name">pwnable.tw secretgarden wp【没shell】</h1>
     
      
-           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
-
-0x01 malloc_chunk的基本结构（使用中/未被f</p>
+           <p itemprop="description" >secretgardenArch:     amd64-64-little
+RELRO:    Full RELRO
+Stack:    Canary found
+NX:       NX enabled
+PIE:      PIE enabled
+FORTIFY:  Enabl</p>
         
     
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
+    <time datetime="2020-07-29T16:00:00.000Z" itemprop="datePublished">2020-07-30</time>
   </a>
 </section>
 
@@ -100,16 +103,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/02/15/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
+    <a href="/2020/07/29/tw/0tw bookwriter/" title="pwnable.tw bookwriter wp" itemprop="url">
   
-    <h1 itemprop="name">整数溢出</h1>
+    <h1 itemprop="name">pwnable.tw bookwriter wp</h1>
     
      
-           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
-例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
+           <p itemprop="description" >bookwriter分析123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)FORTIFY:</p>
         
     
-    <time datetime="2020-02-15T14:06:08.636Z" itemprop="datePublished">2020-02-15</time>
+    <time datetime="2020-07-28T16:00:00.000Z" itemprop="datePublished">2020-07-29</time>
   </a>
 </section>
 
@@ -118,20 +120,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/09/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
+    <a href="/2020/07/29/tw/tw spirit/" title="pwnable.tw spirited_away wp" itemprop="url">
   
-    <h1 itemprop="name">0ctf2017 babyheap wp</h1>
+    <h1 itemprop="name">pwnable.tw spirited_away wp</h1>
     
      
-           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
-
-漏洞点保护全开功能：
-123451. Allocate2. Fill3. Free4. Dump5. Exit
-
-calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
+           <p itemprop="description" >spirited_away分析12345Arch:     i386-32-littleRELRO:    Partial RELROStack:    No canary foundNX:       NX enabledPIE:      No PIE (0x8048000)</p>
         
     
-    <time datetime="2019-12-09T06:25:57.256Z" itemprop="datePublished">2019-12-09</time>
+    <time datetime="2020-07-28T16:00:00.000Z" itemprop="datePublished">2020-07-29</time>
   </a>
 </section>
 
@@ -140,16 +137,15 @@ calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/03/Tcache Attack学习/tcache/" title="Tcache Attack学习" itemprop="url">
+    <a href="/2020/07/28/tw/0tw starbound/" title="pwnable.tw starbound wp【未完】" itemprop="url">
   
-    <h1 itemprop="name">Tcache Attack学习</h1>
+    <h1 itemprop="name">pwnable.tw starbound wp【未完】</h1>
     
      
-           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
-tcache的数据结构glibc在编译时使用use_tcac</p>
+           <p itemprop="description" >starbound分析123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    No canary foundNX:       NX enabledPIE:      No PIE (0x8048000)FOR</p>
         
     
-    <time datetime="2019-12-02T16:00:00.000Z" itemprop="datePublished">2019-12-03</time>
+    <time datetime="2020-07-27T16:00:00.000Z" itemprop="datePublished">2020-07-28</time>
   </a>
 </section>
 
@@ -158,24 +154,15 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/" title="C++ 学习笔记【长期更】" itemprop="url">
+    <a href="/2020/07/26/tw/0tw babystack/" title="pwnable.tw babystack wp【未完】" itemprop="url">
   
-    <h1 itemprop="name">C++ 学习笔记【长期更】</h1>
+    <h1 itemprop="name">pwnable.tw babystack wp【未完】</h1>
     
      
-           <p itemprop="description" >在有c语言基础下学习《C++ Primer》的新知
-
-小知识okfine太繁杂了…我觉得写的太烂了…淦，后面二次学习的话就会精简一些了…吧…
-
-9.7更1using namespace std;
-
-
-
-使用std::虽然较麻烦，但是在大型程序中，很有必要。后期讲命名空间解释。
-1</p>
+           <p itemprop="description" >babystack123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    Canary foundNX:       NX enabledPIE:      PIE enabledFORTIFY:  Enabled</p>
         
     
-    <time datetime="2019-11-23T16:00:00.000Z" itemprop="datePublished">2019-11-24</time>
+    <time datetime="2020-07-25T16:00:00.000Z" itemprop="datePublished">2020-07-26</time>
   </a>
 </section>
 
@@ -184,17 +171,17 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/17/house of_系列学习之 house of orange/house of_系列学习/" title="house of_系列学习之 house of orange" itemprop="url">
+    <a href="/2020/07/22/tw/tw seethefile/" title="pwnable.tw seethefile wp" itemprop="url">
   
-    <h1 itemprop="name">house of_系列学习之 house of orange</h1>
+    <h1 itemprop="name">pwnable.tw seethefile wp</h1>
     
      
-           <p itemprop="description" >emmm说起来这也算是house of orange这道题的wp了ovo
-house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数
-原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个</p>
+           <p itemprop="description" >seethefile分析12345Arch:     i386-32-littleRELRO:    Partial RELROStack:    No canary foundNX:       NX enabledPIE:      No PIE (0x8048000)
+
+最</p>
         
     
-    <time datetime="2019-11-16T16:00:00.000Z" itemprop="datePublished">2019-11-17</time>
+    <time datetime="2020-07-21T16:00:00.000Z" itemprop="datePublished">2020-07-22</time>
   </a>
 </section>
 
@@ -203,17 +190,15 @@ house of orange利用环境题目不存在free函数或无法利用free（其他
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/15/house of roman/house of roman/" title="house of_系列学习之 house of roman" itemprop="url">
+    <a href="/2020/07/21/tw/tw tear/" title="pwnable.tw tcache_tear wp" itemprop="url">
   
-    <h1 itemprop="name">house of_系列学习之 house of roman</h1>
+    <h1 itemprop="name">pwnable.tw tcache_tear wp</h1>
     
      
-           <p itemprop="description" >house of roman介绍利用条件UAF漏洞以及能创建任意大小的chunk
-原理fastbin attack + unsortedbin attack。该技术用于 bypass ALSR，利用 12-bit 的爆破来达到获取 shell 的目的。
-demo分析checkse</p>
+           <p itemprop="description" >tcache_tear分析123456Arch:     amd64-64-littleRELRO:    Full RELRO		# GOT表不可写Stack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400</p>
         
     
-    <time datetime="2019-11-14T16:00:00.000Z" itemprop="datePublished">2019-11-15</time>
+    <time datetime="2020-07-20T16:00:00.000Z" itemprop="datePublished">2020-07-21</time>
   </a>
 </section>
 
@@ -222,18 +207,15 @@ demo分析checkse</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/10/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
+    <a href="/2020/07/20/tw/0tw re-alloc/" title="pwnable.tw re-alloc wp" itemprop="url">
   
-    <h1 itemprop="name">Fastbin Attack</h1>
+    <h1 itemprop="name">pwnable.tw re-alloc wp</h1>
     
      
-           <p itemprop="description" >首先需要了解：
-
-fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_inuse标志，也就无法被合并
-首块double free检查，当一个chunk被free进fastbin前，会看看链表的第一个chunk【main_arena直接指</p>
+           <p itemprop="description" >re-alloc分析123456Arch:     amd64-64-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)FORTIFY</p>
         
     
-    <time datetime="2019-11-09T16:00:00.000Z" itemprop="datePublished">2019-11-10</time>
+    <time datetime="2020-07-19T16:00:00.000Z" itemprop="datePublished">2020-07-20</time>
   </a>
 </section>
 
@@ -242,26 +224,15 @@ fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_in
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
+    <a href="/2020/07/17/tw/tw applestore/" title="pwnable.tw applestore wp" itemprop="url">
   
-    <h1 itemprop="name">Unsorted Bin Attack</h1>
+    <h1 itemprop="name">pwnable.tw applestore wp</h1>
     
      
-           <p itemprop="description" >Unsorted Bin
-chunk分割，剩余&amp;gt;MINSIZE
-
-放入unsorted bin
-
-
-释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻
-
-放入unsorted bin
-
-
-malloc_consolidate时，合并后的chu</p>
+           <p itemprop="description" >applestore分析123456checksec:    Arch:     i386-32-little    RELRO:    Partial RELRO    Stack:    Canary found    NX:       NX enabled    PIE:</p>
         
     
-    <time datetime="2019-10-31T16:00:00.000Z" itemprop="datePublished">2019-11-01</time>
+    <time datetime="2020-07-16T16:00:00.000Z" itemprop="datePublished">2020-07-17</time>
   </a>
 </section>
 
@@ -270,15 +241,17 @@ malloc_consolidate时，合并后的chu</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/31/hdu/hdu/hdu/" title="HDU by java（很少部分） &amp;&amp; java学习" itemprop="url">
+    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
   
-    <h1 itemprop="name">HDU by java（很少部分） &amp;&amp; java学习</h1>
+    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
     
      
-           <p itemprop="description" >做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈</p>
+           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
+
+看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
         
     
-    <time datetime="2019-10-31T12:36:23.663Z" itemprop="datePublished">2019-10-31</time>
+    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
   </a>
 </section>
 
@@ -335,7 +308,7 @@ malloc_consolidate时，合并后的chu</p>
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
 		  
 		
 		  
@@ -356,11 +329,15 @@ malloc_consolidate时，合并后的chu</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
 			
 		
 			
@@ -368,15 +345,11 @@ malloc_consolidate时，合并后的chu</p>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
 			
 		
 			
@@ -396,18 +369,6 @@ malloc_consolidate时，合并后的chu</p>
 			
 		
 			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
@@ -416,15 +377,27 @@ malloc_consolidate时，合并后的chu</p>
 			
 		
 			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>

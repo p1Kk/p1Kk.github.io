@@ -1,0 +1,531 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>pwnable.tw alive_note wp【未完，别看】 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="alive_note123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:      Has RWX segments  芜湖起飞，没得nx，有rwx段，基本就shellcode了 在add和sho">
+<meta name="keywords" content="pwn,wp,tw">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwnable.tw alive_note wp【未完，别看】">
+<meta property="og:url" content="p1Kk.github.io/2020/08/10/tw/0tw alive_note/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="alive_note123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:      Has RWX segments  芜湖起飞，没得nx，有rwx段，基本就shellcode了 在add和sho">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-08-11T15:17:46.037Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pwnable.tw alive_note wp【未完，别看】">
+<meta name="twitter:description" content="alive_note123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:      Has RWX segments  芜湖起飞，没得nx，有rwx段，基本就shellcode了 在add和sho">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/10/tw/0tw alive_note/" title="pwnable.tw alive_note wp【未完，别看】" itemprop="url">pwnable.tw alive_note wp【未完，别看】</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-09T16:00:00.000Z" itemprop="datePublished"> Published 2020-08-10</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#alive-note"><span class="toc-number">1.</span> <span class="toc-text">alive_note</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <h1 id="alive-note"><a href="#alive-note" class="headerlink" title="alive_note"></a>alive_note</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Arch:     i386-32-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    Canary found</span><br><span class="line">NX:       NX disabled</span><br><span class="line">PIE:      No PIE (0x8048000)</span><br><span class="line">RWX:      Has RWX segments</span><br></pre></td></tr></table></figure>
+
+<p>芜湖起飞，没得nx，有rwx段，基本就shellcode了</p>
+<p>在add和show函数中 都存在数组下标越界问题，可以越界写，也可以越界打印….所以可以写got 跳到shellcode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;Index :&quot;);</span><br><span class="line">v1 = read_int();</span><br><span class="line">if ( v1 &gt; 10 )</span><br><span class="line">&#123;</span><br><span class="line">  puts(&quot;Out of bound !!&quot;);</span><br><span class="line">  exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>check函数对输入进行了限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl check(char *s)</span><br><span class="line">&#123;</span><br><span class="line">  size_t i; // [esp+Ch] [ebp-Ch]</span><br><span class="line"></span><br><span class="line">  for ( i = 0; strlen(s) &gt; i; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( s[i] != 32 &amp;&amp; !((*__ctype_b_loc())[s[i]] &amp; 8) )</span><br><span class="line">      return 0;</span><br><span class="line">  &#125;</span><br><span class="line">  return 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关于这个<a href="https://braincoke.fr/blog/2018/05/what-is-ctype-b-loc/" target="_blank" rel="noopener">__ctype_b_loc()</a>，还是写个c测试一下好理解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;string.h&gt;</span><br><span class="line">#include&lt;ctype.h&gt;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">	char s[257];</span><br><span class="line">	for(int i = 0; i &lt;= 256; i++)&#123;</span><br><span class="line">		s[i] = i;</span><br><span class="line">	&#125;</span><br><span class="line">	check(s);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int check(char *s)&#123;</span><br><span class="line">	int n = 0;</span><br><span class="line">	for(int i = 0; i&lt;= 256; i++)&#123;</span><br><span class="line">		if ( s[i] == 32 || ((*__ctype_b_loc())[s[i]] &amp; 8) )&#123;</span><br><span class="line">			printf(&quot;%X ---&gt; %c    &quot;, s[i], s[i]);</span><br><span class="line">			n++;</span><br><span class="line">			if(n%4==3)&#123;</span><br><span class="line">			printf(&quot;\n&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可用的字符就这些，就是可显字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">20 ---&gt;      30 ---&gt; 0    31 ---&gt; 1    </span><br><span class="line">32 ---&gt; 2    33 ---&gt; 3    34 ---&gt; 4    35 ---&gt; 5    </span><br><span class="line">36 ---&gt; 6    37 ---&gt; 7    38 ---&gt; 8    39 ---&gt; 9    </span><br><span class="line">41 ---&gt; A    42 ---&gt; B    43 ---&gt; C    44 ---&gt; D    </span><br><span class="line">45 ---&gt; E    46 ---&gt; F    47 ---&gt; G    48 ---&gt; H    </span><br><span class="line">49 ---&gt; I    4A ---&gt; J    4B ---&gt; K    4C ---&gt; L    </span><br><span class="line">4D ---&gt; M    4E ---&gt; N    4F ---&gt; O    50 ---&gt; P    </span><br><span class="line">51 ---&gt; Q    52 ---&gt; R    53 ---&gt; S    54 ---&gt; T    </span><br><span class="line">55 ---&gt; U    56 ---&gt; V    57 ---&gt; W    58 ---&gt; X    </span><br><span class="line">59 ---&gt; Y    5A ---&gt; Z    61 ---&gt; a    62 ---&gt; b    </span><br><span class="line">63 ---&gt; c    64 ---&gt; d    65 ---&gt; e    66 ---&gt; f    </span><br><span class="line">67 ---&gt; g    68 ---&gt; h    69 ---&gt; i    6A ---&gt; j    </span><br><span class="line">6B ---&gt; k    6C ---&gt; l    6D ---&gt; m    6E ---&gt; n    </span><br><span class="line">6F ---&gt; o    70 ---&gt; p    71 ---&gt; q    72 ---&gt; r    </span><br><span class="line">73 ---&gt; s    74 ---&gt; t    75 ---&gt; u    76 ---&gt; v    </span><br><span class="line">77 ---&gt; w    78 ---&gt; x    79 ---&gt; y    7A ---&gt; z</span><br></pre></td></tr></table></figure>
+
+<p>然后每次输入name最多8字节，所以shellcode是需要一段一段输入的，然后还要写跳转。再者每次malloc都是0x16，所以跳转到下一段shellcode的地址也好找。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/20wx 0x804b158</span><br><span class="line">0x804b158:	0x00000000	0x00000011	0x61414141	0x41414141		# 0</span><br><span class="line">0x804b168:	0x00000000	0x00000011	0x62424242	0x00004242		# 1</span><br><span class="line">0x804b178:	0x00000000	0x00000011	0x43434343	0x00004343		# 4</span><br></pre></td></tr></table></figure>
+
+<p>且申请的index只要在1-10之间，都会按顺序往下申请，所以可以申请很多很多，不过似乎也没啥用</p>
+<p>我写shellcode 真的是太费劲了… 真的太烂了 都不知道咋搞了</p>
+<p>第二种<a href="http://blog.eonew.cn/archives/1143" target="_blank" rel="noopener">Ex🐂的</a> 修改strlen来控制读取，一次写的方法</p>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/oj/">oj</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a><a href="/tags/tw/">tw</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/08/11/tw/0tw heapparadise/" title="pwnable.tw heap_paradise wp[未完，别看]">
+  <span>
+  pwnable.tw heap_paradise wp[未完，别看]</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/07/30/tw/tw secretgarden/"  title="pwnable.tw secretgarden wp【没shell】">
+ <span>pwnable.tw secretgarden wp【没shell】
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>21</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/面经/" title="面经">面经<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
