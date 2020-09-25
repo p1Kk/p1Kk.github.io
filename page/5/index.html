@@ -81,16 +81,21 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/03/Tcache Attack学习/tcache/" title="Tcache Attack学习" itemprop="url">
+    <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp" itemprop="url">
   
-    <h1 itemprop="name">Tcache Attack学习</h1>
+    <h1 itemprop="name">2019 RedpwnCTF Bronze Ropchain wp</h1>
     
      
-           <p itemprop="description" >tcache机制tcache全名thread local caching，它为每个线程创建一个缓存（cache），从而实现无锁的分配算法，有不错的性能提升。lib-2.26【2.23以后】正式提供了该机制，并默认开启。
-tcache的数据结构glibc在编译时使用use_tcac</p>
+           <p itemprop="description" >写于19.8.18
+
+
+这个题应该简单记录一下，我也不怎么用ropchain，感谢今天梦师傅的指点嘻嘻orz\
+
+因为它有点不一样checksec
+1234567kk@ubuntu:~/Desktop/black/CTF/RedpwnCTF/Bronze Ropchain$ ch</p>
         
     
-    <time datetime="2019-12-02T16:00:00.000Z" itemprop="datePublished">2019-12-03</time>
+    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
   </a>
 </section>
 
@@ -99,167 +104,15 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/24/C++学习笔记/新建文件夹/C++笔记/" title="C++ 学习笔记【长期更】" itemprop="url">
+    <a href="/2019/09/10/hdu/hdu/" title="HDU by java（很少部分） &amp;&amp; java学习" itemprop="url">
   
-    <h1 itemprop="name">C++ 学习笔记【长期更】</h1>
+    <h1 itemprop="name">HDU by java（很少部分） &amp;&amp; java学习</h1>
     
      
-           <p itemprop="description" >在有c语言基础下学习《C++ Primer》的新知
-
-小知识okfine太繁杂了…我觉得写的太烂了…淦，后面二次学习的话就会精简一些了…吧…
-
-9.7更1using namespace std;
-
-
-
-使用std::虽然较麻烦，但是在大型程序中，很有必要。后期讲命名空间解释。
-1</p>
+           <p itemprop="description" >做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈</p>
         
     
-    <time datetime="2019-11-23T16:00:00.000Z" itemprop="datePublished">2019-11-24</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/17/house of_系列学习之 house of orange/house of_系列学习/" title="house of_系列学习之 house of orange" itemprop="url">
-  
-    <h1 itemprop="name">house of_系列学习之 house of orange</h1>
-    
-     
-           <p itemprop="description" >emmm说起来这也算是house of orange这道题的wp了ovo
-house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数
-原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个</p>
-        
-    
-    <time datetime="2019-11-16T16:00:00.000Z" itemprop="datePublished">2019-11-17</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/15/house of roman/house of roman/" title="house of_系列学习之 house of roman" itemprop="url">
-  
-    <h1 itemprop="name">house of_系列学习之 house of roman</h1>
-    
-     
-           <p itemprop="description" >house of roman介绍利用条件UAF漏洞以及能创建任意大小的chunk
-原理fastbin attack + unsortedbin attack。该技术用于 bypass ALSR，利用 12-bit 的爆破来达到获取 shell 的目的。
-demo分析checkse</p>
-        
-    
-    <time datetime="2019-11-14T16:00:00.000Z" itemprop="datePublished">2019-11-15</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/10/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
-  
-    <h1 itemprop="name">Fastbin Attack</h1>
-    
-     
-           <p itemprop="description" >首先需要了解：
-
-fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_inuse标志，也就无法被合并
-首块double free检查，当一个chunk被free进fastbin前，会看看链表的第一个chunk【main_arena直接指</p>
-        
-    
-    <time datetime="2019-11-09T16:00:00.000Z" itemprop="datePublished">2019-11-10</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
-  
-    <h1 itemprop="name">Unsorted Bin Attack</h1>
-    
-     
-           <p itemprop="description" >Unsorted Bin
-chunk分割，剩余&amp;gt;MINSIZE
-
-放入unsorted bin
-
-
-释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻
-
-放入unsorted bin
-
-
-malloc_consolidate时，合并后的chu</p>
-        
-    
-    <time datetime="2019-10-31T16:00:00.000Z" itemprop="datePublished">2019-11-01</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/22/FILE structure used with “stream functions”/FILE structure used with “stream functions”/" title="IO_FILE structure used with &#34;stream functions&#34;" itemprop="url">
-  
-    <h1 itemprop="name">IO_FILE structure used with &#34;stream functions&#34;</h1>
-    
-     
-           <p itemprop="description" >emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔
-FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下：
-12345678910111213141516171819202122232425262728</p>
-        
-    
-    <time datetime="2019-10-21T16:00:00.000Z" itemprop="datePublished">2019-10-22</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/13/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具" itemprop="url">
-  
-    <h1 itemprop="name">ubuntu18安装各种pwn工具</h1>
-    
-     
-           <p itemprop="description" >写在前面：因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍
-
-更换系统镜像为清华镜像源不换的话以后下载东西会很慢
-遇到报错
-12E: Could not get lock /var/lib/dpkg/lock - open (1</p>
-        
-    
-    <time datetime="2019-10-12T16:00:00.000Z" itemprop="datePublished">2019-10-13</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/05/SROP/SROP/" title="SROP" itemprop="url">
-  
-    <h1 itemprop="name">SROP</h1>
-    
-     
-           <p itemprop="description" >原理与利用https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srophttps://blog.csdn.net/luozhaotian/article/details/7960</p>
-        
-    
-    <time datetime="2019-10-04T16:00:00.000Z" itemprop="datePublished">2019-10-05</time>
+    <time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished">2019-09-10</time>
   </a>
 </section>
 
@@ -316,7 +169,7 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>15</sup></a></li>
 		  
 		
 		  
@@ -337,19 +190,19 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>31</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>19</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>11</sup></a></li>
 			
 		
 			
@@ -385,11 +238,19 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -398,14 +259,6 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		
 			
 				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 		</ul>

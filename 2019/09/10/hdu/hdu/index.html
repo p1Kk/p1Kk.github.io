@@ -1,0 +1,652 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>HDU by java（很少部分） &amp;&amp; java学习 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦  11.1先做两道吧…然后还有其他东西要学呢 hdu 2000123456789">
+<meta name="keywords" content="java,HDU">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDU by java（很少部分） &amp;&amp; java学习">
+<meta property="og:url" content="p1Kk.github.io/2019/09/10/hdu/hdu/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦  11.1先做两道吧…然后还有其他东西要学呢 hdu 2000123456789">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/10/31/GrZzJufg6tRw3UQ.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/11/bZg6sm8XR7EjGQT.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/12/YIOLuCD1B7Gmy9s.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/12/gNbZ1liqDwodQeE.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/12/JRgmKzCw5nd87hV.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/12/L6pyqjk1Zd3R8fA.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/12/tKHLpdR6JBnmlxW.png">
+<meta property="og:updated_time" content="2020-09-10T13:48:25.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HDU by java（很少部分） &amp;&amp; java学习">
+<meta name="twitter:description" content="做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦  11.1先做两道吧…然后还有其他东西要学呢 hdu 2000123456789">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/31/GrZzJufg6tRw3UQ.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/09/10/hdu/hdu/" title="HDU by java（很少部分） &amp;&amp; java学习" itemprop="url">HDU by java（很少部分） &amp;&amp; java学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"> Published 2019-09-10</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2000"><span class="toc-number">1.</span> <span class="toc-text">hdu 2000</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2001"><span class="toc-number">2.</span> <span class="toc-text">hdu 2001</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2002"><span class="toc-number">3.</span> <span class="toc-text">hdu 2002</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2003"><span class="toc-number">4.</span> <span class="toc-text">hdu 2003</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2004"><span class="toc-number">5.</span> <span class="toc-text">hdu 2004</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2005"><span class="toc-number">6.</span> <span class="toc-text">hdu 2005</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2006"><span class="toc-number">7.</span> <span class="toc-text">hdu 2006</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2007"><span class="toc-number">8.</span> <span class="toc-text">hdu 2007</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hdu-2008"><span class="toc-number">9.</span> <span class="toc-text">hdu 2008</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java学习"><span class="toc-number">10.</span> <span class="toc-text">java学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#变量和常量命名规范"><span class="toc-number">10.1.</span> <span class="toc-text">变量和常量命名规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常量和final"><span class="toc-number">10.2.</span> <span class="toc-text">常量和final</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本数据类型"><span class="toc-number">10.3.</span> <span class="toc-text">基本数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#逻辑类型"><span class="toc-number">10.3.1.</span> <span class="toc-text">逻辑类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#boolean"><span class="toc-number">10.3.1.1.</span> <span class="toc-text">boolean</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#整数类型"><span class="toc-number">10.3.2.</span> <span class="toc-text">整数类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#int"><span class="toc-number">10.3.2.1.</span> <span class="toc-text">int</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#byte"><span class="toc-number">10.3.2.2.</span> <span class="toc-text">byte</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#short"><span class="toc-number">10.3.2.3.</span> <span class="toc-text">short</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#long"><span class="toc-number">10.3.2.4.</span> <span class="toc-text">long</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符类型"><span class="toc-number">10.3.3.</span> <span class="toc-text">字符类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#char"><span class="toc-number">10.3.3.1.</span> <span class="toc-text">char</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点类型"><span class="toc-number">10.3.4.</span> <span class="toc-text">浮点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#float（单精度）"><span class="toc-number">10.3.4.1.</span> <span class="toc-text">float（单精度）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#double（双精度）"><span class="toc-number">10.3.4.2.</span> <span class="toc-text">double（双精度）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型转换"><span class="toc-number">10.4.</span> <span class="toc-text">类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自动类型转换"><span class="toc-number">10.4.1.</span> <span class="toc-text">自动类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#强制类型转换"><span class="toc-number">10.4.2.</span> <span class="toc-text">强制类型转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法"><span class="toc-number">10.5.</span> <span class="toc-text">方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类与对象"><span class="toc-number">10.6.</span> <span class="toc-text">类与对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类的UML图"><span class="toc-number">10.7.</span> <span class="toc-text">类的UML图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this"><span class="toc-number">10.8.</span> <span class="toc-text">this</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static关键字【静态】"><span class="toc-number">10.9.</span> <span class="toc-text">static关键字【静态】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问权限"><span class="toc-number">10.10.</span> <span class="toc-text">访问权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#private【私有】"><span class="toc-number">10.10.1.</span> <span class="toc-text">private【私有】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#protected【受保护】"><span class="toc-number">10.10.2.</span> <span class="toc-text">protected【受保护】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#public【共有】"><span class="toc-number">10.10.3.</span> <span class="toc-text">public【共有】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#【友好】"><span class="toc-number">10.10.4.</span> <span class="toc-text">【友好】</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类封装"><span class="toc-number">10.11.</span> <span class="toc-text">类封装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super"><span class="toc-number">10.12.</span> <span class="toc-text">super</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数组"><span class="toc-number">10.13.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#冒泡排序"><span class="toc-number">10.14.</span> <span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二分（折半）查找法"><span class="toc-number">10.15.</span> <span class="toc-text">二分（折半）查找法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Integer类"><span class="toc-number">10.16.</span> <span class="toc-text">Integer类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#【并不考…】测试自动装箱，拆箱"><span class="toc-number">10.17.</span> <span class="toc-text">【并不考…】测试自动装箱，拆箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#try-catch捕获异常"><span class="toc-number">10.18.</span> <span class="toc-text">try-catch捕获异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#throws声明异常"><span class="toc-number">10.19.</span> <span class="toc-text">throws声明异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#手动抛出异常"><span class="toc-number">10.20.</span> <span class="toc-text">手动抛出异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象【abstract】"><span class="toc-number">10.21.</span> <span class="toc-text">抽象【abstract】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多态"><span class="toc-number">10.22.</span> <span class="toc-text">多态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#final"><span class="toc-number">10.23.</span> <span class="toc-text">final</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类"><span class="toc-number">10.24.</span> <span class="toc-text">抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口【interface】"><span class="toc-number">10.25.</span> <span class="toc-text">接口【interface】</span></a></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <blockquote>
+<p>做的还蛮好的（严格），以前的c语言练习平台，只写一丢丢java，0基础，写的可能又丑空间又大…<br><strong>有趣的是，我大一练习c语言的时候那些id用三国里面的人的ACMer就无时无刻不在测试他们的代码，现在他们还是一直活跃在Realtime Status，真的很厉害很肝，敬佩orz</strong><br>哈哈哈哈哈哈以前做C真的好菜，代码能力好重要哦<br><img src="https://i.loli.net/2019/10/31/GrZzJufg6tRw3UQ.png" alt></p>
+</blockquote>
+<p>11.1<br>先做两道吧…然后还有其他东西要学呢</p>
+<h1 id="hdu-2000"><a href="#hdu-2000" class="headerlink" title="hdu 2000"></a>hdu 2000</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line"></span><br><span class="line">public class Main &#123;     //注意提交的时候改成Main哦~</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Scanner scan =  new Scanner(System.in);</span><br><span class="line">        while(scan.hasNext())&#123;</span><br><span class="line">            String s = scan.next();</span><br><span class="line">            char[] a = s.toCharArray();     //字符串转换为字符数组</span><br><span class="line">            Arrays.sort(a);</span><br><span class="line">            for(int i = 0; i &lt; 2; i++)&#123;</span><br><span class="line">                System.out.print(a[i] + &quot; &quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(a[2]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdu-2001"><a href="#hdu-2001" class="headerlink" title="hdu 2001"></a>hdu 2001</h1><p>这个是copy别人的正确了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"> </span><br><span class="line">public class Main&#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Scanner scanner = new Scanner(System.in);</span><br><span class="line">        </span><br><span class="line">        while (scanner.hasNext()) &#123;</span><br><span class="line">            </span><br><span class="line">            double a = scanner.nextDouble();</span><br><span class="line">            double b = scanner.nextDouble();</span><br><span class="line">            double c = scanner.nextDouble();</span><br><span class="line">            double d = scanner.nextDouble();</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">            double x = Math.pow(a-c, 2);</span><br><span class="line">            double y = Math.pow(b-d, 2);</span><br><span class="line">            double z = Math.sqrt(x+y);</span><br><span class="line">            System.out.println(String.format(&quot;%.2f&quot;,z));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个是我的…fo，示例都过的了…不晓得为啥过不去…居然报Wrong Answer，有点可怕哦</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line">import java.lang.Math;  //sqrt</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        int x1, y1, x2, y2;</span><br><span class="line">        double l;</span><br><span class="line">        while(sc.hasNext()) &#123;</span><br><span class="line">            x1 = sc.nextInt();</span><br><span class="line">            y1 = sc.nextInt();</span><br><span class="line">            x2 = sc.nextInt();</span><br><span class="line">            y2 = sc.nextInt();</span><br><span class="line">            l = (double)Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));</span><br><span class="line">            String str = String.format(&quot;%.2f&quot;, l);</span><br><span class="line">            System.out.println(str);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>11.3</p>
+<h1 id="hdu-2002"><a href="#hdu-2002" class="headerlink" title="hdu 2002"></a>hdu 2002</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        double r;</span><br><span class="line">        double PI = 3.1415927;</span><br><span class="line">        double v;</span><br><span class="line">        while(sc.hasNext())&#123;</span><br><span class="line">            r = sc.nextDouble();</span><br><span class="line">            v = (4.0/3.0) * PI * Math.pow(r, 3);</span><br><span class="line">            System.out.println(String.format(&quot;%.3f&quot;, v));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdu-2003"><a href="#hdu-2003" class="headerlink" title="hdu 2003"></a>hdu 2003</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        while(sc.hasNext())&#123;</span><br><span class="line">            double a = sc.nextDouble();</span><br><span class="line">            a = Math.abs(a);        //可以换成if语句</span><br><span class="line">            System.out.println(String.format(&quot;%.2f&quot;, a));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdu-2004"><a href="#hdu-2004" class="headerlink" title="hdu 2004"></a>hdu 2004</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        int score;</span><br><span class="line">        char level;</span><br><span class="line">        while (sc.hasNext()) &#123;</span><br><span class="line">            score = sc.nextInt();</span><br><span class="line">            if (score &gt; 100 || score &lt; 0)</span><br><span class="line">                System.out.println(&quot;Score is error!&quot;);</span><br><span class="line">            else &#123;</span><br><span class="line">                score = score / 10;     //一样可以用if实现</span><br><span class="line">                switch (score) &#123;</span><br><span class="line">                    case 10:</span><br><span class="line">                        level = &apos;A&apos;;</span><br><span class="line">                        break;</span><br><span class="line">                    case 9:</span><br><span class="line">                        level = &apos;A&apos;;</span><br><span class="line">                        break;</span><br><span class="line">                    case 8:</span><br><span class="line">                        level = &apos;B&apos;;</span><br><span class="line">                        break;</span><br><span class="line">                    case 7:</span><br><span class="line">                        level = &apos;C&apos;;</span><br><span class="line">                        break;</span><br><span class="line">                    case 6:</span><br><span class="line">                        level = &apos;D&apos;;</span><br><span class="line">                        break;</span><br><span class="line">                    default:</span><br><span class="line">                        level = &apos;E&apos;;</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(level);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>11.4</p>
+<h1 id="hdu-2005"><a href="#hdu-2005" class="headerlink" title="hdu 2005"></a>hdu 2005</h1><p>介个我是真的不会哒…java的类也太多了吧，过于智能我不习惯！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import java.text.ParseException;</span><br><span class="line">import java.text.SimpleDateFormat;</span><br><span class="line">import java.util.Scanner;</span><br><span class="line">import java.util.Date;</span><br><span class="line">import java.util.Calendar;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">public static void main(String args[]) throws ParseException &#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        while(sc.hasNext()) &#123;</span><br><span class="line">            String bir = sc.next();</span><br><span class="line">            SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy/MM/dd&quot;);       //校验日期的格式</span><br><span class="line">                                                                               //月份M大写，分钟m小写</span><br><span class="line">            Date date = format.parse(bir);</span><br><span class="line">            Calendar cal = Calendar.getInstance();      //Calendar的getInstance()方法返回用默认的地区和时区的当前日期和当前时间所初始化的GregorianCalendar（标准日历）</span><br><span class="line">            cal.setTime(date);</span><br><span class="line">            long res = cal.get(Calendar.DAY_OF_YEAR);</span><br><span class="line">            System.out.println(res);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdu-2006"><a href="#hdu-2006" class="headerlink" title="hdu 2006"></a>hdu 2006</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        while (sc.hasNext()) &#123;</span><br><span class="line">            int all = 1;</span><br><span class="line">            int n = sc.nextInt();</span><br><span class="line">            for (int i = 0; i &lt; n; i++) &#123;</span><br><span class="line">                int num = sc.nextInt();</span><br><span class="line">                if (num % 2 == 1)</span><br><span class="line">                    all *= num;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(all);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一到九点，做题的人就特别多=。=</p>
+<h1 id="hdu-2007"><a href="#hdu-2007" class="headerlink" title="hdu 2007"></a>hdu 2007</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        while(sc.hasNext())&#123;</span><br><span class="line">            int ou = 0;</span><br><span class="line">            int ji = 0;</span><br><span class="line">            int start = sc.nextInt();</span><br><span class="line">            int end = sc.nextInt();</span><br><span class="line">            int temp = 0;</span><br><span class="line">            if(start &gt; end)&#123;        //记得如果不满足由小到大，交换位置</span><br><span class="line">                temp = start;</span><br><span class="line">                start = end;</span><br><span class="line">                end = temp;</span><br><span class="line">            &#125;</span><br><span class="line">            for(int i = start; i &lt;= end; i++)&#123;</span><br><span class="line">                if(i % 2 == 0)</span><br><span class="line">                    ou += Math.pow(i, 2);</span><br><span class="line">                else</span><br><span class="line">                    ji += Math.pow(i, 3);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(ou + &quot; &quot; + ji);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdu-2008"><a href="#hdu-2008" class="headerlink" title="hdu 2008"></a>hdu 2008</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        while(sc.hasNext())&#123;</span><br><span class="line">            int count = sc.nextInt();</span><br><span class="line">            if(count == 0)</span><br><span class="line">                continue;</span><br><span class="line">            int a = 0, b = 0, c = 0;</span><br><span class="line">            for(int i = 0 ; i&lt; count; i++)&#123;</span><br><span class="line">                float num = sc.nextFloat();</span><br><span class="line">                if(num &gt; 0)</span><br><span class="line">                    a++;        //正数</span><br><span class="line">                else if(num == 0)</span><br><span class="line">                    b++;        //0</span><br><span class="line">                else</span><br><span class="line">                    c++;        //负数</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(c + &quot; &quot; + b + &quot; &quot; + a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>好久没有做hdu喽，最近学一些基础知识，考试要考基础选择什么的1551【只选取我所需的部分】</p>
+<h1 id="java学习"><a href="#java学习" class="headerlink" title="java学习"></a>java学习</h1><p>以下测试用到的包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package Test;</span><br><span class="line"></span><br><span class="line">import java.io.FileReader;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.RandomAccessFile;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.Scanner;</span><br></pre></td></tr></table></figure>
+
+<h2 id="变量和常量命名规范"><a href="#变量和常量命名规范" class="headerlink" title="变量和常量命名规范"></a>变量和常量命名规范</h2><p>1.所有变量、方法、类名：见名知意<br>2.类成员变量：首字母小写和驼峰原则，eg：monthSalary<br>3.局部变量：首字母小写和驼峰原则<br>4.常量：大写字母和下划线，eg：MAX_VALUE<br>5.类名：首字母大写和驼峰原则：Man，GoodMan<br>6.方法名：首字母小写和驼峰规则，eg：run()， runRun()</p>
+<h2 id="常量和final"><a href="#常量和final" class="headerlink" title="常量和final"></a>常量和final</h2><p>【常量：固定的值以及被final修饰的变量，一旦被初始化之后不可更改的量，使用final修饰的称为符号常量】</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        int num = 123;</span><br><span class="line">        num = 456;</span><br><span class="line">        String name = &quot;kk&quot;;</span><br><span class="line">        name = &quot;p1Kk&quot;;</span><br><span class="line">        final String OTHER = &quot;wang&quot;;</span><br><span class="line">        //OTHER = &quot;yi&quot;;    //该句会报错，因为修饰后不可修改</span><br><span class="line">        System.out.println(num);</span><br><span class="line">        System.out.println(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h2><h3 id="逻辑类型"><a href="#逻辑类型" class="headerlink" title="逻辑类型"></a>逻辑类型</h3><h4 id="boolean"><a href="#boolean" class="headerlink" title="boolean"></a>boolean</h4><p>常量：<code>true</code> <code>false</code></p>
+<h3 id="整数类型"><a href="#整数类型" class="headerlink" title="整数类型"></a>整数类型</h3><h4 id="int"><a href="#int" class="headerlink" title="int"></a>int</h4><p>4字节内存，取值范围：<code>-2^31 ~ 2^31-1</code></p>
+<h4 id="byte"><a href="#byte" class="headerlink" title="byte"></a>byte</h4><p>1字节内存，占8位，取值范围：<code>-2^7 ~ 2^7-1</code></p>
+<h4 id="short"><a href="#short" class="headerlink" title="short"></a>short</h4><p>2字节内存，占16位，取值范围：<code>-2^15 ~ 2^15-1</code></p>
+<h4 id="long"><a href="#long" class="headerlink" title="long"></a>long</h4><p>8字节内存，占64位，取值范围：<code>-2^63 ~ 2^63-1</code></p>
+<h3 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h3><h4 id="char"><a href="#char" class="headerlink" title="char"></a>char</h4><p>2字节内存，占16位，取值范围：<code>0 ~ 2^15-1(65535)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">char str = &apos;a&apos;;</span><br><span class="line">char str2 = 97;     //Unicode表中的排序位置</span><br></pre></td></tr></table></figure>
+
+<h3 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h3><h4 id="float（单精度）"><a href="#float（单精度）" class="headerlink" title="float（单精度）"></a>float（单精度）</h4><p>4字节内存，占32位，取值范围：<code>1.4E-45 ~ 3.4028235E38 &amp;&amp; -3.4028235E38 ~ -1.4E-45</code><br><strong>注意常量后面必须要有后缀f或F</strong></p>
+<h4 id="double（双精度）"><a href="#double（双精度）" class="headerlink" title="double（双精度）"></a>double（双精度）</h4><p>8字节内存，占64位，取值范围：<code>4.9E-324 ~ 1.7976931348623157E308 &amp;&amp; -1.7976931348623157E308 ~ -4.9E-324</code></p>
+<h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><h3 id="自动类型转换"><a href="#自动类型转换" class="headerlink" title="自动类型转换"></a>自动类型转换</h3><p>1.容量小的数据类型可以自动转换为容量大的数据类型。容量指的是类型的范围，而不是所占的字节数。<br>2.整型常量直接赋值给byte、short、char等类型变量，而不需要进行强制类型转换，只要不超出其表数范围即可。<br><img src="https://i.loli.net/2019/11/11/bZg6sm8XR7EjGQT.png" alt></p>
+<h3 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">double x = 3.55;</span><br><span class="line">int nx = (int)x;        //nx = 3。小数点后全部舍去</span><br><span class="line"></span><br><span class="line">char c = &apos;a&apos;;</span><br><span class="line">int d = c + 1;      //d = 98, (char)d = &apos;b&apos;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>方法就比较像c语言中的函数<br>java需要new一个对象来调用普通方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        test t = new test();        //通过对象调用普通方法</span><br><span class="line">        t.printSxt();</span><br><span class="line">        t.add(1, 2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    void printSxt()&#123;</span><br><span class="line">        System.out.println(&quot;Hello, haker&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    int add(int a, int b)&#123;</span><br><span class="line">        int sum = a + b;</span><br><span class="line">        System.out.println(sum);</span><br><span class="line">        return sum;     //return什么都不跟，就只有结束方法运行的作用，如果有的话就是返回返回值。</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法的重载实际是完全不同的方法，只是名称相同，条件是：<br>1.不同的含义：形参类型，形参个数，形参的顺序不同<br>2.只有返回值不同不构成方法的重载<br>3.只有形参的名称不同，不构成方法的重载</p>
+<h2 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h2><p>类：class<br>对象：Object， instance（实例）</p>
+<h2 id="类的UML图"><a href="#类的UML图" class="headerlink" title="类的UML图"></a>类的UML图</h2><p>由一个方框图构成，分为三层<br>第1层为类名<br>第2层为属性(成员变量)<br>第3层为方法<br><img src="https://i.loli.net/2019/11/12/YIOLuCD1B7Gmy9s.png" alt><br>其中，<strong>抽象类的类名和抽象方法用斜体表示</strong></p>
+<p>关联关系用实线箭头<img src="https://i.loli.net/2019/11/12/gNbZ1liqDwodQeE.png" alt>表示<br>箭头由关联方指向被关联方</p>
+<p>依赖关系用虚线箭头<img src="https://i.loli.net/2019/11/12/JRgmKzCw5nd87hV.png" alt>表示<br>箭头由依赖方指向被依赖方</p>
+<p>依赖关系用实线箭头<img src="https://i.loli.net/2019/11/12/L6pyqjk1Zd3R8fA.png" alt>表示<br>箭头由继承方(子类)指向被继承方(父类)</p>
+<p>依赖关系用虚线箭头<img src="https://i.loli.net/2019/11/12/tKHLpdR6JBnmlxW.png" alt>表示<br>箭头由实现方(子类)指向被实现方(接口)</p>
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><p>1.在程序中产生二义性，用this指明当前对象。构造方法中，this总是指向正要初始化的对象。普通方法中，this总指向调用该方法的对象。<br>2.this关键字调用重载的构造方法，避免相同的初始化代码。但是只能在构造方法中使用，并且必须位于构造方法的第一句。<br>3.<strong>this不能用于static方法中。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line">    int a, b, c;</span><br><span class="line"></span><br><span class="line">    test(int a, int b)&#123;</span><br><span class="line">        this.a = a;</span><br><span class="line">        this.b = b;</span><br><span class="line">    &#125;</span><br><span class="line">    test(int a, int b, int c)&#123;</span><br><span class="line">        this(a, b);     //重载的方法，使用this必须放在第一句</span><br><span class="line">        this.c = c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void sing()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    void eat()&#123;</span><br><span class="line">        this.sing();    //调用本类中的sing()</span><br><span class="line">        System.out.println(&quot;你妈叫你回家吃饭！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        test hi = new test(2, 3);</span><br><span class="line">        hi.eat();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我还没有很理解…这种还是需要多练的吧…</p>
+<h2 id="static关键字【静态】"><a href="#static关键字【静态】" class="headerlink" title="static关键字【静态】"></a>static关键字【静态】</h2><p>static修饰的成员变量和方法，从属于类。普通变量和方法从属于对象。<br>静态方法不可调用非静态，但是非静态可以调用静态。<br>静态初始化块执行先上溯到Object类，先执行Object的静态初始化块，再向下执行子类的静态初始化块，直到我们的类的静态初始化块为止。</p>
+<h2 id="访问权限"><a href="#访问权限" class="headerlink" title="访问权限"></a>访问权限</h2><p>是指对象能否通过“.”运算符操作自己的变量或通过“.”运算符调用类中的方法。<br>访问限制修饰符<code>private</code>, <code>protected</code>, <code>public</code></p>
+<h3 id="private【私有】"><a href="#private【私有】" class="headerlink" title="private【私有】"></a>private【私有】</h3><p>某类中创建了有private修饰的成员变量或方法，则其他类不能调用</p>
+<h3 id="protected【受保护】"><a href="#protected【受保护】" class="headerlink" title="protected【受保护】"></a>protected【受保护】</h3><p>某类中创建了有protected修饰的成员变量或方法，则只有在同一个包中的其他类可以调用</p>
+<h3 id="public【共有】"><a href="#public【共有】" class="headerlink" title="public【共有】"></a>public【共有】</h3><p>某类中创建了有public修饰的成员变量或方法，则其他类可以调用<br>可以修饰类，其他修饰符不能。</p>
+<h3 id="【友好】"><a href="#【友好】" class="headerlink" title="【友好】"></a>【友好】</h3><p>不用以上修饰符修饰的成员变量和方法。</p>
+<h2 id="类封装"><a href="#类封装" class="headerlink" title="类封装"></a>类封装</h2><table>
+<thead>
+<tr>
+<th>基本数据类型</th>
+<th>包装</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>float</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>int</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Long</td>
+</tr>
+<tr>
+<td>char</td>
+<td>Character</td>
+</tr>
+</tbody></table>
+<h2 id="super"><a href="#super" class="headerlink" title="super"></a>super</h2><p>直接父类对象的引用，可以通过super来访问父类中被子类覆盖的方法或属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class FatherClass&#123;</span><br><span class="line">    public int value;</span><br><span class="line">    public void f()&#123;</span><br><span class="line">        value = 100;</span><br><span class="line">        System.out.println(&quot;FatherClass.value = &quot;+value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ChildClass extends FatherClass&#123;</span><br><span class="line">    public int value;</span><br><span class="line">    public void f()&#123;</span><br><span class="line">        super.f();      //调用父类对象的普通方法</span><br><span class="line">        value = 200;</span><br><span class="line">        System.out.println(&quot;ChildClass.value = &quot;+value);</span><br><span class="line">        System.out.println(value);</span><br><span class="line">        System.out.println(super.value);        //调用父类对象的成员变量</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class test &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        new ChildClass().f();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FatherClass.value = 100</span><br><span class="line">ChildClass.value = 200</span><br><span class="line">200</span><br><span class="line">100</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>所有的构造方法，第一句都会调用super()，去追溯继承树</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Object[] a1 = &#123;1001, &quot;kk&quot;&#125;;</span><br><span class="line">        Object[] a2 = &#123;1002, &quot;aa&quot;, &quot;swpu&quot;&#125;;</span><br><span class="line">        Object[][] emps = new Object[2][];</span><br><span class="line">        emps[0] = a1;</span><br><span class="line">        emps[1] = a2;</span><br><span class="line"></span><br><span class="line">        for(Object[] temp: emps)&#123;</span><br><span class="line">            System.out.println(Arrays.toString(temp));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        int values[] = &#123;3, 1, 6, 2, 9, 10, 4, 5, 8, 6&#125;;</span><br><span class="line">        int temp;</span><br><span class="line">        boolean flag = true;</span><br><span class="line">        for(int i = 0; i &lt; values.length - 1; i++)&#123;</span><br><span class="line">            for(int j = 0; j &lt; values.length -1 - i; j++) &#123;        //不减1的话访问数组越界</span><br><span class="line">                if (values[j] &gt;= values[j + 1]) &#123;</span><br><span class="line">                    temp = values[j];</span><br><span class="line">                    values[j] = values[j + 1];</span><br><span class="line">                    values[j + 1] = temp;</span><br><span class="line">                    flag = false;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            if(flag)&#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(Arrays.toString(values));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="二分（折半）查找法"><a href="#二分（折半）查找法" class="headerlink" title="二分（折半）查找法"></a>二分（折半）查找法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        int values[] = &#123;3, 1, 6, 2, 9, 10, 4, 5, 8, 6&#125;;</span><br><span class="line">        Arrays.sort(values);</span><br><span class="line">        int temp;</span><br><span class="line">        Scanner sc = new Scanner(System.in);</span><br><span class="line">        int num, low, high, index;</span><br><span class="line">        while(true) &#123;</span><br><span class="line">            num = sc.nextInt();</span><br><span class="line">            low = 0;</span><br><span class="line">            high = values.length - 1;</span><br><span class="line">            boolean flag = false;</span><br><span class="line">            while (low &lt;= high) &#123;</span><br><span class="line">                index = (low + high) / 2;</span><br><span class="line">                if (num == values[index]) &#123;</span><br><span class="line">                    System.out.println(&quot;查找成功！位置为：&quot; + (index + 1));</span><br><span class="line">                    flag = true;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">                else if (num &lt; values[index])</span><br><span class="line">                    high = index - 1;</span><br><span class="line">                else</span><br><span class="line">                    low = index + 1;</span><br><span class="line">            &#125;</span><br><span class="line">            if (!flag)</span><br><span class="line">                System.out.println(&quot;查找失败！&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Integer类"><a href="#Integer类" class="headerlink" title="Integer类"></a>Integer类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        //基本数据类型转换成包装类对象</span><br><span class="line">        Integer a = new Integer(3);</span><br><span class="line">        Integer b = Integer.valueOf(10);</span><br><span class="line">        //把包装类对象转换成基本数据类型</span><br><span class="line">        int c = a.intValue();</span><br><span class="line">        double d = b.doubleValue();</span><br><span class="line">        //把字符串转化成包装类对象</span><br><span class="line">        Integer e = new Integer(&quot;11111&quot;);</span><br><span class="line">        Integer f = Integer.parseInt(&quot;22222&quot;);</span><br><span class="line">        //把包装类对象转换成字符串</span><br><span class="line">        String str = f.toString();</span><br><span class="line">        String str2 = &quot;&quot; + e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="【并不考…】测试自动装箱，拆箱"><a href="#【并不考…】测试自动装箱，拆箱" class="headerlink" title="【并不考…】测试自动装箱，拆箱"></a>【并不考…】测试自动装箱，拆箱</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        //装箱</span><br><span class="line">        Integer a = 234; //自动调用Integer a = Integer.valueOf(234);</span><br><span class="line">        //拆箱</span><br><span class="line">        int b = a;  //int b = a.intValue();</span><br><span class="line">        //他会自动缓存[-128, 127]之间的数字</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="try-catch捕获异常"><a href="#try-catch捕获异常" class="headerlink" title="try-catch捕获异常"></a>try-catch捕获异常</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    private static RandomAccessFile reader;</span><br><span class="line"></span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            FileReader reader = new FileReader(&quot;D:/a.txt&quot;);</span><br><span class="line">            char a1 = (char)reader.read();</span><br><span class="line">            System.out.print(a1);</span><br><span class="line">        &#125;catch(FileNotFoundException e)&#123;    //子类</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;catch(IOException e)&#123;      //父类。子类异常在前，父类在后，否则只要抛出异常，都直接执行IO</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;finally&#123;</span><br><span class="line">            try&#123;</span><br><span class="line">                if(reader != null)</span><br><span class="line">                    reader.close();</span><br><span class="line">            &#125;catch(IOException e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="throws声明异常"><a href="#throws声明异常" class="headerlink" title="throws声明异常"></a>throws声明异常</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    public static void main(String args[]) throws IOException&#123;      //抛出异常接收</span><br><span class="line">        readMyFile();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void readMyFile() throws IOException&#123;     //抛出异常后，丢给调用他的main函数</span><br><span class="line">        FileReader reader = null;</span><br><span class="line">        reader = new FileReader(&quot;d:/b.txt&quot;);</span><br><span class="line"></span><br><span class="line">        if(reader != null)</span><br><span class="line">            reader.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="手动抛出异常"><a href="#手动抛出异常" class="headerlink" title="手动抛出异常"></a>手动抛出异常</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        Person p = new Person();</span><br><span class="line">        p.setAge(-10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">class Person&#123;</span><br><span class="line">    private  int age;</span><br><span class="line">    public int getAge()&#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setAge(int age)&#123;</span><br><span class="line">        if(age &lt; 0)&#123;</span><br><span class="line">            throw new IllegalAgeException(&quot;年龄不能为负数&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class IllegalAgeException extends RuntimeException&#123;</span><br><span class="line">    public IllegalAgeException()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public IllegalAgeException(String msg)&#123;</span><br><span class="line">        super(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="抽象【abstract】"><a href="#抽象【abstract】" class="headerlink" title="抽象【abstract】"></a>抽象【abstract】</h2><p>abstract修饰抽象方法，不需要方法体。<br>抽象方法的类必须是抽象类。抽象类可以有非抽象方法。<br>抽象类不能实例化，不能new，只能被继承，被子类调用，被子类实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//抽象类：为子类提供统一的规范，模板</span><br><span class="line">public abstract class test&#123;</span><br><span class="line">    //特点:1.没有实现 2.子类必须实现    //设计一个规范，控制子类</span><br><span class="line">    abstract public void shout();</span><br><span class="line"></span><br><span class="line">    public void run()&#123;</span><br><span class="line">        System.out.println(&quot;Run Run Run!!!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Dog extends test&#123;</span><br><span class="line">    public void shout()&#123;</span><br><span class="line">        System.out.println(&quot;Shout!!!&quot;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>同一个方法调用，由于对象不同，可能会有不同的行为。</p>
+<h2 id="final"><a href="#final" class="headerlink" title="final"></a>final</h2><p>修饰变量，见上文<br>修饰类，修饰的类不能被继承<br>修饰方法，方法不可被子类重写，但是可以被重载。</p>
+<h2 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h2><p>具体实现，规范（抽象方法）</p>
+<h2 id="接口【interface】"><a href="#接口【interface】" class="headerlink" title="接口【interface】"></a>接口【interface】</h2><p>接口不提供任何实现，接口中所有方法都是抽象类方法<br>接口类和实现类不是父子关系，是实现规则的关系<br>一个接口实现多继承<br>子类通过implements来实现接口中的规范</p>
+<blockquote>
+<p>参考：<a href="https://www.bilibili.com/video/av59814573" target="_blank" rel="noopener">b站【尚学堂】Java300集 - 高琪(零基础初学入门)</a><br>《Java2实用教程》——清华大学出版社<br>我校赖老师的ppt</p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/ACM/">ACM</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/HDU/">HDU</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp">
+  <span>
+  2019 RedpwnCTF Bronze Ropchain wp</span>
+</a>
+</div>
+
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>15</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>21</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/面经/" title="面经">面经<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>19</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

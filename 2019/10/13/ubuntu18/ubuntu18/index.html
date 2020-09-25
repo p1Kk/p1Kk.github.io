@@ -20,7 +20,7 @@
 <meta property="og:description" content="写在前面：因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍  更换系统镜像为清华镜像源不换的话以后下载东西会很慢 遇到报错 12E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)E: Unable to lock the a">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://i.loli.net/2019/10/11/NY4DSJ3zXgpeMi7.png">
-<meta property="og:updated_time" content="2020-05-15T03:51:01.172Z">
+<meta property="og:updated_time" content="2020-09-13T10:01:34.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ubuntu18安装各种pwn工具">
 <meta name="twitter:description" content="写在前面：因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍  更换系统镜像为清华镜像源不换的话以后下载东西会很慢 遇到报错 12E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)E: Unable to lock the a">
@@ -104,7 +104,7 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#更换系统镜像为清华镜像源"><span class="toc-number">1.</span> <span class="toc-text">更换系统镜像为清华镜像源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础工具安装"><span class="toc-number">2.</span> <span class="toc-text">基础工具安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwntools"><span class="toc-number">3.</span> <span class="toc-text">pwntools</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gdb"><span class="toc-number">4.</span> <span class="toc-text">gdb</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwndbg"><span class="toc-number">5.</span> <span class="toc-text">pwndbg</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LibcSearcher"><span class="toc-number">6.</span> <span class="toc-text">LibcSearcher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#libc-database库的使用"><span class="toc-number">6.1.</span> <span class="toc-text">libc-database库的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROPgadget"><span class="toc-number">7.</span> <span class="toc-text">ROPgadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#one-gadget"><span class="toc-number">8.</span> <span class="toc-text">one_gadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#roputils"><span class="toc-number">9.</span> <span class="toc-text">roputils</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#edb-debugger"><span class="toc-number">10.</span> <span class="toc-text">edb-debugger</span></a></li></ol>
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#更换系统镜像为清华镜像源"><span class="toc-number">1.</span> <span class="toc-text">更换系统镜像为清华镜像源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pip-timeout等错误"><span class="toc-number">2.</span> <span class="toc-text">pip timeout等错误</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础工具安装"><span class="toc-number">3.</span> <span class="toc-text">基础工具安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwntools"><span class="toc-number">4.</span> <span class="toc-text">pwntools</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gdb"><span class="toc-number">5.</span> <span class="toc-text">gdb</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pwndbg"><span class="toc-number">6.</span> <span class="toc-text">pwndbg</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LibcSearcher"><span class="toc-number">7.</span> <span class="toc-text">LibcSearcher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#libc-database库的使用"><span class="toc-number">7.1.</span> <span class="toc-text">libc-database库的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROPgadget"><span class="toc-number">8.</span> <span class="toc-text">ROPgadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#one-gadget"><span class="toc-number">9.</span> <span class="toc-text">one_gadget</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#roputils"><span class="toc-number">10.</span> <span class="toc-text">roputils</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#edb-debugger"><span class="toc-number">11.</span> <span class="toc-text">edb-debugger</span></a></li></ol>
 		  
 		  </div>
 		  
@@ -116,6 +116,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)</span><br><span class="line">E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</span><br></pre></td></tr></table></figure>
 
 <p>解决：<a href="https://www.cnblogs.com/yun6853992/p/9343816.html\" target="_blank" rel="noopener">https://www.cnblogs.com/yun6853992/p/9343816.html\</a><br>然后重启终端即可，后面还有遇到，直接kill进程，不用再删除文件了</p>
+<h1 id="pip-timeout等错误"><a href="#pip-timeout等错误" class="headerlink" title="pip timeout等错误"></a>pip timeout等错误</h1><p>换源解决</p>
+<p><a href="https://blog.csdn.net/qq_39852676/article/details/101591865" target="_blank" rel="noopener">https://blog.csdn.net/qq_39852676/article/details/101591865</a>        改配置文件</p>
+<p><a href="https://blog.csdn.net/qq_39161804/article/details/81191977" target="_blank" rel="noopener">https://blog.csdn.net/qq_39161804/article/details/81191977</a>           几个源</p>
 <h1 id="基础工具安装"><a href="#基础工具安装" class="headerlink" title="基础工具安装"></a>基础工具安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 安装python</span><br><span class="line">$ sudo apt install python</span><br><span class="line">//pip</span><br><span class="line">$ sudo apt install python-pip</span><br><span class="line">//git</span><br><span class="line">$ sudo apt install git</span><br><span class="line">//gem</span><br><span class="line">$ sudo apt install ruby</span><br></pre></td></tr></table></figure>
 
 <p>先来个<strong>放工具的文件夹</strong>吧嘿嘿</p>
@@ -129,7 +132,7 @@
 
 <h1 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install gdb</span><br></pre></td></tr></table></figure>
 
-<h1 id="pwndbg"><a href="#pwndbg" class="headerlink" title="pwndbg"></a>pwndbg</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir pwndbg</span><br><span class="line"></span><br><span class="line">$ git clone https://github.com/pwndbg/pwndbg</span><br><span class="line">$ cd pwndbg</span><br><span class="line">$ ./setup.sh</span><br></pre></td></tr></table></figure>
+<h1 id="pwndbg"><a href="#pwndbg" class="headerlink" title="pwndbg"></a>pwndbg</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/pwndbg/pwndbg</span><br><span class="line">$ cd pwndbg</span><br><span class="line">$ ./setup.sh</span><br></pre></td></tr></table></figure>
 
 <p>后面有空再下载<em>peda</em>，<em>gef</em>那些吧~</p>
 <h1 id="LibcSearcher"><a href="#LibcSearcher" class="headerlink" title="LibcSearcher"></a>LibcSearcher</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/lieanu/LibcSearcher.git</span><br><span class="line">$ cd LibcSearcher</span><br><span class="line">$ python setup.py develop</span><br></pre></td></tr></table></figure>
@@ -159,7 +162,7 @@
 <p>下载与libc ID对应的整个库。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ./download libc6_2.23-0ubuntu10_amd64</span><br><span class="line">Getting libc6_2.23-0ubuntu10_amd64</span><br><span class="line">    -&gt; Location: http://security.ubuntu.com/ubuntu/pool/main/g/glibc/libc6_2.23-0ubuntu10_amd64.deb</span><br><span class="line">    -&gt; Downloading package</span><br><span class="line">    -&gt; Extracting package</span><br><span class="line">    -&gt; Package saved to libs/libc6_2.23-0ubuntu10_amd64</span><br><span class="line">$ ls libs/libc6_2.23-0ubuntu10_amd64</span><br><span class="line">ld-2.23.so ... libc.so.6 ... libpthread.so.0 ...</span><br></pre></td></tr></table></figure>
 
-<h1 id="ROPgadget"><a href="#ROPgadget" class="headerlink" title="ROPgadget"></a>ROPgadget</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo pip install capstone</span><br><span class="line">$ ROPgadget.py</span><br><span class="line">$ python setup.py install</span><br><span class="line">//或者$ pip install ropgadget</span><br><span class="line">$ ROPgadget</span><br></pre></td></tr></table></figure>
+<h1 id="ROPgadget"><a href="#ROPgadget" class="headerlink" title="ROPgadget"></a>ROPgadget</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/JonathanSalwan/ROPgadget</span><br><span class="line">$ sudo pip install capstone</span><br><span class="line">$ ROPgadget.py</span><br><span class="line">$ python setup.py install</span><br><span class="line">//或者$ pip install ropgadget</span><br><span class="line">$ ROPgadget</span><br></pre></td></tr></table></figure>
 
 <p>用法：</p>
 <p>查找可存储寄存器的代码（rop表示二进制文件名）</p>
@@ -217,8 +220,8 @@
 
 
 <div class="next">
-<a href="/2019/10/05/SROP/SROP/"  title="SROP">
- <span>SROP
+<a href="/2019/10/10/函数调用约定/函数调用约定/"  title="函数调用约定">
+ <span>函数调用约定
 </span>
 </a>
 </div>
@@ -273,7 +276,7 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>22</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>15</sup></a></li>
 		  
 		
 		  
@@ -294,19 +297,19 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>31</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>26</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/tw/" title="tw">tw<sup>18</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>19</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>11</sup></a></li>
 			
 		
 			
@@ -342,11 +345,19 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -355,14 +366,6 @@
 		
 			
 				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 		</ul>
