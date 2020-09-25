@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<!-- 引入 jquery、Bootstrap -->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</head>
+
+	<body>
+		<!-- 登录表单 -->
+		<div class="login-form">
+			<center><span>管理系统</span></center>
+				<div class="form-group">
+					<label for="usernamel">用户名</label>
+					<input type="text" class="form-control" id="username" placeholder="请输入您的用户名或手机号">
+				</div>
+				<div class="form-group">
+					<label for="password">密码</label>
+					<input type="password" class="form-control" id="password" placeholder="请输入您的密码">
+				</div>
+				<div class="c3-1">
+					<center>
+						<button id="login" class="btn btn-primary">登录</button>
+					</center>
+					<br />
+					<a id="searchPwd" data-toggle="modal" data-target="#searchPwd-window">忘记密码</a>
+					<a id="toRegister" data-toggle="modal" data-target="#register-window">立即注册</a>
+				</div>
+		</div>
+		<!-- 注册框 -->
+		<div class="modal fade" id="register-window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">注册</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-inline" role="form">
+						<label>用&ensp;户&ensp;名:</label><input class="form-control" placeholder="请设置您的用户名" />
+						<br /> 
+						<br />
+						<label>密&emsp;&emsp;码:</label><input class="form-control" placeholder="请设置您的密码(不少于8位)" />
+						<br /> 
+						<br />
+						<label>确认密码:</label><input class="form-control" placeholder="请再次确认您的密码" />
+						<br /> 
+						<br />
+						<label>手&ensp;机&ensp;号:</label><input class="form-control" placeholder="请输入您的手机号" />
+						<input type="button" value="发送验证码" class="btn btn-info" />
+						<br /> 
+						<br />
+						<label>验&ensp;证&ensp;码:</label><input class="form-control" placeholder="请输入短信验证码" />
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="register" @click="register" class="btn btn-primary">注册</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 找回密码框 -->
+		<div class="modal fade" id="searchPwd-window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">重置密码</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-inline" role="form">
+						<label>用&ensp;户&ensp;名:</label><input class="form-control" placeholder="请输入您的用户名" />
+						<br /> 
+						<br />
+						<label>新&ensp;密&ensp;码:</label><input class="form-control" placeholder="请设置您的新密码(不少于8位)" />
+						<br /> 
+						<br />
+						<label>确认密码:</label><input class="form-control" placeholder="请再次确认您的新密码" />
+						<br /> 
+						<br />
+						<label>手&ensp;机&ensp;号:</label><input class="form-control" placeholder="请输入您绑定的手机号" />
+						<input type="button" value="发送验证码" class="btn btn-info" />
+						<br /> 
+						<br />
+						<label>验&ensp;证&ensp;码:</label><input class="form-control" placeholder="请输入短信验证码" />
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="resetPwd" @click="resetPwd" class="btn btn-primary">重置密码</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<style type="text/css">
+		html body{
+			background: url(img/back.jpg) no-repeat center;
+			background-size: 100%;
+		}
+		span{
+			font-family: "微软雅黑";
+			font-size: 30px;
+		}
+		.login-form {
+			width: 20%;
+			margin: auto;
+			margin-top: 15%;
+		}
+		#toRegister {
+			float: right;
+		}
+	</style>
+</html>
