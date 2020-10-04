@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200401220057.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200330224749.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/20200403231324.png">
-<meta property="og:updated_time" content="2020-05-03T16:15:26.124Z">
+<meta property="og:updated_time" content="2020-09-30T00:37:29.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="路由器栈溢出漏洞">
 <meta name="twitter:description" content="前提:有一定的 linux/win pwn 基础  mips汇编要先了解一下https://blog.csdn.net/gujing001/article/details/8476685 寄存器   REGISTER NAME USAGE    $0 $zero 常量0(constant value 0)   $1 $at 保留给汇编器(Reserved for assembler)   $2-">
@@ -204,7 +204,55 @@
 <td>乘除结果低位寄存器</td>
 </tr>
 </tbody></table>
-<h2 id="部分指令"><a href="#部分指令" class="headerlink" title="部分指令"></a>部分指令</h2><p>指令    |用法    |功能<br>|—|—|—|<br>addiu    |addiu $1,$2,n    |$1=$2+n<br>sw    |sw $1,n($2)    |memory[n+ $2]=$1<br>addiu    |addiu $1,$2,n    |$1=$2+n<br>lui    |lui $1,n    |$1=65536*$1<br>lw    |lw $1,n($2)    |$1=memory[n+$2]<br>bnez    |bnez R1,addr    |不等于0则跳转到addr<br>jal    |jal addr    |类似call<br>j    |j addr    |直接跳转指令，跳转的地址在指令中</p>
+<h2 id="部分指令"><a href="#部分指令" class="headerlink" title="部分指令"></a>部分指令</h2><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>用法</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>addiu</td>
+<td>addiu $1,$2,n</td>
+<td>$1=$2+n</td>
+</tr>
+<tr>
+<td>sw</td>
+<td>sw $1,n($2)</td>
+<td>memory[n+ $2]=$1</td>
+</tr>
+<tr>
+<td>addiu</td>
+<td>addiu $1,$2,n</td>
+<td>$1=$2+n</td>
+</tr>
+<tr>
+<td>lui</td>
+<td>lui $1,n</td>
+<td>$1=65536*$1</td>
+</tr>
+<tr>
+<td>lw</td>
+<td>lw $1,n($2)</td>
+<td>$1=memory[n+$2]</td>
+</tr>
+<tr>
+<td>bnez</td>
+<td>bnez R1,addr</td>
+<td>不等于0则跳转到addr</td>
+</tr>
+<tr>
+<td>jal</td>
+<td>jal addr</td>
+<td>类似call</td>
+</tr>
+<tr>
+<td>j</td>
+<td>j addr</td>
+<td>直接跳转指令，跳转的地址在指令中</td>
+</tr>
+</tbody></table>
 <h1 id="MIPS架构函数调用约定"><a href="#MIPS架构函数调用约定" class="headerlink" title="MIPS架构函数调用约定"></a>MIPS架构函数调用约定</h1><p>大多数采用linux嵌入式操作系统的路由器使用的是MIPS32架构，MIPS32架构函数调用时对栈的分配和使用方式与x86架构有异同之处：</p>
 <ol>
 <li>mips32与x86一样，栈是从高地址向低地址增长，但mips32中没有EBP（Base Pointer）指针，进入一个函数时需要将当前栈指针向下移动 n 比特，这个大小为n比特的存储空间就是此函数的 stack frame 的存储区域。此后栈指针便不再移动，只能在函数返回时再将栈指针加上这个偏移量恢复栈现场。由于不能随便移动栈指针，所以寄存器压栈和出栈都必须指定偏移量。</li>
@@ -393,7 +441,7 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>15</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
 		  
 		
 		  
@@ -414,11 +462,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>31</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>19</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
 			
 		
 			
@@ -426,7 +474,7 @@
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>11</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
 			
 		
 			
@@ -446,11 +494,11 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
 			
 		
 			
@@ -462,11 +510,7 @@
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -474,7 +518,11 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			

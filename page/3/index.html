@@ -81,6 +81,44 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
+  
+    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
+    
+     
+           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
+
+0x01 malloc_chunk的基本结构（使用中/未被f</p>
+        
+    
+    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
+  
+    <h1 itemprop="name">栈迁移</h1>
+    
+     
+           <p itemprop="description" >看到了一道栈迁移的题，就来写一下加深印象
+前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
+以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数</p>
+        
+    
+    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/02/16/buu/wppp/" title="buuctf pwn wp【长期更】" itemprop="url">
   
     <h1 itemprop="name">buuctf pwn wp【长期更】</h1>
@@ -240,54 +278,6 @@ fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_in
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
-  
-    <h1 itemprop="name">Unsorted Bin Attack</h1>
-    
-     
-           <p itemprop="description" >Unsorted Bin
-chunk分割，剩余&amp;gt;MINSIZE
-
-放入unsorted bin
-
-
-释放一个不属于fastbin的chunk，且该chunk不与top chunk紧邻
-
-放入unsorted bin
-
-
-malloc_consolidate时，合并后的chu</p>
-        
-    
-    <time datetime="2019-10-31T16:00:00.000Z" itemprop="datePublished">2019-11-01</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/26/canary的绕过姿势/canary/" title="canary的绕过姿势" itemprop="url">
-  
-    <h1 itemprop="name">canary的绕过姿势</h1>
-    
-     
-           <p itemprop="description" >0x01 Canary
-canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。工人们每次下井都会带上一只金丝雀如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。
-
-由于 stack overflow 而引发的攻击非常</p>
-        
-    
-    <time datetime="2019-10-25T16:00:00.000Z" itemprop="datePublished">2019-10-26</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -339,7 +329,7 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>15</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
 		  
 		
 		  
@@ -360,11 +350,11 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>31</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>19</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
 			
 		
 			
@@ -372,7 +362,7 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>11</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
 			
 		
 			
@@ -392,11 +382,11 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
 			
 		
 			
@@ -408,11 +398,7 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
@@ -420,7 +406,11 @@ canary的意思是金丝雀，来源于英国矿井工人用来探查井下气�
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
