@@ -81,6 +81,23 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/10/04/tw/tw secret_of_my_heart/" title="pwnable.tw secret_of_my_heart wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw secret_of_my_heart wp</h1>
+    
+     
+           <p itemprop="description" >secret_of_my_heart分析123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    Canary foundNX:       NX enabledPIE:      PIE enabledFORTIF</p>
+        
+    
+    <time datetime="2020-10-04T12:13:01.362Z" itemprop="datePublished">2020-10-04</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/10/04/tw/tw babystack/" title="pwnable.tw babystack wp" itemprop="url">
   
     <h1 itemprop="name">pwnable.tw babystack wp</h1>
@@ -185,12 +202,14 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/20/tw/tw re-alloc/" title="pwnable.tw re-alloc wp" itemprop="url">
+    <a href="/2020/07/20/tw/tw/" title="pwnable.tw start orw wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw re-alloc wp</h1>
+    <h1 itemprop="name">pwnable.tw start orw wp</h1>
     
      
-           <p itemprop="description" >re-alloc分析123456Arch:     amd64-64-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)FORTIFY</p>
+           <p itemprop="description" >这两个还比较简单
+start0x01分析checksec
+1234567kk@ubuntu:~/Desktop/black/tw/start$ checksec start [*] &amp;apos;/home/kk/Desktop/black/tw/start/start&amp;apos;</p>
         
     
     <time datetime="2020-07-19T16:00:00.000Z" itemprop="datePublished">2020-07-20</time>
@@ -202,14 +221,12 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/20/tw/tw/" title="pwnable.tw start orw wp" itemprop="url">
+    <a href="/2020/07/20/tw/tw re-alloc/" title="pwnable.tw re-alloc wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw start orw wp</h1>
+    <h1 itemprop="name">pwnable.tw re-alloc wp</h1>
     
      
-           <p itemprop="description" >这两个还比较简单
-start0x01分析checksec
-1234567kk@ubuntu:~/Desktop/black/tw/start$ checksec start [*] &amp;apos;/home/kk/Desktop/black/tw/start/start&amp;apos;</p>
+           <p itemprop="description" >re-alloc分析123456Arch:     amd64-64-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)FORTIFY</p>
         
     
     <time datetime="2020-07-19T16:00:00.000Z" itemprop="datePublished">2020-07-20</time>
@@ -230,25 +247,6 @@ start0x01分析checksec
         
     
     <time datetime="2020-07-16T16:00:00.000Z" itemprop="datePublished">2020-07-17</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
-    
-     
-           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
-
-看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
-        
-    
-    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
   </a>
 </section>
 
@@ -305,7 +303,7 @@ start0x01分析checksec
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>16</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
 		  
 		
 		  
@@ -326,11 +324,11 @@ start0x01分析checksec
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>32</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>20</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
 			
 		
 			
@@ -338,7 +336,7 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>12</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
 			
 		
 			
