@@ -81,6 +81,45 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2019/11/15/house of/house of roman/" title="house of_系列学习之 house of roman" itemprop="url">
+  
+    <h1 itemprop="name">house of_系列学习之 house of roman</h1>
+    
+     
+           <p itemprop="description" >house of roman介绍利用条件UAF漏洞以及能创建任意大小的chunk
+原理fastbin attack + unsortedbin attack。该技术用于 bypass ALSR，利用 12-bit 的爆破来达到获取 shell 的目的。
+demo分析checkse</p>
+        
+    
+    <time datetime="2019-11-14T16:00:00.000Z" itemprop="datePublished">2019-11-15</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/11/10/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
+  
+    <h1 itemprop="name">Fastbin Attack</h1>
+    
+     
+           <p itemprop="description" >首先需要了解：
+
+fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_inuse标志，也就无法被合并
+首块double free检查，当一个chunk被free进fastbin前，会看看链表的第一个chunk【main_arena直接指</p>
+        
+    
+    <time datetime="2019-11-09T16:00:00.000Z" itemprop="datePublished">2019-11-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
   
     <h1 itemprop="name">Unsorted Bin Attack</h1>
@@ -206,29 +245,6 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
-  
-    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
-    
-     
-           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
-
-lab1法一通过ida查看get_flag函数。发现是…逆向呀
-
-是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
-
-在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
-        
-    
-    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
     <a href="/2019/10/03/Asis CTF 2016 b00ks(obo)/wp/" title="Asis CTF 2016 b00ks wp (null off-by-one)【详】" itemprop="url">
   
     <h1 itemprop="name">Asis CTF 2016 b00ks wp (null off-by-one)【详】</h1>
@@ -251,39 +267,18 @@ lab1法一通过ida查看get_flag函数。发现是…逆向呀
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">
+    <a href="/2019/10/03/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
   
-    <h1 itemprop="name">Jarvis OJ pwn wp(未完...看情况继续写)</h1>
+    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
     
      
-           <p itemprop="description" >写于19.7.12
+           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
 
-用jarvis复习复习，题总是做不出来…☹
-level3_x640x01寻找漏洞checksec
-1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos</p>
-        
-    
-    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
+lab1法一通过ida查看get_flag函数。发现是…逆向呀
 
+是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
 
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">
-  
-    <h1 itemprop="name">IDA插件keypatch初体验</h1>
-    
-     
-           <p itemprop="description" >写于19.6.28
-
-我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数
-找到上方Edit
-我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数
-这里只举例用汇编修改，使用汇编修改比较方便
-修改成功，下</p>
+在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
         
     
     <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
@@ -343,15 +338,11 @@ level3_x640x01寻找漏洞checksec
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>21</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/面经/" title="面经">面经<sup>1</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
 		  
 		
 		</ul>
@@ -364,11 +355,11 @@ level3_x640x01寻找漏洞checksec
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
 			
 		
 			
@@ -376,15 +367,15 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
 			
 		
 			
@@ -396,11 +387,15 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
@@ -412,6 +407,10 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
@@ -420,19 +419,15 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -460,7 +455,7 @@ level3_x640x01寻找漏洞checksec
 	
 
 	<p class="copyright">
-	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2021 
 	
 	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
 	

@@ -20,7 +20,7 @@
 <meta property="og:description" content="0x01 Canary canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。工人们每次下井都会带上一只金丝雀如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。  由于 stack overflow 而引发的攻击非常普遍也非常古老, 相应地一种叫做 canary 的 mitigation 技术很早就出现在 glibc 里, 直到现在也">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://i.loli.net/2019/10/26/FkgTZjr9ihModNP.png">
-<meta property="og:updated_time" content="2020-09-10T13:47:49.236Z">
+<meta property="og:updated_time" content="2020-10-22T13:32:36.068Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="canary的绕过姿势">
 <meta name="twitter:description" content="0x01 Canary canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。工人们每次下井都会带上一只金丝雀如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。  由于 stack overflow 而引发的攻击非常普遍也非常古老, 相应地一种叫做 canary 的 mitigation 技术很早就出现在 glibc 里, 直到现在也">
@@ -114,7 +114,7 @@
 <p>由于 stack overflow 而引发的攻击非常普遍也非常古老, 相应地一种叫做 canary 的 mitigation 技术很早就出现在 glibc 里, 直到现在也作为系统安全的第一道防线存在。<br>canary 不管是实现还是设计思想都比较简单高效, 就是插入一个值, 在 stack overflow 发生的 高危区域的尾部, 当函数返回之时检测 canary 的值是否经过了改变, 以此来判断 stack/buffer overflow 是否发生.<br>Canary 与 windows 下的 GS 保护都是防止栈溢出的有效手段，它的出现很大程度上防止了栈溢出的出现，并且由于它几乎并不消耗系统资源，所以现在成了 linux 下保护机制的标配</p>
 <h2 id="GCC中使用参数设置canary"><a href="#GCC中使用参数设置canary" class="headerlink" title="GCC中使用参数设置canary"></a>GCC中使用参数设置canary</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-fstack-protector 启用保护，不过只为局部变量中含有数组的函数插入保护</span><br><span class="line">-fstack-protector-all 启用保护，为所有函数插入保护</span><br><span class="line">-fstack-protector-strong</span><br><span class="line">-fstack-protector-explicit 只对有明确stack_protect attribute的函数开启保护</span><br><span class="line">-fno-stack-protector 禁用保护</span><br></pre></td></tr></table></figure>
 
-<h2 id="Canary原理"><a href="#Canary原理" class="headerlink" title="Canary原理"></a>Canary原理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">stack 结构如下：</span><br><span class="line"></span><br><span class="line">        High</span><br><span class="line">        Address |                 |</span><br><span class="line">                +-----------------+</span><br><span class="line">                | args            |</span><br><span class="line">                +-----------------+</span><br><span class="line">                | return address  |</span><br><span class="line">                +-----------------+</span><br><span class="line">        rbp =&gt;  | old ebp         |</span><br><span class="line">                +-----------------+</span><br><span class="line">      rbp-8 =&gt;  | canary value    |</span><br><span class="line">                +-----------------+</span><br><span class="line">                | 局部变量        |</span><br><span class="line">        Low     |                 |</span><br></pre></td></tr></table></figure>
+<h2 id="Canary原理"><a href="#Canary原理" class="headerlink" title="Canary原理"></a>Canary原理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">stack 结构如下：</span><br><span class="line"></span><br><span class="line">        High</span><br><span class="line">        Address |                 |</span><br><span class="line">                +-----------------+</span><br><span class="line">                | args            |</span><br><span class="line">                +-----------------+</span><br><span class="line">                | return address  |</span><br><span class="line">                +-----------------+</span><br><span class="line">        rbp =&gt;  | old ebp         |</span><br><span class="line">                +-----------------+</span><br><span class="line">      rbp-8 =&gt;  | canary value    |</span><br><span class="line">                +-----------------+</span><br><span class="line">                | 局部变量         |</span><br><span class="line">        Low     |                 |</span><br></pre></td></tr></table></figure>
 
 <p>当程序启用 Canary 编译后，在函数序言部分会取 fs 寄存器 0x28 处的值，存放在栈中 %ebp-0x8 的位置。 这个操作即为向栈中插入 Canary 值，代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov    rax, qword ptr fs:[0x28]</span><br><span class="line">mov    qword ptr [rbp - 8], rax</span><br></pre></td></tr></table></figure>
@@ -265,15 +265,11 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>17</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>21</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/面经/" title="面经">面经<sup>1</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
 		  
 		
 		</ul>
@@ -286,11 +282,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>33</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>21</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
 			
 		
 			
@@ -298,15 +294,15 @@
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>13</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/iot/" title="iot">iot<sup>7</sup></a></li>
 			
 		
 			
@@ -318,11 +314,15 @@
 			
 		
 			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
@@ -334,6 +334,10 @@
 			
 		
 			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
@@ -342,19 +346,15 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/面经/" title="面经">面经<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -382,7 +382,7 @@
 	
 
 	<p class="copyright">
-	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2020 
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2021 
 	
 	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
 	

