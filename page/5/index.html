@@ -81,16 +81,54 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">
+    <a href="/2019/10/10/函数调用约定/函数调用约定/" title="函数调用约定" itemprop="url">
   
-    <h1 itemprop="name">Jarvis OJ pwn wp(未完...看情况继续写)</h1>
+    <h1 itemprop="name">函数调用约定</h1>
     
      
-           <p itemprop="description" >写于19.7.12
+           <p itemprop="description" >一.基本介绍
+函数调用约定，是指当一个函数被调用时，函数的[参数]会被传递给被调用的函数和[返回值]会被返回给调用函数。函数的调用约定就是描述参数是怎么传递和由谁平衡[堆栈]的，当然还有返回值。
 
-用jarvis复习复习，题总是做不出来…☹
-level3_x640x01寻找漏洞checksec
-1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos</p>
+二.函数调用约定0x01Windows_x86下的函数调用约定（C）-cdecl调</p>
+        
+    
+    <time datetime="2019-10-09T16:00:00.000Z" itemprop="datePublished">2019-10-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/05/SROP/SROP/" title="SROP" itemprop="url">
+  
+    <h1 itemprop="name">SROP</h1>
+    
+     
+           <p itemprop="description" >原理与利用https://ctf-wiki.github.io/ctf-wiki/pwn/linux/stackoverflow/advanced-rop-zh/#srophttps://blog.csdn.net/luozhaotian/article/details/7960</p>
+        
+    
+    <time datetime="2019-10-04T16:00:00.000Z" itemprop="datePublished">2019-10-05</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/Asis CTF 2016 b00ks(obo)/wp/" title="Asis CTF 2016 b00ks wp (null off-by-one)【详】" itemprop="url">
+  
+    <h1 itemprop="name">Asis CTF 2016 b00ks wp (null off-by-one)【详】</h1>
+    
+     
+           <p itemprop="description" >写于19.6.26
+
+
+没错没错，从CTF-wiki过来的，我没看懂，又去其他大佬的博客==&amp;gt;九层台取取经，终于会调了orz…掌握gdb调试很重要啊啊啊！改最终脚本改了好久了，唉😑ps过于繁琐高手可以绕过嚯嚯嚯
+
+🎈0x01寻找漏洞checksec1234567kk@u</p>
         
     
     <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
@@ -102,18 +140,39 @@ level3_x640x01寻找漏洞checksec
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp" itemprop="url">
+    <a href="/2019/10/03/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
   
-    <h1 itemprop="name">2019 RedpwnCTF Bronze Ropchain wp</h1>
+    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
     
      
-           <p itemprop="description" >写于19.8.18
+           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
+
+lab1法一通过ida查看get_flag函数。发现是…逆向呀
+
+是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
+
+在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
+        
+    
+    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
 
 
-这个题应该简单记录一下，我也不怎么用ropchain，感谢今天梦师傅的指点嘻嘻orz\
 
-因为它有点不一样checksec
-1234567kk@ubuntu:~/Desktop/black/CTF/RedpwnCTF/Bronze Ropchain$ ch</p>
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">
+  
+    <h1 itemprop="name">Jarvis OJ pwn wp(未完...看情况继续写)</h1>
+    
+     
+           <p itemprop="description" >写于19.7.12
+
+用jarvis复习复习，题总是做不出来…☹
+level3_x640x01寻找漏洞checksec
+1234567kk@ubuntu:~/Desktop/black/Jarvis Oj/level3$ checksec level3_x64 [*] &amp;apos</p>
         
     
     <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
@@ -148,20 +207,18 @@ level3_x640x01寻找漏洞checksec
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/【攻防世界】pwn新手区/【攻防世界】pwn新手区/" title="【攻防世界】pwn新手区 wp" itemprop="url">
+    <a href="/2019/10/03/redpwnctf ropchain/wp/" title="2019 RedpwnCTF Bronze Ropchain wp" itemprop="url">
   
-    <h1 itemprop="name">【攻防世界】pwn新手区 wp</h1>
+    <h1 itemprop="name">2019 RedpwnCTF Bronze Ropchain wp</h1>
     
      
-           <p itemprop="description" >写这些的时候是19.5.30
+           <p itemprop="description" >写于19.8.18
 
-string （NUAACTF）
-参考：CTF-wiki格式化字符串漏洞利用
 
-0x01寻找漏洞checksec
-在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。
+这个题应该简单记录一下，我也不怎么用ropchain，感谢今天梦师傅的指点嘻嘻orz\
 
-执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，</p>
+因为它有点不一样checksec
+1234567kk@ubuntu:~/Desktop/black/CTF/RedpwnCTF/Bronze Ropchain$ ch</p>
         
     
     <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
@@ -184,6 +241,31 @@ dice_game （XCTF 4th-QCTF-2018）
 写在前面：这道题和新手区的[guess_num]如出一辙，都用到了覆盖和随机种子，可以参考一下/&amp;gt;.&amp;lt;/
 
 0x01寻找漏洞首先整个程序流程就是猜对50次的数字后就可以get </p>
+        
+    
+    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/【攻防世界】pwn新手区/【攻防世界】pwn新手区/" title="【攻防世界】pwn新手区 wp" itemprop="url">
+  
+    <h1 itemprop="name">【攻防世界】pwn新手区 wp</h1>
+    
+     
+           <p itemprop="description" >写这些的时候是19.5.30
+
+string （NUAACTF）
+参考：CTF-wiki格式化字符串漏洞利用
+
+0x01寻找漏洞checksec
+在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。
+
+执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，</p>
         
     
     <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
@@ -260,11 +342,19 @@ dice_game （XCTF 4th-QCTF-2018）
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
+			<li><a href="/categories/iot/" title="iot">iot<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
 		  
 		
 		</ul>
@@ -277,23 +367,23 @@ dice_game （XCTF 4th-QCTF-2018）
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>10</sup></a></li>
 			
 		
 			
@@ -301,11 +391,11 @@ dice_game （XCTF 4th-QCTF-2018）
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
@@ -317,23 +407,15 @@ dice_game （XCTF 4th-QCTF-2018）
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
@@ -345,11 +427,23 @@ dice_game （XCTF 4th-QCTF-2018）
 			
 		
 			
-				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 		</ul>

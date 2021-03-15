@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="复现一个Netgear R8300设备的栈溢出漏洞，要求是编写先探测目标版本号，再发送payload的POC  ARM前言arm32指令   指令 描述 指令 描述    MOV 移动数据 EOR 按位异或   MVN 移动并取反 LDR 加载   ADD 加 STR 存储   SUB 减 LDM 加载多个   MUL 乘 STM 存储多个   LSL 逻辑左移 PUSH 入栈   LSR 逻辑">
-<meta name="keywords" content="iot,漏洞复现">
+<meta name="keywords" content="iot,栈溢出">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netgear R8300 PSV-2020-0211栈溢出复现">
 <meta property="og:url" content="p1Kk.github.io/2020/12/20/路由器/Netgear R8300/index.html">
@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/runsuccess.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/failgdb.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/successgdb.png">
-<meta property="og:updated_time" content="2021-02-04T13:25:07.847Z">
+<meta property="og:updated_time" content="2021-02-28T01:56:52.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netgear R8300 PSV-2020-0211栈溢出复现">
 <meta name="twitter:description" content="复现一个Netgear R8300设备的栈溢出漏洞，要求是编写先探测目标版本号，再发送payload的POC  ARM前言arm32指令   指令 描述 指令 描述    MOV 移动数据 EOR 按位异或   MVN 移动并取反 LDR 加载   ADD 加 STR 存储   SUB 减 LDM 加载多个   MUL 乘 STM 存储多个   LSL 逻辑左移 PUSH 入栈   LSR 逻辑">
@@ -110,7 +110,7 @@
 		  <div id="toc" class="toc-article">
 			  <strong class="toc-title">Contents</strong>
 		  
-			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARM前言"><span class="toc-number">1.</span> <span class="toc-text">ARM前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#arm32指令"><span class="toc-number">1.1.</span> <span class="toc-text">arm32指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32位"><span class="toc-number">1.2.</span> <span class="toc-text">32位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#64位"><span class="toc-number">1.3.</span> <span class="toc-text">(64位)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#叶函数-非页函数"><span class="toc-number">1.4.</span> <span class="toc-text">叶函数 非页函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞点"><span class="toc-number">2.</span> <span class="toc-text">漏洞点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境搭建"><span class="toc-number">3.</span> <span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#user-mod"><span class="toc-number">3.1.</span> <span class="toc-text">user mod</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修复NVRAM错误"><span class="toc-number">3.1.1.</span> <span class="toc-text">修复NVRAM错误</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sys-mod"><span class="toc-number">3.2.</span> <span class="toc-text">sys mod</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#探测目标版本"><span class="toc-number">3.3.</span> <span class="toc-text">探测目标版本</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#poc"><span class="toc-number">4.</span> <span class="toc-text">poc</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取ARM架构的libc-so-6文件方法"><span class="toc-number">5.1.</span> <span class="toc-text">获取ARM架构的libc.so.6文件方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#附录"><span class="toc-number">6.</span> <span class="toc-text">附录</span></a></li></ol>
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARM前言"><span class="toc-number">1.</span> <span class="toc-text">ARM前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#arm32指令"><span class="toc-number">1.1.</span> <span class="toc-text">arm32指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32位"><span class="toc-number">1.2.</span> <span class="toc-text">32位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#64位"><span class="toc-number">1.3.</span> <span class="toc-text">(64位)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#叶函数-非页函数"><span class="toc-number">1.4.</span> <span class="toc-text">叶函数 非页函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞点"><span class="toc-number">2.</span> <span class="toc-text">漏洞点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境搭建"><span class="toc-number">3.</span> <span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#user-mod"><span class="toc-number">3.1.</span> <span class="toc-text">user mod</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修复NVRAM错误"><span class="toc-number">3.1.1.</span> <span class="toc-text">修复NVRAM错误</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sys-mod"><span class="toc-number">4.</span> <span class="toc-text">sys mod</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#探测目标版本"><span class="toc-number">4.1.</span> <span class="toc-text">探测目标版本</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#poc"><span class="toc-number">5.</span> <span class="toc-text">poc</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">6.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取ARM架构的libc-so-6文件方法"><span class="toc-number">6.1.</span> <span class="toc-text">获取ARM架构的libc.so.6文件方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#附录"><span class="toc-number">7.</span> <span class="toc-text">附录</span></a></li></ol>
 		  
 		  </div>
 		  
@@ -342,7 +342,7 @@
 <p><a href="http://mrbelieve.tech/2020/10/19/Netgear%20Nighthawk%20R8300%20upnpd%20PreAuth%20RCE%20%E5%A4%8D%E7%8E%B0%E8%BE%85%E5%8A%A9/#qemu-user-mode%E6%A8%A1%E6%8B%9F_" target="_blank" rel="noopener">Netgear Nighthawk R8300 upnpd PreAuth RCE 复现辅助</a></p>
 <p><a href="https://www.anquanke.com/post/id/215428" target="_blank" rel="noopener">https://www.anquanke.com/post/id/215428</a></p>
 </blockquote>
-<h2 id="sys-mod"><a href="#sys-mod" class="headerlink" title="sys mod"></a>sys mod</h2><p>同上法一 运行成功</p>
+<h1 id="sys-mod"><a href="#sys-mod" class="headerlink" title="sys mod"></a>sys mod</h1><p>同上法一 运行成功</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># LD_PRELOAD=&apos;./nvram.so /lib/libdl.so.0&apos; /usr/sbin/upnpd</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/runsuccess.png" alt></p>
@@ -372,13 +372,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  <a class="article-category-link" href="/categories/漏洞复现/">漏洞复现</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iot/">iot</a><a href="/tags/漏洞复现/">漏洞复现</a>
+  <span></span> <a href="/tags/iot/">iot</a><a href="/tags/栈溢出/">栈溢出</a>
   </div>
 
 </div>
@@ -457,11 +457,19 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
+			<li><a href="/categories/iot/" title="iot">iot<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
 		  
 		
 		</ul>
@@ -474,23 +482,23 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>10</sup></a></li>
 			
 		
 			
@@ -498,11 +506,11 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
@@ -514,23 +522,15 @@
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
@@ -542,11 +542,23 @@
 			
 		
 			
-				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 		</ul>

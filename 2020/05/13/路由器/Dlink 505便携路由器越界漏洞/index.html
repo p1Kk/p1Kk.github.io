@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/  根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞 分析基础步骤不再赘述，找到my_cgi.cgi文件注意这次是大端了，要用qemu-mi">
-<meta name="keywords" content="笔记,iot,栈溢出">
+<meta name="keywords" content="iot,栈溢出">
 <meta property="og:type" content="article">
 <meta property="og:title" content="D-Link DIR-505 便携路由器越界漏洞分析">
 <meta property="og:url" content="p1Kk.github.io/2020/05/13/路由器/Dlink 505便携路由器越界漏洞/index.html">
@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/replacechar.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/xrefstosys.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/systemyuan.png">
-<meta property="og:updated_time" content="2020-05-24T15:23:56.744Z">
+<meta property="og:updated_time" content="2021-02-28T01:56:21.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="D-Link DIR-505 便携路由器越界漏洞分析">
 <meta name="twitter:description" content="固件下载：http://files.dlink.com.au/Products/DIR-505/REV_A/Firmware/v1.05b04/  根据披露，漏洞存在于my_cgi.cgi脚本，处理POST参数中storage_path参数的值时，存在边界验证不合理导致程序越界访问。（且这个路由器存在多个漏洞 分析基础步骤不再赘述，找到my_cgi.cgi文件注意这次是大端了，要用qemu-mi">
@@ -144,13 +144,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  <a class="article-category-link" href="/categories/漏洞复现/">漏洞复现</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/笔记/">笔记</a><a href="/tags/iot/">iot</a><a href="/tags/栈溢出/">栈溢出</a>
+  <span></span> <a href="/tags/iot/">iot</a><a href="/tags/栈溢出/">栈溢出</a>
   </div>
 
 </div>
@@ -229,11 +229,19 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
+			<li><a href="/categories/iot/" title="iot">iot<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
 		  
 		
 		</ul>
@@ -246,23 +254,23 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>10</sup></a></li>
 			
 		
 			
@@ -270,11 +278,11 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
@@ -286,23 +294,15 @@
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
@@ -314,11 +314,23 @@
 			
 		
 			
-				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 		</ul>

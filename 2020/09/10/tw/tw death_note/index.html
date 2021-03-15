@@ -20,7 +20,7 @@
 <meta property="og:description" content="death_note分析123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:      Has RWX segments  开了canary，nx没开  漏洞很明显，数组下标只判断了是否&amp;gt;1">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/notebug.png">
-<meta property="og:updated_time" content="2020-07-24T15:57:45.258Z">
+<meta property="og:updated_time" content="2021-03-13T08:33:44.756Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pwnable.tw death_note wp">
 <meta name="twitter:description" content="death_note分析123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:      Has RWX segments  开了canary，nx没开  漏洞很明显，数组下标只判断了是否&amp;gt;1">
@@ -128,7 +128,6 @@
 <p>🔺和本题很相关的Ex🐂的文章<a href="http://blog.eonew.cn/archives/1125" target="_blank" rel="noopener">生成可打印的shellcode</a></p>
 <p><a href="https://hama.hatenadiary.jp/entry/2017/04/04/190129" target="_blank" rel="noopener">编写x64字母数字shellcode</a></p>
 <p><a href="https://www.exploit-db.com/exploits/35205" target="_blank" rel="noopener">Linux/x64 – execve(“/bin/sh”,NULL,NULL) + Position Independent + Alphanumeric Shellcode (87 bytes)</a></p>
-<p><a href="https://www.jianshu.com/p/eb75426b85cb" target="_blank" rel="noopener">编写shellcode的几种姿势</a></p>
 <p><a href="https://blog.csdn.net/Virtual_Func/article/details/49454801" target="_blank" rel="noopener">系统调用与中断</a></p>
 <p><a href="https://www.cnblogs.com/ichunqiu/p/9258785.html" target="_blank" rel="noopener">Linux pwn入门教程(2)——shellcode的使用，原理与变形</a></p>
 <p>可转可见shellcode工具<a href="https://github.com/VincentDary/PolyAsciiShellGen" target="_blank" rel="noopener">https://github.com/VincentDary/PolyAsciiShellGen</a></p>
@@ -225,11 +224,19 @@
 		  
 		
 		  
-			<li><a href="/categories/oj/" title="oj">oj<sup>18</sup></a></li>
+			<li><a href="/categories/iot/" title="iot">iot<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
 		  
 		
 		</ul>
@@ -242,23 +249,23 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>34</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/wp/" title="wp">wp<sup>22</sup></a></li>
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>17</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>14</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>8</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>10</sup></a></li>
 			
 		
 			
@@ -266,11 +273,11 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>3</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
 			
 		
 			
@@ -282,23 +289,15 @@
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
 			
 		
 			
@@ -310,11 +309,23 @@
 			
 		
 			
-				<li><a href="/tags/复现/" title="复现">复现<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/漏洞复现/" title="漏洞复现">漏洞复现<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
 			
 		
 		</ul>
