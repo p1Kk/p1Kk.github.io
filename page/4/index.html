@@ -81,6 +81,63 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
+  
+    <h1 itemprop="name">栈迁移</h1>
+    
+     
+           <p itemprop="description" >看到了一道栈迁移的题，就来写一下加深印象
+前提未开启NX，且栈溢出大小较小，无法直接泄露libc_base
+以32位为例，在使用call这个命令，进入一个函数的时候,程序会进行一系列栈操作:push eip+4;push ebp;mov ebp,esp;来保护现场，避免执行完函数</p>
+        
+    
+    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/02/16/buu/wppp/" title="buuctf pwn wp【长期更】" itemprop="url">
+  
+    <h1 itemprop="name">buuctf pwn wp【长期更】</h1>
+    
+     
+           <p itemprop="description" >开始刷一下buu，尽力做吧
+
+连上就有flag的pwnRIP覆盖一下ciscn_2019_c_1栈溢出我的exp一直调试不对是因为这句
+1puts_addr = u64(io.recvuntil(&amp;quot;\n&amp;quot;, drop = True).ljust(8, &amp;apo</p>
+        
+    
+    <time datetime="2020-02-15T16:00:00.000Z" itemprop="datePublished">2020-02-16</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/02/16/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
+  
+    <h1 itemprop="name">整数溢出</h1>
+    
+     
+           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
+例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
+        
+    
+    <time datetime="2020-02-15T16:00:00.000Z" itemprop="datePublished">2020-02-16</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/12/03/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
   
     <h1 itemprop="name">0ctf2017 babyheap wp</h1>
@@ -230,69 +287,9 @@ malloc_consolidate时，合并后的chu</p>
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/26/canary的绕过姿势/canary/" title="canary的绕过姿势" itemprop="url">
-  
-    <h1 itemprop="name">canary的绕过姿势</h1>
-    
-     
-           <p itemprop="description" >0x01 Canary
-canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。工人们每次下井都会带上一只金丝雀如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。
-
-由于 stack overflow 而引发的攻击非常</p>
-        
-    
-    <time datetime="2019-10-25T16:00:00.000Z" itemprop="datePublished">2019-10-26</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/22/FILE structure used with “stream functions”/FILE structure used with “stream functions”/" title="IO_FILE structure used with &#34;stream functions&#34;" itemprop="url">
-  
-    <h1 itemprop="name">IO_FILE structure used with &#34;stream functions&#34;</h1>
-    
-     
-           <p itemprop="description" >emmm因为一道题，看了orange，不够透彻，还需要结合IO流….wiki…好重要喔
-FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配在堆中。FILE结构如下：
-12345678910111213141516171819202122232425262728</p>
-        
-    
-    <time datetime="2019-10-21T16:00:00.000Z" itemprop="datePublished">2019-10-22</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/13/ubuntu18/ubuntu18/" title="ubuntu18安装各种pwn工具" itemprop="url">
-  
-    <h1 itemprop="name">ubuntu18安装各种pwn工具</h1>
-    
-     
-           <p itemprop="description" >写在前面：因为18就没怎么用过，所以很多东西都没有下载安装，连很基础的指令都没得…18炸了又重装（笑…再来亿遍
-
-更换系统镜像为清华镜像源不换的话以后下载东西会很慢
-遇到报错
-12E: Could not get lock /var/lib/dpkg/lock - open (1</p>
-        
-    
-    <time datetime="2019-10-12T16:00:00.000Z" itemprop="datePublished">2019-10-13</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
   </nav>
 
 </div>
@@ -341,19 +338,15 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 		  
 		
 		  
-			<li><a href="/categories/iot/" title="iot">iot<sup>1</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>6</sup></a></li>
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>9</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>19</sup></a></li>
 		  
 		
 		</ul>
@@ -378,11 +371,15 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>12</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>10</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>10</sup></a></li>
 			
 		
 			
@@ -390,11 +387,15 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>5</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
 			
 		
 			
@@ -406,15 +407,11 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 			
 		
 			
-				<li><a href="/tags/cve/" title="cve">cve<sup>2</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
@@ -430,15 +427,11 @@ FILE结构FILE结构在程序执行fopen等函数时会进行创建，并分配�
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
 			
 		
 			

@@ -81,6 +81,57 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/10/04/tw/tw babystack/" title="pwnable.tw babystack wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw babystack wp</h1>
+    
+     
+           <p itemprop="description" >babystack123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    Canary foundNX:       NX enabledPIE:      PIE enabledFORTIFY:  Enabled</p>
+        
+    
+    <time datetime="2020-10-03T16:00:00.000Z" itemprop="datePublished">2020-10-04</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/09/10/tw/tw bullet/" title="pwnable.tw silver_bullet wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw silver_bullet wp</h1>
+    
+     
+           <p itemprop="description" >silver_bullet分析123456checksec:    Arch:     i386-32-little    RELRO:    Full RELRO    Stack:    No canary found    NX:       NX enabled    P</p>
+        
+    
+    <time datetime="2020-09-10T01:56:43.196Z" itemprop="datePublished">2020-09-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/09/10/tw/tw death_note/" title="pwnable.tw death_note wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw death_note wp</h1>
+    
+     
+           <p itemprop="description" >death_note分析123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX disabledPIE:      No PIE (0x8048000)RWX:</p>
+        
+    
+    <time datetime="2020-09-10T01:56:43.196Z" itemprop="datePublished">2020-09-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/07/30/tw/tw secretgarden/" title="pwnable.tw secretgarden wp" itemprop="url">
   
     <h1 itemprop="name">pwnable.tw secretgarden wp</h1>
@@ -206,74 +257,9 @@ start0x01分析checksec
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
-    
-     
-           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
-
-看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
-        
-    
-    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
-    
-     
-           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
-
-其中有个note结构体如下，程序就是一个菜单，比较好理解
-1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
-</p>
-        
-    
-    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/07/08/tw/tw 3x17/" title="pwnable.tw 3x17 wp" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw 3x17 wp</h1>
-    
-     
-           <p itemprop="description" >继续继续…不能都搞一半放下了…
-3X17这个题目是静态编译，先来了解一下ELF文件的启动
-
-详细请看:https://luomuxiaoxiao.com/?p=516
-
-
-0x01 分析ida一看这个函数名，静态编译，再通过linux file确认一下
-
-运行程序，在ida中查找</p>
-        
-    
-    <time datetime="2020-07-07T16:00:00.000Z" itemprop="datePublished">2020-07-08</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -322,19 +308,15 @@ start0x01分析checksec
 		  
 		
 		  
-			<li><a href="/categories/iot/" title="iot">iot<sup>1</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>6</sup></a></li>
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>9</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>18</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>19</sup></a></li>
 		  
 		
 		</ul>
@@ -359,11 +341,15 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/笔记/" title="笔记">笔记<sup>14</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>12</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>10</sup></a></li>
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>10</sup></a></li>
 			
 		
 			
@@ -371,11 +357,15 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>5</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>3</sup></a></li>
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
 			
 		
 			
@@ -387,15 +377,11 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/cve/" title="cve">cve<sup>2</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
@@ -411,15 +397,11 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
 			
 		
 			

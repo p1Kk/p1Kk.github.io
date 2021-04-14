@@ -1,0 +1,549 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>符号执行&amp;污点分析简述 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="应该做一些工具出来… 符号执行白话说就是给你一个结果，求输入。 正向的符号执行正向的符号执行用于全面地对程序代码进行分析，可分为过程内分析和过程间分析。  过程内分析：只对单个函数的代码进行分析  过程间分析（或全局分析）：对整个软件代码进行上下文敏感的分析，在当前函数入口点要考虑当前函数的调用信息和环境信息等   逆向的符号执行逆向的符号执行用于对可能存在漏洞的部分代码进行有针对性的分析。通过分">
+<meta name="keywords" content="待完善">
+<meta property="og:type" content="article">
+<meta property="og:title" content="符号执行&amp;污点分析简述">
+<meta property="og:url" content="p1Kk.github.io/2021/04/04/others/符号执行&污点分析/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="应该做一些工具出来… 符号执行白话说就是给你一个结果，求输入。 正向的符号执行正向的符号执行用于全面地对程序代码进行分析，可分为过程内分析和过程间分析。  过程内分析：只对单个函数的代码进行分析  过程间分析（或全局分析）：对整个软件代码进行上下文敏感的分析，在当前函数入口点要考虑当前函数的调用信息和环境信息等   逆向的符号执行逆向的符号执行用于对可能存在漏洞的部分代码进行有针对性的分析。通过分">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-04-14T12:59:29.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="符号执行&amp;污点分析简述">
+<meta name="twitter:description" content="应该做一些工具出来… 符号执行白话说就是给你一个结果，求输入。 正向的符号执行正向的符号执行用于全面地对程序代码进行分析，可分为过程内分析和过程间分析。  过程内分析：只对单个函数的代码进行分析  过程间分析（或全局分析）：对整个软件代码进行上下文敏感的分析，在当前函数入口点要考虑当前函数的调用信息和环境信息等   逆向的符号执行逆向的符号执行用于对可能存在漏洞的部分代码进行有针对性的分析。通过分">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2021/04/04/others/符号执行&污点分析/" title="符号执行&amp;污点分析简述" itemprop="url">符号执行&amp;污点分析简述</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2021-04-03T16:00:00.000Z" itemprop="datePublished"> Published 2021-04-04</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#符号执行"><span class="toc-number">1.</span> <span class="toc-text">符号执行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#正向的符号执行"><span class="toc-number">1.1.</span> <span class="toc-text">正向的符号执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逆向的符号执行"><span class="toc-number">1.2.</span> <span class="toc-text">逆向的符号执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态符号执行"><span class="toc-number">1.3.</span> <span class="toc-text">动态符号执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缺点"><span class="toc-number">1.4.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#污点分析"><span class="toc-number">2.</span> <span class="toc-text">污点分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#静态污点分析"><span class="toc-number">2.1.</span> <span class="toc-text">静态污点分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态污点分析"><span class="toc-number">2.2.</span> <span class="toc-text">动态污点分析</span></a></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <p>应该做一些工具出来…</p>
+<h1 id="符号执行"><a href="#符号执行" class="headerlink" title="符号执行"></a>符号执行</h1><p>白话说就是给你一个结果，求输入。</p>
+<h2 id="正向的符号执行"><a href="#正向的符号执行" class="headerlink" title="正向的符号执行"></a>正向的符号执行</h2><p>正向的符号执行用于全面地对程序代码进行分析，可分为过程内分析和过程间分析。</p>
+<ul>
+<li><p>过程内分析：只对单个函数的代码进行分析</p>
+</li>
+<li><p>过程间分析（或全局分析）：对整个软件代码进行上下文敏感的分析，在当前函数入口点要考虑当前函数的调用信息和环境信息等</p>
+</li>
+</ul>
+<h2 id="逆向的符号执行"><a href="#逆向的符号执行" class="headerlink" title="逆向的符号执行"></a>逆向的符号执行</h2><p>逆向的符号执行用于对可能存在漏洞的部分代码进行有针对性的分析。通过分析这些程序语句，可以得到变量取值满足怎样的约束表示程序存在漏洞，将这样的约束记录下来，在之后的分析中，通过逆向分析判断程序存在漏洞的约束是否是可以满足的。通过不断地记录并分析路径条件，检查程序是否可能存在带有程序漏洞的路径。</p>
+<h2 id="动态符号执行"><a href="#动态符号执行" class="headerlink" title="动态符号执行"></a>动态符号执行</h2><p>符号执行在发展过程中出现了一种叫做<strong>动态符号执行</strong>的方法（concrete and symbolic， <code>concolic</code>）。动态符号执行是<strong>以具体数值作为输入</strong>来模拟执行程序代码，与传统静态符号执行相比，其输入值的表示形式不同。动态符号执行使用具体值作为输入，同时启动代码模拟执行器，并从当前路径的分支语句的谓词中搜集所有符号约束。然后修改该符号约束内容构造出一条新的可行的路径约束，并用约束求解器求解出一个可行的新的具体输入，接着符号执行引擎对新输入值进行一轮新的分析。通过使用这种输入迭代产生变种输入的方法，理论上所有可行的路径都可以被计算并分析一遍。<br>动态符号执行相对于静态符号执行的优点是每次都是具体输入的执行，在模拟执行这个过程中，<strong>符号化的模拟执行比具体化的模拟执行的开销大很多</strong>；并且模拟执行过程中所有的变量都为具体值，而不必使用复杂的数据结构来表达符号值，使得模拟执行的花销进一步减少。但是动态符号执行的结果是对程序的所有路径的一个下逼近，即其最后<strong>产生路径的集合应该比所有路径集合小</strong>，但这种情况在软件测试中是允许的。</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>路径状态空间爆炸问题：由于每一个条件分支语句都可能会使当前路径再分出一条新的路径，特别是遇到循环分支时，每增加一次循环都将增加一条新路径，因此这种增长是指数级的。</p>
+<ul>
+<li>解决：比如规定每个过程内的分析路径的数目上限，或者设置时间上限和内存上限等来进行缓解。</li>
+</ul>
+<h1 id="污点分析"><a href="#污点分析" class="headerlink" title="污点分析"></a>污点分析</h1><p>污点分析可以抽象成一个三元组<code>&lt;sources,sinks,sanitizers&gt;</code>的形式</p>
+<p>source ：<strong>污点源</strong>，代表直接引入不受信任的数据或者机密数据到系统中；</p>
+<p>sink：<strong>污点汇聚点</strong>，代表直接产生安全敏感操作(违反数据完整性)或者泄露隐私数据到外界(违反数据保密性)；</p>
+<p>sanitizer：<strong>无害处理</strong>，代表通过数据加密或者移除危害操作等手段使数据传播不再对软件系统的信息安全产生危害。</p>
+<p><strong>污点分析</strong>是一种跟踪并分析污点信息在程序中流动的技术。在漏洞分析中，使用污点分析技术将所感兴趣的数据（通常来自程序的外部输入）标记为污点数据，然后通过跟踪和污点数据相关的信息的流向，可以知道它们是否会影响某些关键的程序操作，进而挖掘程序漏洞。即将程序是否存在某种漏洞的问题转化为<strong>污点信息是否会被 Sink 点上的操作所使用</strong>的问题。</p>
+<ul>
+<li><strong>显式信息流</strong>：通过数据依赖传播的信息流</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[...]</span><br><span class="line">scanf(&quot;%d&quot;, &amp;x);    // Source 点，输入数据被标记为污点信息，并且认为变量 x 是污染的</span><br><span class="line">[...]</span><br><span class="line">y = x + k;          // 如果二元操作的操作数是污染的，那么操作结果也是污染的，所以变量 y 也是污染的</span><br><span class="line">[...]</span><br><span class="line">x = 0;              // 如果一个被污染的变量被赋值为一个常数，那么认为它是未污染的，所以 x 转变成未污染的</span><br><span class="line">[...]</span><br><span class="line">while (i &lt; y)       // Sink 点，如果规定循环的次数不能受程序输入的影响，那么需要检查 y 是否被污染</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>隐式信息流</strong>：通过控制依赖传播的信息流</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (x &gt; 0)			// 变量 y 的取值依赖于变量 x 的取值，如果变量 x 是污染的，那么变量 y 也应该是污染的。</span><br><span class="line">    y = 1;</span><br><span class="line">else</span><br><span class="line">    y = 0;</span><br></pre></td></tr></table></figure>
+
+<h2 id="静态污点分析"><a href="#静态污点分析" class="headerlink" title="静态污点分析"></a>静态污点分析</h2><p>静态污点分析系统首先对程序代码进行解析，获得程序代码的中间表示，然后在中间表示的基础上对程序代码进行控制流分析等辅助分析，以获得需要的控制流图、调用图等。在辅助分析的过程中，系统可以利用污点分析规则在中间表示上识别程序中的 Source 点和 Sink 点。最后检测系统根据污点分析规则，利用静态污点分析检查程序是否存在污点类型的漏洞。</p>
+<p>基于数据流的污点分析。在<strong>不考虑隐式信息流</strong>的情况下，可以将污点分析看做针对污点数据的数据流分析。根据污点传播规则<strong>跟踪污点信息</strong>或者<strong>标记路径上的变量污染情况</strong>，进而检查污点信息是否影响敏感操作。</p>
+<p>基于依赖关系的污点分析。考虑隐式信息流，在分析过程中，根据程序中的语句或者指令之间的依赖关系，<strong>检查 Sink 点处敏感操作是否依赖于 Source 点处接收污点信息的操作</strong>。</p>
+<h2 id="动态污点分析"><a href="#动态污点分析" class="headerlink" title="动态污点分析"></a>动态污点分析</h2><p>动态污点分析是在<strong>程序运行</strong>的基础上，对数据流或控制流进行监控，从而实现对数据在内存中的显式传播、数据误用等进行跟踪和检测。动态污点分析与静态污点分析的唯一区别在于<strong>静态污点分析技术在检测时并不真正运行程序</strong>，而是通过模拟程序的执行过程来传播污点标记，而动态污点分析技术需要运行程序，同时实时传播并检测污点标记。识别出污点数据后，需要对污点进行标记。<strong>污点生命周期</strong>是指在该生命周期的时间范围内，污点被定义为有效。污点生命周期开始于污点创建时刻，生成污点标记，结束于污点删除时刻，清除污点标记。</p>
+<blockquote>
+<p>Reference:</p>
+<p><a href="https://www.bookstack.cn/" target="_blank" rel="noopener">ctf all in one 5.1&amp;5.5</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/待完善/">待完善</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2021/03/29/iot/Tenda AC15 CVE-2018-5767 CVE-2020-10987/"  title="以Tenda AC15 CVE-2018-5767为例进行fuzz测试">
+ <span>以Tenda AC15 CVE-2018-5767为例进行fuzz测试
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>19</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HDU/" title="HDU">HDU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2021 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
