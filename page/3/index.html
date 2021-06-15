@@ -81,19 +81,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
+    <a href="/2020/07/17/tw/tw applestore/" title="pwnable.tw applestore wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
+    <h1 itemprop="name">pwnable.tw applestore wp</h1>
     
      
-           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
-
-其中有个note结构体如下，程序就是一个菜单，比较好理解
-1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
-</p>
+           <p itemprop="description" >applestore分析123456checksec:    Arch:     i386-32-little    RELRO:    Partial RELRO    Stack:    Canary found    NX:       NX enabled    PIE:</p>
         
     
-    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
+    <time datetime="2020-07-16T16:00:00.000Z" itemprop="datePublished">2020-07-17</time>
   </a>
 </section>
 
@@ -110,6 +106,27 @@
            <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
 
 看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
+        
+    
+    <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
+  
+    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
+    
+     
+           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
+
+其中有个note结构体如下，程序就是一个菜单，比较好理解
+1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
+</p>
         
     
     <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
@@ -271,25 +288,6 @@ $zero
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
-  
-    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
-    
-     
-           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
-
-0x01 malloc_chunk的基本结构（使用中/未被f</p>
-        
-    
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -345,7 +343,7 @@ $zero
 		  
 		
 		  
-			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>9</sup></a></li>
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
 		  
 		
 		  
@@ -374,7 +372,7 @@ $zero
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>12</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>13</sup></a></li>
 			
 		
 			
@@ -390,7 +388,7 @@ $zero
 			
 		
 			
-				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>6</sup></a></li>
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>7</sup></a></li>
 			
 		
 			
@@ -438,7 +436,7 @@ $zero
 			
 		
 			
-				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
 			
 		
 		</ul>
