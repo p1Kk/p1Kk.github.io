@@ -81,6 +81,26 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2019/11/10/fastbin attack/fastbin/" title="Fastbin Attack" itemprop="url">
+  
+    <h1 itemprop="name">Fastbin Attack</h1>
+    
+     
+           <p itemprop="description" >首先需要了解：
+
+fastbin大小&amp;lt;=64B（32位），fastbins中的chunk不改变它的prev_inuse标志，也就无法被合并
+首块double free检查，当一个chunk被free进fastbin前，会看看链表的第一个chunk【main_arena直接指</p>
+        
+    
+    <time datetime="2019-11-09T16:00:00.000Z" itemprop="datePublished">2019-11-10</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/11/01/unsorted bin attack/unsorted bin attack/" title="Unsorted Bin Attack" itemprop="url">
   
     <h1 itemprop="name">Unsorted Bin Attack</h1>
@@ -269,29 +289,6 @@ level3_x640x01寻找漏洞checksec
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/10/03/keypatch/keypatch/" title="IDA插件keypatch初体验" itemprop="url">
-  
-    <h1 itemprop="name">IDA插件keypatch初体验</h1>
-    
-     
-           <p itemprop="description" >写于19.6.28
-
-我们用一个简单的栈溢出程序做实验进入IDA发现程序存在getshell函数
-找到上方Edit
-我们尝试修改call hello为call getShell，使程序运行到这步直接调用getShell函数
-这里只举例用汇编修改，使用汇编修改比较方便
-修改成功，下</p>
-        
-    
-    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
@@ -351,7 +348,7 @@ level3_x640x01寻找漏洞checksec
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>19</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>20</sup></a></li>
 		  
 		
 		</ul>
@@ -376,7 +373,7 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>13</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>14</sup></a></li>
 			
 		
 			
@@ -412,11 +409,11 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/C/" title="C++">C++<sup>1</sup></a></li>
+				<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
 			
 		
 			
@@ -432,11 +429,11 @@ level3_x640x01寻找漏洞checksec
 			
 		
 			
-				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
 			
 		
 			
