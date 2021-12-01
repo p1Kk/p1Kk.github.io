@@ -81,6 +81,80 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2021/11/30/iot/CVE-2019-17137复现/" title="多个认证绕过漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">多个认证绕过漏洞分析</h1>
+    
+     
+           <p itemprop="description" >之前只针对了CVE-2019-17137进行了分析，后文新增其他绕过漏洞
+CVE-2019-17137
+此漏洞允许网络邻近攻击者绕过受影响的NETGEAR AC1200 R6220固件版本1.1.0.86（及之前）智能WiFi路由器安装的认证。利用此漏洞不需要身份验证。特定的缺陷</p>
+        
+    
+    <time datetime="2021-11-29T16:00:00.000Z" itemprop="datePublished">2021-11-30</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2021/11/30/iot/multiple_auth_bypass_vuln_analysis/" title="多个认证绕过漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">多个认证绕过漏洞分析</h1>
+    
+     
+           <p itemprop="description" >之前只针对了CVE-2019-17137进行了分析，后文新增其他绕过漏洞
+CVE-2019-17137
+此漏洞允许网络邻近攻击者绕过受影响的NETGEAR AC1200 R6220固件版本1.1.0.86（及之前）智能WiFi路由器安装的认证。利用此漏洞不需要身份验证。特定的缺陷</p>
+        
+    
+    <time datetime="2021-11-29T16:00:00.000Z" itemprop="datePublished">2021-11-30</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2021/06/18/iot/Dlink DIR-850L固件加解密/" title="Dlink DIR-850L 固件加解密" itemprop="url">
+  
+    <h1 itemprop="name">Dlink DIR-850L 固件加解密</h1>
+    
+     
+           <p itemprop="description" >固件下载地址：http://files.dlink.com.au/Products/DIR-850L/REV_B/Firmware/Firmware_v2.20b03/DIR850LB1_FW220WWb03.bin
+1234$ binwalk DIR850LB1_FW220WW</p>
+        
+    
+    <time datetime="2021-06-17T16:00:00.000Z" itemprop="datePublished">2021-06-18</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2021/06/12/iot/tplink wr886 v6/" title="TP-Link WR886N v6 升级包固件分析（VxWorks 恢复符号表）" itemprop="url">
+  
+    <h1 itemprop="name">TP-Link WR886N v6 升级包固件分析（VxWorks 恢复符号表）</h1>
+    
+     
+           <p itemprop="description" >download：https://service.tp-link.com.cn/detail_download_8676.html
+12345678910111213141516$ binwalk TL-WR886N\ V6.0_2.3.8\ Build\ 190826\ Rel</p>
+        
+    
+    <time datetime="2021-06-11T16:00:00.000Z" itemprop="datePublished">2021-06-12</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2021/06/11/iot/施耐德 NOE771/" title="施耐德 NOE771 后门分析（ida函数恢复）" itemprop="url">
   
     <h1 itemprop="name">施耐德 NOE771 后门分析（ida函数恢复）</h1>
@@ -124,13 +198,9 @@
     <h1 itemprop="name">符号执行&amp;污点分析简述</h1>
     
      
-           <p itemprop="description" >应该做一些工具出来…
-符号执行白话说就是给你一个结果，求输入。
-正向的符号执行正向的符号执行用于全面地对程序代码进行分析，可分为过程内分析和过程间分析。
-
-过程内分析：只对单个函数的代码进行分析
-
-过程间分析（或全局分析）：对整个软件代码进行上下文敏感的分析，在当前函数入口点要考</p>
+           <p itemprop="description" >符号执行给一个结果，求输入。
+根据发展状况,可以将符号执行分为经典符号执行、动态符号执行和选择性符号执行
+经典符号执行经典符号执行的核心思想是通过使用符号值来代替具体值作为程序输入，并用符号表达式来表示与符号值相关的程序变量的值。经典符号执行并不真实地执行,而是基于解析程序，通过</p>
         
     
     <time datetime="2021-04-03T16:00:00.000Z" itemprop="datePublished">2021-04-04</time>
@@ -197,77 +267,6 @@
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2021/02/28/iot/DrayTek Vigor CVE-2020-1447214473/" title="DrayTek Vigor CVE-2020-14472 CVE-2020-8515命令注入/14473栈溢出 漏洞复现" itemprop="url">
-  
-    <h1 itemprop="name">DrayTek Vigor CVE-2020-14472 CVE-2020-8515命令注入/14473栈溢出 漏洞复现</h1>
-    
-     
-           <p itemprop="description" >CVE-2020-14472/CVE-2020-14473版本要求：DrayTek Vigor2960/3900/300B  version&amp;lt;1.5.1.1固件下载地址：http://www.draytek.com.cn/support/DownloadShow.php
-
-</p>
-        
-    
-    <time datetime="2021-02-27T16:00:00.000Z" itemprop="datePublished">2021-02-28</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2021/02/08/tw/tw starbound/" title="pwnable.tw starbound wp" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw starbound wp</h1>
-    
-     
-           <p itemprop="description" >分析checksec123456Arch:     i386-32-littleRELRO:    Partial RELROStack:    No canary foundNX:       NX enabledPIE:      No PIE (0x8048000)FORT</p>
-        
-    
-    <time datetime="2021-02-07T16:00:00.000Z" itemprop="datePublished">2021-02-08</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2021/02/07/tw/tw calc/" title="pwnable.tw calc wp" itemprop="url">
-  
-    <h1 itemprop="name">pwnable.tw calc wp</h1>
-    
-     
-           <p itemprop="description" >这个题目对我来说还是蛮有价值的…
-0x01checksec12345Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE </p>
-        
-    
-    <time datetime="2021-02-06T16:00:00.000Z" itemprop="datePublished">2021-02-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2021/02/04/iot/CVE-2019-17137复现/" title="Netgear R6220 认证绕过复现 cve-2019-17137" itemprop="url">
-  
-    <h1 itemprop="name">Netgear R6220 认证绕过复现 cve-2019-17137</h1>
-    
-     
-           <p itemprop="description" >此漏洞允许网络邻近攻击者绕过受影响的NETGEAR AC1200 R6220固件版本1.1.0.86（及之前）智能WiFi路由器安装的认证。利用此漏洞不需要身份验证。特定的缺陷存在于路径字符串的处理过程中。通过在路径中插入一个null字节，用户可以跳过大多数身份验证检查。攻击者可</p>
-        
-    
-    <time datetime="2021-02-03T16:00:00.000Z" itemprop="datePublished">2021-02-04</time>
-  </a>
-</section>
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -323,11 +322,11 @@
 		  
 		
 		  
-			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>11</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>20</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>22</sup></a></li>
 		  
 		
 		</ul>
@@ -348,11 +347,11 @@
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>17</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>14</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
@@ -360,7 +359,7 @@
 			
 		
 			
-				<li><a href="/tags/路由器/" title="路由器">路由器<sup>10</sup></a></li>
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>11</sup></a></li>
 			
 		
 			
@@ -372,11 +371,15 @@
 			
 		
 			
-				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+				<li><a href="/tags/cve/" title="cve">cve<sup>5</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>2</sup></a></li>
 			
 		
 			
@@ -408,11 +411,7 @@
 			
 		
 			
-				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
 			
 		
 			
