@@ -151,14 +151,16 @@ start0x01分析checksec
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
+    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
+    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
     
      
-           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
+           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
 
-看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
+其中有个note结构体如下，程序就是一个菜单，比较好理解
+1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
+</p>
         
     
     <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
@@ -170,16 +172,14 @@ start0x01分析checksec
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/07/09/tw/tw hacknote/" title="pwnable.tw hacknote wp" itemprop="url">
+    <a href="/2020/07/09/tw/tw dubblesort/" title="pwnable.tw dubblesort wp" itemprop="url">
   
-    <h1 itemprop="name">pwnable.tw hacknote wp</h1>
+    <h1 itemprop="name">pwnable.tw dubblesort wp</h1>
     
      
-           <p itemprop="description" >hacknote分析漏洞很明显了，uaf
+           <p itemprop="description" >dubblesort分析保护全开，运行一下就会发现存在泄露
 
-其中有个note结构体如下，程序就是一个菜单，比较好理解
-1234struct note &amp;#123;  void (*printnote)();		// 打印函数  char *content;		// content&amp;#125;;
-</p>
+看着ida代码似乎没什么问题，但是printf打印信息是通过\x00截断的，而name是通过read读取的，read通过输入字符的回车就截断了，如果这个回车后面不是00，printf就会一起打印出来，不过name只能输</p>
         
     
     <time datetime="2020-07-08T16:00:00.000Z" itemprop="datePublished">2020-07-09</time>
@@ -327,7 +327,7 @@ start0x01分析checksec
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>22</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
 		  
 		
 		</ul>
@@ -340,7 +340,7 @@ start0x01分析checksec
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
 			
 		
 			
@@ -348,11 +348,11 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>16</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
 			
 		
 			
@@ -360,7 +360,7 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/路由器/" title="路由器">路由器<sup>10</sup></a></li>
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
 			
 		
 			
@@ -408,7 +408,7 @@ start0x01分析checksec
 			
 		
 			
-				<li><a href="/tags/fuzz/" title="fuzz">fuzz<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
 			
 		
 			
@@ -444,7 +444,7 @@ start0x01分析checksec
 	
 
 	<p class="copyright">
-	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2021 
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2022 
 	
 	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
 	

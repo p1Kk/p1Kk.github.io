@@ -103,6 +103,29 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2019/10/03/HITCON Ttaing/HITCON wp/" title="HITCON-Training WP (Lab1, Lab10, Lab13)" itemprop="url">
+  
+    <h1 itemprop="name">HITCON-Training WP (Lab1, Lab10, Lab13)</h1>
+    
+     
+           <p itemprop="description" >写于19.6.19以后应该会继续做..吧..
+
+lab1法一通过ida查看get_flag函数。发现是…逆向呀
+
+是对给定的数据进行for循环得到flag，所以我们需要知道buf为多少使for循环执行。
+
+在scanf之前下断点，后面比较了ebp-0x80和eax，前者就是buf</p>
+        
+    
+    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/10/03/Jarvis oj/wp/" title="Jarvis OJ pwn wp(未完...看情况继续写)" itemprop="url">
   
     <h1 itemprop="name">Jarvis OJ pwn wp(未完...看情况继续写)</h1>
@@ -170,28 +193,6 @@ level3_x640x01寻找漏洞checksec
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/10/03/【攻防世界】pwn进阶区/【攻防世界】pwn进阶区wp/" title="【攻防世界】pwn进阶区 wp(未完)" itemprop="url">
-  
-    <h1 itemprop="name">【攻防世界】pwn进阶区 wp(未完)</h1>
-    
-     
-           <p itemprop="description" >做这些的时候是19.8.2
-
-dice_game （XCTF 4th-QCTF-2018）
-写在前面：这道题和新手区的[guess_num]如出一辙，都用到了覆盖和随机种子，可以参考一下/&amp;gt;.&amp;lt;/
-
-0x01寻找漏洞首先整个程序流程就是猜对50次的数字后就可以get </p>
-        
-    
-    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
     <a href="/2019/10/03/【攻防世界】pwn新手区/【攻防世界】pwn新手区/" title="【攻防世界】pwn新手区 wp" itemprop="url">
   
     <h1 itemprop="name">【攻防世界】pwn新手区 wp</h1>
@@ -206,6 +207,28 @@ string （NUAACTF）
 在IDA中对文件进行分析。查看sub_400CA6时发现一条语句。
 
 执行这条语句的条件是*a1 == a1[1]，a1为传入的参数，</p>
+        
+    
+    <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/03/【攻防世界】pwn进阶区/【攻防世界】pwn进阶区wp/" title="【攻防世界】pwn进阶区 wp(未完)" itemprop="url">
+  
+    <h1 itemprop="name">【攻防世界】pwn进阶区 wp(未完)</h1>
+    
+     
+           <p itemprop="description" >做这些的时候是19.8.2
+
+dice_game （XCTF 4th-QCTF-2018）
+写在前面：这道题和新手区的[guess_num]如出一辙，都用到了覆盖和随机种子，可以参考一下/&amp;gt;.&amp;lt;/
+
+0x01寻找漏洞首先整个程序流程就是猜对50次的数字后就可以get </p>
         
     
     <time datetime="2019-10-02T16:00:00.000Z" itemprop="datePublished">2019-10-03</time>
@@ -290,7 +313,7 @@ string （NUAACTF）
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>22</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
 		  
 		
 		</ul>
@@ -303,7 +326,7 @@ string （NUAACTF）
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/pwn/" title="pwn">pwn<sup>36</sup></a></li>
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
 			
 		
 			
@@ -311,11 +334,11 @@ string （NUAACTF）
 			
 		
 			
-				<li><a href="/tags/iot/" title="iot">iot<sup>16</sup></a></li>
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
 			
 		
 			
@@ -323,7 +346,7 @@ string （NUAACTF）
 			
 		
 			
-				<li><a href="/tags/路由器/" title="路由器">路由器<sup>10</sup></a></li>
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
 			
 		
 			
@@ -371,7 +394,7 @@ string （NUAACTF）
 			
 		
 			
-				<li><a href="/tags/fuzz/" title="fuzz">fuzz<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
 			
 		
 			
@@ -407,7 +430,7 @@ string （NUAACTF）
 	
 
 	<p class="copyright">
-	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2021 
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2022 
 	
 	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
 	
