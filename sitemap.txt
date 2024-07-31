@@ -1,8 +1,10 @@
+p1Kk.github.io/2019/08/18/redpwnctf%20ropchain/wp/
+p1Kk.github.io/2020/03/07/%E5%A0%86%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/heap%20related%20data%20structure/
+p1Kk.github.io/2024/02/10/BMC/bmc/
 p1Kk.github.io/2020/07/20/tw/tw%20bullet/
 p1Kk.github.io/2021/03/13/tw/tw%20death_note/
 p1Kk.github.io/2020/10/04/tw/tw%20secret_of_my_heart/
 p1Kk.github.io/about/index.html
-p1Kk.github.io/2020/03/07/%E5%A0%86%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/heap%20related%20data%20structure/
 p1Kk.github.io/2020/01/01/%E5%BC%82%E6%9E%84pwn/arm%20pwn/
 p1Kk.github.io/2020/01/01/%E5%BC%82%E6%9E%84pwn/mips%20pwn/
 p1Kk.github.io/2019/10/03/%E3%80%90%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E3%80%91pwn%E6%96%B0%E6%89%8B%E5%8C%BA/%E3%80%90%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E3%80%91pwn%E6%96%B0%E6%89%8B%E5%8C%BA/
@@ -37,7 +39,6 @@ p1Kk.github.io/2019/10/03/Asis%20CTF%202016%20b00ks(obo)/wp/
 p1Kk.github.io/2019/09/10/hdu/hdu/
 p1Kk.github.io/2019/10/03/HITCON%20Ttaing/HITCON%20wp/
 p1Kk.github.io/2019/10/03/keypatch/keypatch/
-p1Kk.github.io/2019/10/03/redpwnctf%20ropchain/wp/
 p1Kk.github.io/2019/10/03/Jarvis%20oj/wp/
 p1Kk.github.io/2019/10/10/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A/
 p1Kk.github.io/2019/10/03/%E3%80%90%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E3%80%91pwn%E8%BF%9B%E9%98%B6%E5%8C%BA/%E3%80%90%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E3%80%91pwn%E8%BF%9B%E9%98%B6%E5%8C%BAwp/
@@ -88,6 +89,7 @@ p1Kk.github.io/tags/HDU/
 p1Kk.github.io/tags/fuzz/
 p1Kk.github.io/tags/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/
 p1Kk.github.io/tags/C/
+p1Kk.github.io/tags/BMC/
 p1Kk.github.io/categories/%E7%AC%94%E8%AE%B0/
 p1Kk.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/
 p1Kk.github.io/categories/CTF/

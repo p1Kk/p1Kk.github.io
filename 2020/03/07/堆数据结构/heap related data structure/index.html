@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png">
 <meta property="og:image" content="p1Kk.github.io/2020/03/07/堆数据结构/heap%20related%20data%20structure/img/image-20240731170246662.png">
-<meta property="og:updated_time" content="2024-07-31T10:01:45.283Z">
+<meta property="og:updated_time" content="2024-07-31T10:41:20.174Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="heap related data structure &amp;&amp; ptmalloc2">
 <meta name="twitter:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
@@ -300,6 +300,7 @@
 <h3 id="5-large-bins"><a href="#5-large-bins" class="headerlink" title="5. large bins"></a>5. large bins</h3><p>双向链表，存储大于1024字节的chunk，63个排序bins，参考32位</p>
 <p>分配器优先分配bins中的chunk，而不是top chunk（内存重用）</p>
 <p>释放至bins优先级：tcache bin 已满 &gt; fast bin 大小不符合 &gt; unsorted bin &gt; 再调用malloc时排序</p>
+<p>malloc hook只适用于glibc &lt;= 2.33</p>
 <blockquote>
 <p>参考：<a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/heap_structure/" target="_blank" rel="noopener">CTF-wiki堆</a>，<a href="https://paper.seebug.org/papers/Archive/refs/heap/glibc%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86ptmalloc%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90.pdf" target="_blank" rel="noopener">glibc内存管理ptmalloc2源码分析</a></p>
 <p><a href="https://blog.quarkslab.com/heap-exploitation-glibc-internals-and-nifty-tricks.html" target="_blank" rel="noopener">https://blog.quarkslab.com/heap-exploitation-glibc-internals-and-nifty-tricks.html</a></p>
@@ -332,16 +333,16 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2020/03/28/iot/路由器环境配置/" title="路由器环境基础工具安装">
+ <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移">
   <span>
-  路由器环境基础工具安装</span>
+  栈迁移</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2020/03/07/栈迁移/栈迁移/"  title="栈迁移">
- <span>栈迁移
+<a href="/2020/02/16/buu/wppp/"  title="buuctf pwn wp【长期更】">
+ <span>buuctf pwn wp【长期更】
 </span>
 </a>
 </div>
@@ -404,7 +405,7 @@
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>24</sup></a></li>
 		  
 		
 		</ul>
@@ -465,7 +466,7 @@
 			
 		
 			
-				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
 			
 		
 			
@@ -481,11 +482,11 @@
 			
 		
 			
-				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
 			
 		
 			

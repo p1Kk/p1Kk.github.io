@@ -81,6 +81,25 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/05/03/iot/D-Link DIR-645栈溢出漏洞/" title="D-Link DIR-645(/865/845)路由器栈溢出漏洞分析" itemprop="url">
+  
+    <h1 itemprop="name">D-Link DIR-645(/865/845)路由器栈溢出漏洞分析</h1>
+    
+     
+           <p itemprop="description" >固件下载：http://files.dlink.com.au/Products/DIR-645/REV_A/Firmware/DIR645_FW103B11/POC：https://www.exploit-db.com/exploits/33862
+
+分析从介绍中可以看出是cgi</p>
+        
+    
+    <time datetime="2020-05-02T16:00:00.000Z" itemprop="datePublished">2020-05-03</time>
+  </a>
+</section>
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/04/15/iot/路由分析/" title="分析固件第一步" itemprop="url">
   
     <h1 itemprop="name">分析固件第一步</h1>
@@ -123,25 +142,6 @@ bin</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
-  
-    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
-    
-     
-           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
-
-0x01 malloc_chunk的基本结构（使用中/未被f</p>
-        
-    
-    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
-  </a>
-</section>
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
     <a href="/2020/03/07/栈迁移/栈迁移/" title="栈迁移" itemprop="url">
   
     <h1 itemprop="name">栈迁移</h1>
@@ -161,16 +161,17 @@ bin</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/02/16/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
+    <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">
   
-    <h1 itemprop="name">整数溢出</h1>
+    <h1 itemprop="name">heap related data structure &amp;&amp; ptmalloc2</h1>
     
      
-           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
-例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
+           <p itemprop="description" >复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）
+
+0x01 malloc_chunk的基本结构（使用中/未被f</p>
         
     
-    <time datetime="2020-02-15T16:00:00.000Z" itemprop="datePublished">2020-02-16</time>
+    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished">2020-03-07</time>
   </a>
 </section>
 
@@ -199,32 +200,16 @@ bin</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/01/异构pwn/mips pwn/" title="mips pwn" itemprop="url">
+    <a href="/2020/02/16/整数溢出/整数溢出/" title="整数溢出" itemprop="url">
   
-    <h1 itemprop="name">mips pwn</h1>
+    <h1 itemprop="name">整数溢出</h1>
     
      
-           <p itemprop="description" >mips汇编要先了解一下https://blog.csdn.net/gujing001/article/details/8476685
-寄存器
-
-
-REGISTER
-NAME
-USAGE
-
-
-
-$0
-$zero
-常量0(constant value 0)
-
-
-$1
-$at
-保留给</p>
+           <p itemprop="description" >ok这是一个比较简单的问题，但是今天在翻看wiki的时候发现，我通常遇到的整数溢出的题是有无符号的转换导致的上下界溢出但是还有一个强制转换精度问题我一直没有了解，忽视了，记录一下
+例如： long: 0x100000000 -&amp;gt; int: 0x00000000已经长整型的占</p>
         
     
-    <time datetime="2019-12-31T16:00:00.000Z" itemprop="datePublished">2020-01-01</time>
+    <time datetime="2020-02-15T16:00:00.000Z" itemprop="datePublished">2020-02-16</time>
   </a>
 </section>
 
@@ -267,20 +252,32 @@ R7
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/03/0CTF2017 babyheap/wp/" title="0ctf2017 babyheap wp" itemprop="url">
+    <a href="/2020/01/01/异构pwn/mips pwn/" title="mips pwn" itemprop="url">
   
-    <h1 itemprop="name">0ctf2017 babyheap wp</h1>
+    <h1 itemprop="name">mips pwn</h1>
     
      
-           <p itemprop="description" >因为我是堆菜鸟，所以需要…好好调试分析一下…
+           <p itemprop="description" >mips汇编要先了解一下https://blog.csdn.net/gujing001/article/details/8476685
+寄存器
 
-漏洞点保护全开功能：
-123451. Allocate2. Fill3. Free4. Dump5. Exit
 
-calloc的size是在Allocate中输入的。而Fill时size是重新输入的，可以造成堆溢出。（内存分配函数是</p>
+REGISTER
+NAME
+USAGE
+
+
+
+$0
+$zero
+常量0(constant value 0)
+
+
+$1
+$at
+保留给</p>
         
     
-    <time datetime="2019-12-02T16:00:00.000Z" itemprop="datePublished">2019-12-03</time>
+    <time datetime="2019-12-31T16:00:00.000Z" itemprop="datePublished">2020-01-01</time>
   </a>
 </section>
 
@@ -363,7 +360,7 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
 		  
 		
 		  
-			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>24</sup></a></li>
 		  
 		
 		</ul>
@@ -424,7 +421,7 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
 			
 		
 			
-				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
 			
 		
 			
@@ -440,11 +437,11 @@ tcache的数据结构glibc在编译时使用use_tcac</p>
 			
 		
 			
-				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
 			
 		
 			
