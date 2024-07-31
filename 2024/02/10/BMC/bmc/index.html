@@ -19,19 +19,19 @@
 <meta property="og:site_name" content="p1Kk&#39;s World!">
 <meta property="og:description" content="BMC简介BMC（Baseboard Management Controller）为主板管理控制器。它是一种硬件设备或嵌入式系统，通常位于计算机主板上，用于监控、管理和维护计算机系统的硬件和软件。他本质上使用传感器来与设备进行通信，允许对被控机器进行完全控制（例如KVM）。这样可以通过远程访问BMC，然后重新配置主机，更改BIOS设置；或者刷新受控设备的固件。 不同供应商的服务器和主板可能会配备不">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231026110011812.png">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231026105932679.png">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231026105911034.png">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231026110042361.png">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231106105054321.png">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231108155710506.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026110011812.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026105932679.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026105911034.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026110042361.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231106105054321.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231108155710506.png">
 <meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231108183645122.png">
-<meta property="og:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231108170420750.png">
-<meta property="og:updated_time" content="2024-07-31T10:36:32.722Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231108170420750.png">
+<meta property="og:updated_time" content="2024-07-31T10:48:00.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BMC漏洞实例分析">
 <meta name="twitter:description" content="BMC简介BMC（Baseboard Management Controller）为主板管理控制器。它是一种硬件设备或嵌入式系统，通常位于计算机主板上，用于监控、管理和维护计算机系统的硬件和软件。他本质上使用传感器来与设备进行通信，允许对被控机器进行完全控制（例如KVM）。这样可以通过远程访问BMC，然后重新配置主机，更改BIOS设置；或者刷新受控设备的固件。 不同供应商的服务器和主板可能会配备不">
-<meta name="twitter:image" content="p1Kk.github.io/2024/02/10/BMC/bmc/img%5Cimage-20231026110011812.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026110011812.png">
 
     
     <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
@@ -117,10 +117,10 @@
 		  
 		  <h1 id="BMC简介"><a href="#BMC简介" class="headerlink" title="BMC简介"></a>BMC简介</h1><p>BMC（Baseboard Management Controller）为主板管理控制器。它是一种硬件设备或嵌入式系统，通常位于计算机主板上，用于监控、管理和维护计算机系统的硬件和软件。他本质上使用传感器来与设备进行通信，允许对被控机器进行完全控制（例如KVM）。这样可以通过远程访问BMC，然后重新配置主机，更改BIOS设置；或者刷新受控设备的固件。</p>
 <p>不同供应商的服务器和主板可能会配备不同类型的 BMC，例如，HP 的 iLO、Dell 的 iDRAC、浪潮的IPMI、华为的MGMT 等都是 BMC 的具体实现。</p>
-<p><img src="img%5Cimage-20231026110011812.png" alt="HP iLO"></p>
-<p><img src="img%5Cimage-20231026105932679.png" alt="DELL iDRAC"></p>
-<p><img src="img%5Cimage-20231026105911034.png" alt="浪潮 IPMI"></p>
-<p><img src="img%5Cimage-20231026110042361.png" alt="华为 MGMT"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026110011812.png" alt="HP iLO"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026105932679.png" alt="DELL iDRAC"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026105911034.png" alt="浪潮 IPMI"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231026110042361.png" alt="华为 MGMT"></p>
 <p>BMC通常被实现为嵌入式ARM系统，芯片外围会配置自己的RAM、Flash等器件，插电BMC就会快速运行起来。</p>
 <p>BMC是一个独立的系统，不依赖与系统上的其他硬件（比如CPU、内存等等），也不依赖BIOS、OS等。但BMC可以与BIOS和OS交互，一般大规模的数据中心会有OS系统管理软件与BMC协同工作实现集中管理的工作。</p>
 <h1 id="带外管理"><a href="#带外管理" class="headerlink" title="带外管理"></a>带外管理</h1><p>服务器的带外管理是指远程客户端通过网络物理通道对服务器进行控制管理和维护。常见的带外管理接口有 IPMI 和 Redfish：</p>
@@ -176,7 +176,7 @@
 </li>
 </ul>
 <p>可通过一些产品的默认账号密码登录</p>
-<p><img src="img%5Cimage-20231106105054321.png" alt="image-20231106105054321"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231106105054321.png" alt="image-20231106105054321"></p>
 <h2 id="SNMP"><a href="#SNMP" class="headerlink" title="SNMP"></a>SNMP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ snmpwalk -v1 -c public -m &quot;./immalert.mib&quot; 192.168.1.129</span><br><span class="line">	|		|		|				|				|		</span><br><span class="line">	|		|		|				|				|------&gt; 目标IP</span><br><span class="line">	|		|		|				|------&gt; 指定MIB文件，包含了用于解释和查询SNMP数据的信息</span><br><span class="line">	|		|		|------&gt; community字符public，用于只读访问</span><br><span class="line">	|		|------&gt; SNMP版本v1</span><br><span class="line">	|------&gt; 执行SNMP Walk操作，从设备上获取关于其管理信息的数据</span><br></pre></td></tr></table></figure>
 
 <p>返回一些管理数据或命令，或许可以找到一些可控的命令注入</p>
@@ -197,7 +197,7 @@
 <h3 id="CVE-2013-4786"><a href="#CVE-2013-4786" class="headerlink" title="CVE-2013-4786"></a>CVE-2013-4786</h3><p>分析BMC可以首先检查自2013以来就已知的哈希泄露</p>
 <p>下图是IPMI标准手册截图，解释了IPMI中身份验证如何工作。IPMI 2.0规范使用RAKP认证密钥交换协议。</p>
 <p>可以看到两条消息，<strong>Message 1</strong>从管理员控制台发送到BMC，管理员只需要将用户名发送到BMC，而BMC会查找用户名并根据包含用户名的某些数据（比如控制台和受管系统的Session ID，和对应的随机数，权限级别，用户名长度和用户名本身）计算HMAC，且即将进行身份验证的用户的密码将用作此HMAC计算的密钥。<strong>Message 2</strong>将这个HMAC计算结果被发送回管理员。</p>
-<p><img src="img%5Cimage-20231108155710506.png" alt="image-20231108155710506"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231108155710506.png" alt="image-20231108155710506"></p>
 <p>触发RAKP的一种简单方法是使用<code>ipmitool</code> </p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ipmitool -I lanplus -v -v -v -U ADMIN -P fluffy-wuffy -H 10.0.0.1 chassis identify</span><br><span class="line">				|		  |			|			|			  |				|------&gt; 蓝色uid指示灯，直接执行命令，只能维持15秒</span><br><span class="line">                |		  |			|			|			  |------&gt; 指定目标BMC设备的IP地址</span><br><span class="line">				|		  |			|			|------&gt; 无效的密码，不重要，因为不需要完成认证</span><br><span class="line">				|		  |			|------&gt; 用户名</span><br><span class="line">				|		  |------&gt; -v*3 启用详细的调试输出，得到所有传入和传出的数据包</span><br><span class="line">				|</span><br><span class="line">				|------&gt; IPMI接口类型LANplus</span><br></pre></td></tr></table></figure>
 
@@ -288,7 +288,7 @@
 <h1 id="BMC-2-HOST"><a href="#BMC-2-HOST" class="headerlink" title="BMC 2 HOST"></a>BMC 2 HOST</h1><p>获得对BMC的管理访问权限后，可以使用多种方法来获得对主机操作系统的访问权限。</p>
 <ol>
 <li><p><strong>滥用BMC的KVM功能</strong>（VNC，自定义协议等），并重启主机至root shell（GRUB 中 init=/bin/sh）（也许不起作用，可能有security boot、signed command）或 指定救援盘作为虚拟 CD-ROM 并引导到该磁盘，获得对主机磁盘的原始访问权限，最大的缺点是必须重新启动主机才能使用此方法。</p>
-<p> <img src="img%5Cimage-20231108170420750.png" alt="image-20231108170420750"></p>
+<p> <img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20231108170420750.png" alt="image-20231108170420750"></p>
 </li>
 <li><p>如果主机的物理控制台保持登录状态，那么使用内置 KVM 功能劫持它就很简单</p>
 </li>

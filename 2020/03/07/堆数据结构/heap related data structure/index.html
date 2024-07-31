@@ -22,8 +22,8 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png">
-<meta property="og:image" content="p1Kk.github.io/2020/03/07/堆数据结构/heap%20related%20data%20structure/img/image-20240731170246662.png">
-<meta property="og:updated_time" content="2024-07-31T10:41:20.174Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20240731170246662.png">
+<meta property="og:updated_time" content="2024-07-31T10:45:15.555Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="heap related data structure &amp;&amp; ptmalloc2">
 <meta name="twitter:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
@@ -292,7 +292,7 @@
 
 <h2 id="main-arena"><a href="#main-arena" class="headerlink" title="main_arena"></a>main_arena</h2><p>main_arena表示主分配区，任何进程有且仅有一个全局的主分配区</p>
 <h1 id="64位（GLIBC-2-31）"><a href="#64位（GLIBC-2-31）" class="headerlink" title="64位（GLIBC 2.31）"></a>64位（GLIBC 2.31）</h1><p>大致结构同32位，标头占0x10bytes，整个块长度在0x10字节对齐</p>
-<p><img src="img/image-20240731170246662.png" alt="image-20240731170246662"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/image-20240731170246662.png" alt="image-20240731170246662"></p>
 <h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-fast-bins-1"><a href="#1-fast-bins-1" class="headerlink" title="1. fast bins"></a>1. fast bins</h3><p>单链表，存储小于88字节的chunk，10个排序bins【32B，48B，64B，80B，96B，112B，128B】</p>
 <h3 id="2-tcache-bins"><a href="#2-tcache-bins" class="headerlink" title="2. tcache bins"></a>2. tcache bins</h3><p>单链表，fastbins的优化，对于每个线程来说都是本地的（在其他bin上执行操作需要获取mutex），64个bins，每个bin最多有7个大小为24-1032字节的chunk</p>
 <h3 id="3-unsorted-bins"><a href="#3-unsorted-bins" class="headerlink" title="3. unsorted bins"></a>3. unsorted bins</h3><p>双向链表，缓存层，不适合tcache或fastbin的chunk被释放时会存储在这里，稍后放入合适的bins中</p>
