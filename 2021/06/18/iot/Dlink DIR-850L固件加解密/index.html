@@ -1,0 +1,585 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>Dlink DIR-850L 固件加解密 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="固件下载地址：http://files.dlink.com.au/Products/DIR-850L/REV_B/Firmware/Firmware_v2.20b03/DIR850LB1_FW220WWb03.bin 1234$ binwalk DIR850LB1_FW220WWb03.bin DECIMAL       HEXADECIMAL     DESCRIPTION-----------">
+<meta name="keywords" content="iot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dlink DIR-850L 固件加解密">
+<meta property="og:url" content="p1Kk.github.io/2021/06/18/iot/Dlink DIR-850L固件加解密/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="固件下载地址：http://files.dlink.com.au/Products/DIR-850L/REV_B/Firmware/Firmware_v2.20b03/DIR850LB1_FW220WWb03.bin 1234$ binwalk DIR850LB1_FW220WWb03.bin DECIMAL       HEXADECIMAL     DESCRIPTION-----------">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt1.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt2.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt3.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/dir850l_stringencry.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/dir805lencimg.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/dir850l_iotauditor.png">
+<meta property="og:updated_time" content="2021-08-29T15:29:13.521Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dlink DIR-850L 固件加解密">
+<meta name="twitter:description" content="固件下载地址：http://files.dlink.com.au/Products/DIR-850L/REV_B/Firmware/Firmware_v2.20b03/DIR850LB1_FW220WWb03.bin 1234$ binwalk DIR850LB1_FW220WWb03.bin DECIMAL       HEXADECIMAL     DESCRIPTION-----------">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt1.jpg">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2021/06/18/iot/Dlink DIR-850L固件加解密/" title="Dlink DIR-850L 固件加解密" itemprop="url">Dlink DIR-850L 固件加解密</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2021-06-17T16:00:00.000Z" itemprop="datePublished"> Published 2021-06-18</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#解密old-version"><span class="toc-number">1.</span> <span class="toc-text">解密old version</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解密new-version"><span class="toc-number">2.</span> <span class="toc-text">解密new version</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#恶意更新固件"><span class="toc-number">3.</span> <span class="toc-text">恶意更新固件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IOT-Auditor"><span class="toc-number">4.</span> <span class="toc-text">IOT Auditor</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#后续"><span class="toc-number">5.</span> <span class="toc-text">后续</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <p>固件下载地址：<a href="http://files.dlink.com.au/Products/DIR-850L/REV_B/Firmware/Firmware_v2.20b03/DIR850LB1_FW220WWb03.bin" target="_blank" rel="noopener">http://files.dlink.com.au/Products/DIR-850L/REV_B/Firmware/Firmware_v2.20b03/DIR850LB1_FW220WWb03.bin</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> binwalk DIR850LB1_FW220WWb03.bin </span></span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>binwalk并没有分析出什么东西，这可能是一个加密文件。我们需要用到binwalk的<code>-E</code>参数，查看该固件的<strong>熵</strong>。计算熵是一种感知给定字节序列是否压缩或加密的有效手段。<strong>熵值大，意味着有可能是加密的或是压缩过的。熵值低，则正好相反。</strong>不过，即使得到具体的熵值，也并不是总能立刻得到准确的判断。</p>
+<h1 id="解密old-version"><a href="#解密old-version" class="headerlink" title="解密old version"></a>解密old version</h1><p>在<a href="https://pierrekim.github.io/blog/2017-09-08-dlink-850l-mydlink-cloud-0days-vulnerabilities.html中可以学到：" target="_blank" rel="noopener">https://pierrekim.github.io/blog/2017-09-08-dlink-850l-mydlink-cloud-0days-vulnerabilities.html中可以学到：</a></p>
+<p>DIR850LA1_FW114WWb07.bin是没有被加密的，直接解压后，后面版本的加密key <code>wrgac05_dlob.hans_dir850l</code> 就存在于固件系统目录下的<code>/etc/config</code>的<code>fw_sign</code>或<code>image_sign</code>中，一般来说同一型号不同版本的路由器的key都是一样的。利用文中的解密方法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * Simple tool to decrypt D-LINK DIR-850L REVB firmwares </span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * $ gcc -o revbdec revbdec.c</span></span><br><span class="line"><span class="comment"> * $ ./revbdec DIR850L_REVB_FW207WWb05_h1ke_beta1.bin wrgac25_dlink.2013gui_dir850l &gt; DIR850L_REVB_FW207WWb05_h1ke_beta1.decrypted</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> USAGE <span class="meta-string">"Usage: decimg &lt;filename&gt; &lt;key&gt;\n"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span>    argc,</span></span></span><br><span class="line"><span class="function"><span class="params">         <span class="keyword">char</span>   **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>     i, fi;</span><br><span class="line">        <span class="keyword">int</span>     fo = STDOUT_FILENO, fe = STDERR_FILENO;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                write(fe, USAGE, <span class="built_in">strlen</span>(USAGE));</span><br><span class="line">                <span class="keyword">return</span> (EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((fi = open(argv[<span class="number">1</span>], O_RDONLY)) == <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                perror(<span class="string">"open"</span>);</span><br><span class="line">                write(fe, USAGE, <span class="built_in">strlen</span>(USAGE));</span><br><span class="line">                <span class="keyword">return</span> (EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *key = argv[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> kl = <span class="built_in">strlen</span>(key);</span><br><span class="line"></span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">char</span> buffer[<span class="number">4096</span>];</span><br><span class="line">                <span class="keyword">int</span> j, len;</span><br><span class="line">                len = read(fi, buffer, <span class="number">4096</span>);</span><br><span class="line">                <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">                        buffer[j] ^= (i + j) % <span class="number">0xFB</span> + <span class="number">1</span>;</span><br><span class="line">                        buffer[j] ^= key[(i + j) % kl];</span><br><span class="line">                &#125;</span><br><span class="line">                write(fo, buffer, len);</span><br><span class="line">                i += len;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> (EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译后进行尝试解密原文测试的固件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./revbdec DIR850LB1_FW207WWb05.bin wrgac05_dlob.hans_dir850l &gt; DIR850LB1_FW207WWb05.decrypted</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> binwalk DIR850LB1_FW207WWb05.decrypted </span></span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>失败，这是为什么？因为我找到的key和原文中的key<code>wrgac25_dlink.2013gui_dir850l</code>并不相同，看来同一个型号的固件key也会不同</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./revbdec DIR850LB1_FW207WWb05.bin wrgac25_dlink.2013gui_dir850l &gt; DIR850LB1_FW207WWb05.decrypted</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> binwalk DIR850LB1_FW207WWb05.decrypted </span></span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">0             0x0             DLOB firmware header, boot partition: "dev=/dev/mtdblock/1"</span><br><span class="line">10380         0x288C          LZMA compressed data, properties: 0x5D, dictionary size: 8388608 bytes, uncompressed size: 5184868 bytes</span><br><span class="line">1704052       0x1A0074        PackImg section delimiter tag, little endian size: 10517760 bytes; big endian size: 8232960 bytes</span><br><span class="line">1704084       0x1A0094        Squashfs filesystem, little endian, version 4.0, compression:lzma, size: 8231815 bytes, 2677 inodes, blocksize: 131072 bytes, created: 2016-03-29 04:08:14</span><br></pre></td></tr></table></figure>
+
+<p>对DIR850LB1_FW207WWb05.bin测试成功，再测试FW220</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 两个key我都已经尝试</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./revbdec DIR850LB1_FW220WWb03.bin wrgac05_dlob.hans_dir850l &gt; DIR850LB1_FW220WWb03.decrypted</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> binwalk DIR850LB1_FW220WWb03.decrypted </span></span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>失败，可能是由于固件的加密方式已改变</p>
+<p>固件一般有这么几种加密方式：</p>
+<ol>
+<li>设备固件出厂时未加密，也不包含任何解密例程。解密例程与固件的未加密版本一起以更高版本（v1.1）一起提供，以用于将来的加密固件更新，随后的固件版本将被加密。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt1.jpg" alt="1"></p>
+<ol start="2">
+<li>设备固件在原始发行版中已加密，供应商决定更改加密方案，并发布包含新解密例程的未加密过渡版本v1.2。阅读固件版本的<em>发行说明</em>可能有助于识别未加密的过渡版本。发行说明通常会指导用户在升级到最新版本之前先升级到中间版本，中间版本很可能是未加密的过渡固件。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt2.jpg" alt></p>
+<ol start="3">
+<li>设备固件在原始版本中是加密的。但是，供应商决定更改加密方案，并发布包含新解密例程的未加密过渡版本。在这种情况下，来获得解密例程就很困难了。一种方法是购买设备并直接从硬件中提取未加密的固件。另一种可能的方法是对固件进行更多的分析，以期“破解加密”。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/encrypt3.jpg" alt></p>
+<h1 id="解密new-version"><a href="#解密new-version" class="headerlink" title="解密new version"></a>解密new version</h1><p>通过分析DIR850L B1系列的路由器，发现DIR850LB1_FW210WWb03.bin没有被加密，所以应该就是上述的加密方式2，新的解密方式应该就保存在FW210中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> binwalk DIR850LB1_FW210WWb03.bin </span></span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">0             0x0             DLOB firmware header, boot partition: "dev=/dev/mtdblock/1"</span><br><span class="line">10380         0x288C          LZMA compressed data, properties: 0x5D, dictionary size: 8388608 bytes, uncompressed size: 5213748 bytes</span><br><span class="line">209586        0x332B2         Nagra Constant_KEY IDEA_Key: 10192431 B9CB4D0F BA90B26E</span><br><span class="line">1704052       0x1A0074        PackImg section delimiter tag, little endian size: 13664256 bytes; big endian size: 8441856 bytes</span><br><span class="line">1704084       0x1A0094        Squashfs filesystem, little endian, version 4.0, compression:lzma, size: 8441157 bytes, 2692 inodes, blocksize: 131072 bytes, created: 2017-09-18 12:11:33</span><br></pre></td></tr></table></figure>
+
+<p>在ida中查找加密关键字<code>crypt</code>发现了关键函数<code>encrypt_main</code>-&gt;<code>sub_4090E0</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/dir850l_stringencry.png" alt="crypt"></p>
+<p>还可以注意到，在<code>encrypt_main</code>调用的<code>sub_408F8C</code>中，似乎是对文件进行encode decode处理的函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/dir805lencimg.png" alt></p>
+<p>而在我们的固件系统文件中存在<code>/usr/sbin/encimg</code>，尝试运行一下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo chroot . ./qemu-mips-static usr/sbin/encimg</span></span><br><span class="line">no signature specified!</span><br><span class="line">Usage: encimg &#123;OPTIONS&#125;</span><br><span class="line">   -h                      : show this message.</span><br><span class="line">   -v                      : Verbose mode.</span><br><span class="line">   -i &#123;input image file&#125;   : input image file.</span><br><span class="line">   -e                      : encode file.</span><br><span class="line">   -d                      : decode file.</span><br><span class="line">   -s                      : signature.</span><br><span class="line"><span class="meta">#</span><span class="bash"> input文件使用绝对路径相对路径都找不到文件，最后还是把文件贴到了squashfs-root根目录下</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chroot . ./qemu-mips-static --strace usr/sbin/encimg -i DIR850LB1_FW220WWb03.bin -d -s wrgac25_dlink.2013gui_dir850l </span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 解密成功！</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> binwalk DIR850LB1_FW220WWb03.bin </span></span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">0             0x0             DLOB firmware header, boot partition: "dev=/dev/mtdblock/1"</span><br><span class="line">10380         0x288C          LZMA compressed data, properties: 0x5D, dictionary size: 8388608 bytes, uncompressed size: 5213748 bytes</span><br><span class="line">209586        0x332B2         Nagra Constant_KEY IDEA_Key: 10192431 B9CB4D0F BA90B26E</span><br><span class="line">1704052       0x1A0074        PackImg section delimiter tag, little endian size: 13664256 bytes; big endian size: 8441856 bytes</span><br><span class="line">1704084       0x1A0094        Squashfs filesystem, little endian, version 4.0, compression:lzma, size: 8441027 bytes, 2692 inodes, blocksize: 131072 bytes, created: 2017-09-18 12:21:21</span><br></pre></td></tr></table></figure>
+
+<h1 id="恶意更新固件"><a href="#恶意更新固件" class="headerlink" title="恶意更新固件"></a>恶意更新固件</h1><p>对固件恶意修改后进行打包再加密，升级后获取shell</p>
+<h1 id="IOT-Auditor"><a href="#IOT-Auditor" class="headerlink" title="IOT Auditor"></a><a href="https://app.expliot.io/" target="_blank" rel="noopener">IOT Auditor</a></h1><ol>
+<li><p>熵图对比</p>
+</li>
+<li><p>分析Linux文件系统并下载所有内容</p>
+</li>
+<li><p>反编译的代码和函数</p>
+</li>
+<li><p><a href="https://expliot.io/pages/firmware-auditor" target="_blank" rel="noopener">https://expliot.io/pages/firmware-auditor</a></p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg@master/Picture/dir850l_iotauditor.png" alt></p>
+<blockquote>
+<p>reference:</p>
+<p><a href="https://cq674350529.github.io/2019/03/18/D-Link-DIR-850L%E8%B7%AF%E7%94%B1%E5%99%A8%E5%88%86%E6%9E%90%E4%B9%8B%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87shell/" target="_blank" rel="noopener">https://cq674350529.github.io/2019/03/18/D-Link-DIR-850L%E8%B7%AF%E7%94%B1%E5%99%A8%E5%88%86%E6%9E%90%E4%B9%8B%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87shell/</a></p>
+<p><a href="https://mp.weixin.qq.com/s/CpT4gTAwYMCFqwTRxQBBkw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/CpT4gTAwYMCFqwTRxQBBkw</a></p>
+<p><a href="https://www.4hou.com/posts/wZpJ" target="_blank" rel="noopener">https://www.4hou.com/posts/wZpJ</a></p>
+</blockquote>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>DIR-850L的最新固件<code>DIR850LB1_FW223WWb01</code>也是被加密的，而解密进程就在FW220中，使用上述方法即可解密固件^_^</p>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iot/">iot</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2021/11/30/iot/multiple_auth_bypass_vuln_analysis/" title="多个认证绕过漏洞分析">
+  <span>
+  多个认证绕过漏洞分析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2021/06/12/iot/tplink wr886 v6/"  title="TP-Link WR886N v6 升级包固件分析（VxWorks 恢复符号表）">
+ <span>TP-Link WR886N v6 升级包固件分析（VxWorks 恢复符号表）
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/待完善/" title="待完善">待完善<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2024 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

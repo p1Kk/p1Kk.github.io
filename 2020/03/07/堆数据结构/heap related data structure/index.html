@@ -1,0 +1,716 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>heap related data structure &amp;&amp; ptmalloc2 | p1Kk&#39;s World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="p1Kk">
+    
+
+    
+    <meta name="description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
+<meta name="keywords" content="pwn,堆,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="heap related data structure &amp;&amp; ptmalloc2">
+<meta property="og:url" content="p1Kk.github.io/2020/03/07/堆数据结构/heap related data structure/index.html">
+<meta property="og:site_name" content="p1Kk&#39;s World!">
+<meta property="og:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png">
+<meta property="og:image" content="p1Kk.github.io/2020/03/07/堆数据结构/heap%20related%20data%20structure/img/image-20240731170246662.png">
+<meta property="og:updated_time" content="2024-07-31T10:01:45.283Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="heap related data structure &amp;&amp; ptmalloc2">
+<meta name="twitter:description" content="复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）  0x01 malloc_chunk的基本结构（使用中/未被free） （空闲chunk/free之后）  size字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png">
+
+    
+    <link rel="alternative" href="atom.xml" title="p1Kk&#39;s World!" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/site.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/head.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/head.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo2.jpg" alt="p1Kk&#39;s World!" title="p1Kk&#39;s World!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="p1Kk&#39;s World!">p1Kk&#39;s World!</a></h1>
+				<h2 class="blog-motto">艺无止境，功不唐捐。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:p1Kk.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	
+	  <article itemprop="articleBody"> 
+		  <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/03/07/堆数据结构/heap related data structure/" title="heap related data structure &amp;&amp; ptmalloc2" itemprop="url">heap related data structure &amp;&amp; ptmalloc2</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="p1Kk" target="_blank" itemprop="author">p1Kk</a>
+		
+  <p class="article-time">
+    <time datetime="2020-03-06T16:00:00.000Z" itemprop="datePublished"> Published 2020-03-07</time>
+    
+  </p>
+</header>
+	  <div class="article-content">
+		  
+		  <div id="toc" class="toc-article">
+			  <strong class="toc-title">Contents</strong>
+		  
+			  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-malloc-chunk的基本结构"><span class="toc-number">1.</span> <span class="toc-text">0x01 malloc_chunk的基本结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-chunk的复用"><span class="toc-number">2.</span> <span class="toc-text">0x02 chunk的复用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-Bin"><span class="toc-number">3.</span> <span class="toc-text">0x03 Bin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一．概述"><span class="toc-number">3.1.</span> <span class="toc-text">一．概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二．分类"><span class="toc-number">3.2.</span> <span class="toc-text">二．分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fast-bins"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. fast bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-unsorted-bins"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. unsorted bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-small-bins"><span class="toc-number">3.2.3.</span> <span class="toc-text">3. small bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-large-bins"><span class="toc-number">3.2.4.</span> <span class="toc-text">4. large bins</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-三种特殊的chunk"><span class="toc-number">4.</span> <span class="toc-text">0x04 三种特殊的chunk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#top-chunk"><span class="toc-number">4.1.</span> <span class="toc-text">top chunk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mmaped-chunk（略）"><span class="toc-number">4.2.</span> <span class="toc-text">mmaped chunk（略）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-remainder-chunk（略）"><span class="toc-number">4.3.</span> <span class="toc-text">last remainder chunk（略）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#综上"><span class="toc-number">5.</span> <span class="toc-text">综上</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配：-int-malloc"><span class="toc-number">5.1.</span> <span class="toc-text">内存分配：_int_malloc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存回收：free"><span class="toc-number">5.2.</span> <span class="toc-text">内存回收：free</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分配区"><span class="toc-number">6.</span> <span class="toc-text">分配区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#main-arena"><span class="toc-number">6.1.</span> <span class="toc-text">main_arena</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#64位（GLIBC-2-31）"><span class="toc-number">7.</span> <span class="toc-text">64位（GLIBC 2.31）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">7.1.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fast-bins-1"><span class="toc-number">7.1.1.</span> <span class="toc-text">1. fast bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-tcache-bins"><span class="toc-number">7.1.2.</span> <span class="toc-text">2. tcache bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-unsorted-bins"><span class="toc-number">7.1.3.</span> <span class="toc-text">3. unsorted bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-small-bins"><span class="toc-number">7.1.4.</span> <span class="toc-text">4. small bins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-large-bins"><span class="toc-number">7.1.5.</span> <span class="toc-text">5. large bins</span></a></li></ol></li></ol></li></ol>
+		  
+		  </div>
+		  
+		  <blockquote>
+<p>复习堆的时候发现自己对于堆结构，空间申请与释放，函数调用掌握的还是不够透彻，所以再重新复习一遍堆的数据结构 o3o 也发现了一些以前搞错了很多，害…<br>本文只捡练了一些（以32位系统为例,64位基本都是对应size*2）</p>
+</blockquote>
+<h1 id="0x01-malloc-chunk的基本结构"><a href="#0x01-malloc-chunk的基本结构" class="headerlink" title="0x01 malloc_chunk的基本结构"></a>0x01 malloc_chunk的基本结构</h1><p>（使用中/未被free）<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/no_free.png" alt></p>
+<p>（空闲chunk/free之后）<br><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/%E7%A9%BA%E9%97%B2chunk.png" alt></p>
+<ol>
+<li><strong>size</strong>字段的低三个比特位对chunk的大小没有影响，他们从高到底分别表示：<ul>
+<li>NON_MAIN_<strong>A</strong>RENA，记录当前 chunk 是否不属于主线程（main_arena），1 表示不属于，0 表示属于。</li>
+<li>ID_<strong>M</strong>APPED，记录当前 chunk 是否是由 mmap 分配的。（chunk空闲时，<strong>M</strong>不存在）</li>
+<li><strong>P</strong>REV_INUSE，记录前一个chunk是否被分配。1表示被分配，0表示没有。<strong>堆的第一个chunk所记录的prev_inuse位默认为1</strong></li>
+</ul>
+</li>
+<li><strong>fd_nextsize</strong> <strong>bk_nextsize</strong>在chunk空闲时才使用，（Large bin中特有）暂不讲解。</li>
+<li>一般情况下，物理相邻的两个空闲chunk会被合并为一个chunk，堆管理器会通过prev_size字段及size字段合并两个物理相邻的空闲chunk。</li>
+</ol>
+<h1 id="0x02-chunk的复用"><a href="#0x02-chunk的复用" class="headerlink" title="0x02 chunk的复用"></a>0x02 chunk的复用</h1><p>空闲时，一个chunk至少需要4个size_t（4B）大小的空间（prev_size, size, fd, bk）共16B，且chunk的大小要对齐到8B。<br>当一个chunk处于使用状态时，它的下一个chunk的prev_size无效，该prev_size域被当前chunk使用。（可以理解为，当chunk在使用时，在二进制文件中执行，而不归共享库管理，下一个chunk的prev_size域直接分配给当前chunk，可以使内存空间高效利用，也省去重新分配空间的麻烦）<br>一个使用中的chunk的大小<strong>in_use_size = (用户申请大小 + 8 - 4) align to 8B</strong><br>+8是存储prev_size和size<br>-4是“借”了下一个chunk的prev_size<br>最终分配的<strong>chunk_size = max(in_use_size, 16)</strong></p>
+<h1 id="0x03-Bin"><a href="#0x03-Bin" class="headerlink" title="0x03 Bin"></a>0x03 Bin</h1><h2 id="一．概述"><a href="#一．概述" class="headerlink" title="一．概述"></a>一．概述</h2><ul>
+<li>用户释放掉的 chunk 不会马上归还给系统，ptmalloc 会统一管理 heap 和 mmap 映射区域中的空闲的 chunk。当用户再一次请求分配内存时，ptmalloc 分配器会试图在空闲的 chunk 中挑选一块合适的给用户。这样可以避免频繁的系统调用，降低内存分配的开销。</li>
+<li>ptmalloc将相似大小的chunk用双向链表链接，此链表称为bin。ptmalloc一共维护了128个bin，并使用一个数组来存储这些bin</li>
+<li>free掉一个chunk时根据chunk大小加入到对应的bin中。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/p1Kk/blogImg/master/Picture/bin.png" alt><br>bin[128]中0和127不使用</p>
+<h2 id="二．分类"><a href="#二．分类" class="headerlink" title="二．分类"></a>二．分类</h2><h3 id="1-fast-bins"><a href="#1-fast-bins" class="headerlink" title="1. fast bins"></a>1. fast bins</h3><p><strong>不大于</strong>max_fast（<strong>64B</strong>）的chunk被释放后，首先会被放到fastbins中，fastbins中的chunk不改变它的Prev_inuse标志，也就无法被合并。<br>当用户需要的chunk大小 &lt; max_fast时，ptmalloc会首先判断fastbin中相应的bin中是否有对应大小的空闲块（这里比较的是无符号整数），如果有，直接从fastbin头结点开始取chunk。free之后如果再次malloc相同size，会申请到同一块内存。如果没有才会查找bins中的空闲chunk。<br>在某个特定的时候，ptmalloc会遍历fastbins中的chunk，将相邻的空闲chunk进行合并，并将合并后的chunk加入unsorted bin中，然后再将unsortedbin中的chunk加入bins。</p>
+<p>fast bin为单链表。采用LIFO（Last In First Out）。fastbins cache了 small bins的前7个大小的空闲chunk，对于 SIZE_SZ 为 4B 的平台【16B，24B，32B，40B，48B，56B，64B】；对 于 SIZE_SZ 为 8B 的平台【32B，48B，64B，80B，96B，112B，128B】</p>
+<p>当每次释放的 chunk 与该 chunk 相邻的空闲 chunk 合并后的大小大于 64k 时，就认为内存碎片可能比较多了，就需要 把 fast bins 中的所有 chunk 都进行合并，以减少内存碎片对系统的影响</p>
+<h3 id="2-unsorted-bins"><a href="#2-unsorted-bins" class="headerlink" title="2. unsorted bins"></a>2. unsorted bins</h3><p>如果被用户释放的chunk <strong>&gt;</strong> max_fast（<strong>64B</strong>），或者fastbins中的空闲chunk合并后，这些chunk首先会被放入unsorted bin<br>malloc时如果fastbin中没有合适的chunk，就会在unsorted bin中查找合适的。如果unsorted bin中没有合适的chunk，就将unsorted bin中的chunk放到所属的bin中再分配。<br>可以把unsorted bins理解为缓冲区。</p>
+<p><code>unsorted bin</code>为bin[1]，其中的chunk没有排序，大小不限制，双链表，成环。采用FIFO。</p>
+<h3 id="3-small-bins"><a href="#3-small-bins" class="headerlink" title="3. small bins"></a>3. small bins</h3><p><code>small bin</code>为索引2到63，大小为（2 * SIZE_SZ * ndx）（即 size <strong>&lt; 512B</strong>），双链表，成环。采用FIFO。<br>实际共62个bin，<strong>同一个small bin 链表中的 chunk 的大小相同</strong>。两个相邻索引的 small bin 链表中的 chunk 大小32 位相差 8 字节【16B, 24B, 32B, …, 504B】，64 位相差 16 字节【32B, 48B, 64B, …, 1008B】<br>分配时采用精确匹配。</p>
+<h3 id="4-large-bins"><a href="#4-large-bins" class="headerlink" title="4. large bins"></a>4. large bins</h3><p><code>large bin</code>为索引64到126，大小为[512,512+64)（即 size <strong>&gt;= 512B</strong>）。<br>一共包括63个bin，每个 bin 中的 chunk 的大小不一致，而是处于一定区间范围内。此外，这 63 个 bin 被分成了 6 组，每组 bin 中的 chunk 大小之间的公差一致。<br>以32位平台（SIZE_SZ = 4B）为例：</p>
+<table>
+<thead>
+<tr>
+<th>组</th>
+<th>数量</th>
+<th>公差</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>32</td>
+<td>64B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>16</td>
+<td>512B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>8</td>
+<td>4096B</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>32768B</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>262144B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>不限制</td>
+</tr>
+</tbody></table>
+<p>large bins 中的每一个 bin 都包含一定范围内的 chunk，其中的 chunk 按 fd 指针的顺序从大到小排列。相同大小的 chunk 同样按照最近使用顺序排列。<br>分配时采用最近匹配。</p>
+<hr>
+<p>——上述这些 bin 的排布都会遵循一个原则：<strong>任意两个物理相邻的空闲 chunk 不能在一起</strong>。</p>
+<p>需要注意的是，并不是所有的 chunk 被释放后就立即被放到 bin 中。ptmalloc 为了提高分配的速度，会把一些小的 chunk<strong>先</strong>放到 fast bins 的容器内。<strong>而且，fastbin 容器中的 chunk 的使用标记总是被置位的，所以不满足上面的原则。</strong></p>
+<h1 id="0x04-三种特殊的chunk"><a href="#0x04-三种特殊的chunk" class="headerlink" title="0x04 三种特殊的chunk"></a>0x04 三种特殊的chunk</h1><p>并不是所有的chunk都按照上面的方式组织。以下是三种特殊的chunk，他们不属于任何bins。</p>
+<h2 id="top-chunk"><a href="#top-chunk" class="headerlink" title="top chunk"></a>top chunk</h2><p>对于<strong>非主分配区</strong>预先从mmap分配一块较大的sub-heap，heap 会被分为两块，一块给用户，剩下的那块就是 top chunk。其实，所谓的 top chunk 就是处于当前堆的物理地址最<strong>高</strong>的 chunk。【因为内存是按地址从低向高进行分配的】<br>这个 chunk 不属于任何一个 bin，它的作用在于当所有的 bin 都无法满足用户请求的大小时，如果其大小不小于指定的大小，就进行分配，并将剩下的部分作为新的 top chunk。否则，就重新分配一个sub-heap，并将top chunk迁移到新的sub-heap上再分配。<br>top chunk分配内存会使top chunk减小。如果回收的chunk恰好与top chunk相邻，那么合并成新top chunk使top chunk变大。<br>如果free时回收的内存大于某个阈值，且top chunk大小也超过的收缩阈值，ptmalloc就会收缩sub-heap。如果top chunk包含了整个sub-heap，ptmalloc会调用munmap把整个sub-heap返回操作系统。</p>
+<p><strong>主分配区</strong>是唯一能够映射进程heap区域的分配区（有点难理解。。。）在 main arena 中通过 sbrk 扩展收缩 heap，ptmalloc会预先分配一块较大的空闲内存（heap）<br>主分配区的top chunk第一次malloc时会分配一块(chunk_size + 128KB) align 4KB大小的空间作为初始heap，用户从top chunk分配内存时，可直接取出一块给用户。如果top chunk中没有空闲内存，ptmalloc会调用sbrk()将进程heap边界brk上移，然后修改top chunk大小。回收时，回收的内存恰好与top chunk相邻则合成新top chunk。<br>如果free时回收的内存大于某个阈值，且top chunk大小也超过的收缩阈值，会收缩内存，但至少保留一个页大小的空闲内存，从而把内存归还操作系统。</p>
+<h2 id="mmaped-chunk（略）"><a href="#mmaped-chunk（略）" class="headerlink" title="mmaped chunk（略）"></a>mmaped chunk（略）</h2><p>chunk足够大时，以上的都不能满足分配需求时，ptmalloc会使用mmap直接使用内存映射来将页映射到进程空间。这样分配的chunk在被free时将直接接触映射，将内存归还给操作系统，若再次对这样的内存引用将导致segmentation fault。</p>
+<h2 id="last-remainder-chunk（略）"><a href="#last-remainder-chunk（略）" class="headerlink" title="last remainder chunk（略）"></a>last remainder chunk（略）</h2><p>需要分配一个small chunk，但small bins中找不到合适的chunk，如果last remainder chunk的大小 &gt; 所需的small chunk大小，就将它分裂成两个chunk，其中一个chunk返回用户，另一个变成新的last remainder chunk。</p>
+<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><h2 id="内存分配：-int-malloc"><a href="#内存分配：-int-malloc" class="headerlink" title="内存分配：_int_malloc"></a>内存分配：_int_malloc</h2><p><strong>根据size</strong></p>
+<ul>
+<li>获取分配区的锁（略，想了解看源码分析）</li>
+<li>将用户请求的大小转换为实际需要分配的chunk_size</li>
+<li>fastbin range：chunk_size &lt;= max_fast，从<code>fast bin</code>中查找是否有合适的chunk。<ul>
+<li>找到，分配结束。</li>
+<li>未找到 ⬇</li>
+</ul>
+</li>
+<li>small bin range：chunk_size &lt; 512B，先从<code>small bin</code>查找（<code>small bin</code>按照size排好，查找更快）按照size从对应具体的small bin的尾部找到恰好满足大小的chunk。<ul>
+<li>找到，分配结束。</li>
+<li>未找到 ⬇</li>
+</ul>
+</li>
+<li>ptmalloc首先遍历fast bins中的chunk，将相邻chunk合并，并链接到unsorted bin。</li>
+<li>遍历unsorted bin。<ul>
+<li>如果unsorted bin只有一个chunk，并且该chunk在上次分配时被使用，所需分配的chunk大小属于small bins，且该chunk大小 &gt;= 需要分配的大小，直接切割，分配结束。（丢，好绕）</li>
+<li>否则，根据chunk大小放入small bins或large bins中。⬇</li>
+</ul>
+</li>
+<li>large bin range：从<code>large bin</code> 中查找满足条件且最小的chunk。<ul>
+<li>有则切分，剩下的部分链接回bins中，剩余的放入<code>unsorted bin</code><strong>//这是ptmalloc机制，他在分配large chunk时会先对堆中的碎片chunk进行合并，以便减少堆中的碎片</strong></li>
+<li>未找到 ⬇</li>
+</ul>
+</li>
+<li>从top chunk切割<ul>
+<li>满足，分配结束</li>
+<li>不满足 ⬇</li>
+</ul>
+</li>
+<li>当topchunk也无法满足时，如果是主分配区，调用sbrk()增加top chunk大小。如果是非主分配区，调用mmap()<br>【mmap的具体分配方法 略】</li>
+</ul>
+<h2 id="内存回收：free"><a href="#内存回收：free" class="headerlink" title="内存回收：free"></a>内存回收：free</h2><ul>
+<li><ol>
+<li>获取分配区锁</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>检测传入free的指针是否为0</li>
+</ol>
+<ul>
+<li>是，直接return</li>
+<li>否，⬇</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>是否是mmap分配</li>
+</ol>
+<ul>
+<li>是，释放mmap的chunk</li>
+<li>否，⬇</li>
+</ul>
+</li>
+<li><ol start="4">
+<li>size是否属于<code>fast bin</code>且chunk并不位于heap顶部，也就是不与top chunk相邻</li>
+</ol>
+<ul>
+<li>是，插入<code>fast bin</code>，return</li>
+<li>否，⬇</li>
+</ul>
+</li>
+<li><ol start="5">
+<li>查看前一个chunk是否free</li>
+</ol>
+<ul>
+<li>是，合并，⬇</li>
+</ul>
+</li>
+<li><ol start="6">
+<li>查看下一个chunk是否为top chunk</li>
+</ol>
+<ul>
+<li>是，合并，更新top chunk大小，⬇</li>
+<li>否，-&gt;7</li>
+</ul>
+</li>
+<li><ol start="7">
+<li>查看下一个chunk是否free</li>
+</ol>
+<ul>
+<li>是，合并</li>
+</ul>
+</li>
+<li><ol start="8">
+<li>判断合并后的 chunk 的大小是否大于 FASTBIN_CONSOLIDATION_THRESHOLD（默认 64KB）</li>
+</ol>
+<ul>
+<li>是，触发进行 fast bins 的合并操作，fast bins 中的 chunk 将被 遍历，并与相邻的空闲 chunk 进行合并，合并后的 chunk 会被放到 unsorted bin 中。 fast bins 将变为空，⬇</li>
+</ul>
+</li>
+<li><ol start="9">
+<li>判断 top chunk 的大小是否大于 mmap 收缩阈值（默认为 128KB）</li>
+</ol>
+<ul>
+<li>是，对 于主分配区，则会试图归还 top chunk 中的一部分给操作系统。但是最先分配的 128KB 空间是不会归还的，ptmalloc 会一直管理这部分内存，用于响应用户的分配 请求；如果为非主分配区，会进行 sub-heap 收缩，将 top chunk 的一部分返回给操 作系统，如果 top chunk 为整个 sub-heap，会把整个 sub-heap 还回给操作系统。</li>
+</ul>
+</li>
+</ul>
+<p>释放结束，从 free() 函数退出。可以看出，收缩堆的条件是当前 free 的 chunk 大小加上前后能合并 chunk 的大小大于 64k，并且要 top chunk 的大 小要达到 mmap 收缩阈值，才有可能收缩堆</p>
+<h1 id="分配区"><a href="#分配区" class="headerlink" title="分配区"></a>分配区</h1><p>arena的个数是跟系统中处理器核心个数相关</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">For 32 bit systems:</span><br><span class="line">     Number of arena = 2 * number of cores.</span><br><span class="line">For 64 bit systems:</span><br><span class="line">     Number of arena = 8 * number of cores.</span><br></pre></td></tr></table></figure>
+
+<h2 id="main-arena"><a href="#main-arena" class="headerlink" title="main_arena"></a>main_arena</h2><p>main_arena表示主分配区，任何进程有且仅有一个全局的主分配区</p>
+<h1 id="64位（GLIBC-2-31）"><a href="#64位（GLIBC-2-31）" class="headerlink" title="64位（GLIBC 2.31）"></a>64位（GLIBC 2.31）</h1><p>大致结构同32位，标头占0x10bytes，整个块长度在0x10字节对齐</p>
+<p><img src="img/image-20240731170246662.png" alt="image-20240731170246662"></p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-fast-bins-1"><a href="#1-fast-bins-1" class="headerlink" title="1. fast bins"></a>1. fast bins</h3><p>单链表，存储小于88字节的chunk，10个排序bins【32B，48B，64B，80B，96B，112B，128B】</p>
+<h3 id="2-tcache-bins"><a href="#2-tcache-bins" class="headerlink" title="2. tcache bins"></a>2. tcache bins</h3><p>单链表，fastbins的优化，对于每个线程来说都是本地的（在其他bin上执行操作需要获取mutex），64个bins，每个bin最多有7个大小为24-1032字节的chunk</p>
+<h3 id="3-unsorted-bins"><a href="#3-unsorted-bins" class="headerlink" title="3. unsorted bins"></a>3. unsorted bins</h3><p>双向链表，缓存层，不适合tcache或fastbin的chunk被释放时会存储在这里，稍后放入合适的bins中</p>
+<h3 id="4-small-bins"><a href="#4-small-bins" class="headerlink" title="4. small bins"></a>4. small bins</h3><p>双向链表，存储最大1024字节的chunk，62个排序相差 16 字节的bins【32B, 48B, 64B, …, 1008B】</p>
+<h3 id="5-large-bins"><a href="#5-large-bins" class="headerlink" title="5. large bins"></a>5. large bins</h3><p>双向链表，存储大于1024字节的chunk，63个排序bins，参考32位</p>
+<p>分配器优先分配bins中的chunk，而不是top chunk（内存重用）</p>
+<p>释放至bins优先级：tcache bin 已满 &gt; fast bin 大小不符合 &gt; unsorted bin &gt; 再调用malloc时排序</p>
+<blockquote>
+<p>参考：<a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/heap_structure/" target="_blank" rel="noopener">CTF-wiki堆</a>，<a href="https://paper.seebug.org/papers/Archive/refs/heap/glibc%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86ptmalloc%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90.pdf" target="_blank" rel="noopener">glibc内存管理ptmalloc2源码分析</a></p>
+<p><a href="https://blog.quarkslab.com/heap-exploitation-glibc-internals-and-nifty-tricks.html" target="_blank" rel="noopener">https://blog.quarkslab.com/heap-exploitation-glibc-internals-and-nifty-tricks.html</a></p>
+</blockquote>
+  
+	  </div>
+		  <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/笔记/">笔记</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pwn/">pwn</a><a href="/tags/堆/">堆</a><a href="/tags/笔记/">笔记</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	  </article>
+	  
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/03/28/iot/路由器环境配置/" title="路由器环境基础工具安装">
+  <span>
+  路由器环境基础工具安装</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/03/07/栈迁移/栈迁移/"  title="栈迁移">
+ <span>栈迁移
+</span>
+</a>
+</div>
+
+</nav>
+
+	  
+
+</div> 
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/https://weibo.com/u/5213203661?refer_flag=0000015010_&amp;from=feed&amp;loc=nickname" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/p1Kk" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:p1kk_wang@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/oj/" title="oj">oj<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/漏洞复现/" title="漏洞复现">漏洞复现<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/笔记/" title="笔记">笔记<sup>23</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/pwn/" title="pwn">pwn<sup>38</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/wp/" title="wp">wp<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tw/" title="tw">tw<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iot/" title="iot">iot<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔记/" title="笔记">笔记<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/路由器/" title="路由器">路由器<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈溢出/" title="栈溢出">栈溢出<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/堆/" title="堆">堆<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cve/" title="cve">cve<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/栈/" title="栈">栈<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/攻防世界/" title="攻防世界">攻防世界<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令注入/" title="命令注入">命令注入<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ubuntu18/" title="ubuntu18">ubuntu18<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AWD/" title="AWD">AWD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/命令执行/" title="命令执行">命令执行<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/认证绕过/" title="认证绕过">认证绕过<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/摄像头/" title="摄像头">摄像头<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/待完善/" title="待完善">待完善<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/canary/" title="canary">canary<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://whali3n51.github.io" target="_blank" title="whali3n51">whali3n51</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+	<p class="copyright">
+	Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2024 
+	
+	<a href="/about" target="_blank" title="p1Kk">p1Kk</a>
+	
+	
+	</p>
+</div></footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
