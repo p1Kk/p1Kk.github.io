@@ -1,3 +1,4 @@
+p1Kk.github.io/about/index.html
 p1Kk.github.io/2020/03/07/%E5%A0%86%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/heap%20related%20data%20structure/
 p1Kk.github.io/2020/01/01/%E5%BC%82%E6%9E%84pwn/arm%20pwn/
 p1Kk.github.io/2020/01/01/%E5%BC%82%E6%9E%84pwn/mips%20pwn/
@@ -10,7 +11,6 @@ p1Kk.github.io/2021/06/12/iot/tplink%20wr886%20v6/
 p1Kk.github.io/2021/06/11/iot/%E6%96%BD%E8%80%90%E5%BE%B7%20NOE771/
 p1Kk.github.io/2021/03/29/iot/Tenda%20AC15%20CVE-2018-5767%20CVE-2020-10987/
 p1Kk.github.io/2021/04/14/iot/vivotek%20%E6%91%84%E5%83%8F%E5%A4%B4%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/
-p1Kk.github.io/about/index.html
 p1Kk.github.io/2021/03/14/iot/DLink%20DIR-878%20CVE-2019-8316%20%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/
 p1Kk.github.io/2021/03/13/iot/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/
 p1Kk.github.io/2020/03/28/iot/%E8%B7%AF%E7%94%B1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/
